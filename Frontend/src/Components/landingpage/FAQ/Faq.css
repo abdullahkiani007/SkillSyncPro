@@ -45,7 +45,7 @@
   }
   
   .faq-accordion-container:before {
-    content: url("../../assets/images/illustration-woman-online-mobile.svg");
+    content: url("../../../assets/images/illustration-woman-online-mobile.svg");
     position: absolute;
     min-width: 250px;
     top: -115px;
@@ -90,7 +90,7 @@
   }
   
   .faq-accordion-question-button:after {
-    content: url("../../assets/images/icon-arrow-down.svg");
+    content: url("../../../assets/images/icon-arrow-down.svg");
     transition: all 0.2s ease-in-out;
   }
   
@@ -127,16 +127,16 @@
       justify-content: flex-end;
       padding-top: 50px;
   
-      background: url("../../assets/images/illustration-woman-online-desktop.svg")
+      background: url("../../../assets/images/illustration-woman-online-desktop.svg")
           bottom 3.1rem left -5.1rem no-repeat,
-        url("../../assets/images/bg-pattern-desktop.svg")
+        url("../../../assets/images/bg-pattern-desktop.svg")
           bottom -10rem left -36rem no-repeat;
   
       background-color: white;
     }
   
     .faq-accordion-container:before {
-      content: url(" ../../assets/images/illustration-box-desktop.svg");
+      content: url(" ../../../assets/images/illustration-box-desktop.svg");
       top: 60%;
       left: 3.5%;
       transform: translate(-50%, -55%);

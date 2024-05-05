@@ -1,5 +1,5 @@
 import React from 'react'
-import './css/Faq.css'
+import './Faq.css'
 
 const FAQ = () => {
 
@@ -54,8 +54,8 @@ const FAQ = () => {
       
 
     return (
-        <div className='faq-accordion df flex justify-center'>
-           <div className="faq-accordion-container"
+        <div className='md:faq-accordion df flex justify-center my-20'>
+           <div id="faq" className="faq-accordion-container"
            data-aos="fade-in" data-aos-delay="250" data-aos-duration="500"
            >
                <div className="faq-accordion-content">
