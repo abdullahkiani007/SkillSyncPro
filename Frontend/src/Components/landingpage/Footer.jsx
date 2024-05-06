@@ -1,13 +1,19 @@
-import React from 'react'
+import React from "react";
+import Section from "./Section";
+
 
 const Footer = () => {
   return (
-    <div>
-        <footer className="bg-primary text-white text-center py-10">
-            <p>&copy; 2021 SkillSync Pro. All rights reserved.</p>
-        </footer>
-    </div>
-  )
-}
+    <Section crosses className="!px-0 !py-10">
+      <div className=" ">
+        <p className="text-center text-n-4 ">
+          © {new Date().getFullYear()}. All rights reserved.
+        </p>
 
-export default Footer
+        
+      </div>
+    </Section>
+  );
+};
+
+export default Footer;

@@ -1,0 +1,147 @@
+import React, { useState, useEffect } from "react";
+import { Facebook, GitHub, Google } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+
+import { motion } from "framer-motion";
+import Navbar from "../landingpage/Navbar";
+
+const Login = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const route = window.location.pathname.split("/")[2];
+  const [path, setPath] = useState(route);
+  // get route path or url path
+
+  useEffect(() => {}, [path]);
+
+  console.log(route);
+
+  const dropIn = {
+    hidden: {
+      y: "-100vh",
+      opacity: 0,
+    },
+    visible: {
+      y: "0",
+      opacity: 1,
+      transition: {
+        duration: 0.1,
+        type: "spring",
+        damping: 25,
+        stiffness: 500,
+      },
+    },
+    exit: {
+      y: "100vh",
+      opacity: 0,
+    },
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleClick = () => {
+    if (email === "test@gmail.com" && password === "test") {
+      alert("Login Successful!");
+    } else {
+      alert("Invalid Credentials!");
+    }
+  };
+
+  return (
+    <>
+      <div className="bg-gray-100 flex flex-col items-center justify-center min-h-screen md:py-2">
+        {/* <div className="py-4">
+        <p className="text-xl text-primary font-bold">SkillSync Pro</p>
+
+            </div> */}
+        <main className="flex flex-col md:flex-row  items-center w-full px-2 md:px-20 lg:px-96">
+          <div className="flex md:inline-flex flex-col justify-center items-center md:items-start flex-1 space-y-1">
+            <p className=" text-2xl md:text-6xl text-primary font-bold">
+              SkillSync Pro
+            </p>
+            <p className="font-medium text-lg leading-1 m-2 text-center text-secondary-dark">
+              Unlock Your Potential, Land Your Dream Job with SkillSync Pro!
+            </p>
+            <Link to="/">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="bg-primary text-white text-lg font-bold w-24 md:w-40  py-3 rounded-xl my-5 "
+              >
+                Home
+              </motion.button>
+            </Link>
+          </div>
+          {/* Login form */}
+          <motion.div
+            className="bg-white rounded-2xl shadow-2xl flex flex-col w-full md:w-96 items-center max-w-4xl "
+            variants={dropIn}
+            initial="hidden"
+            animate="visible"
+            // exit="exit"
+          >
+            <h2 className="p-3 text-xl md:text-3xl font-bold text-primary">
+              SkillSync Pro
+            </h2>
+            <div className="inline-block border-[1px] justify-center w-20 border-primary border-solid"></div>
+            <h3 className="text-lg md:text-xl font-semibold text-primary pt-2">
+              Sign In!
+            </h3>
+            <div className="flex space-x-2 m-4 items-center justify-center">
+              <div className="socialIcon">
+                <Facebook />
+              </div>
+              <div className="socialIcon">
+                <GitHub />
+              </div>
+              <div className="socialIcon">
+                <Google />
+              </div>
+            </div>
+            {/* Inputs */}
+            <div className="flex flex-col items-center justify-center">
+              <input
+                type="email"
+                className="rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-primary m-1 focus:shadow-md focus:border-secondary-dark focus:outline-none focus:ring-0"
+                placeholder="Email"
+                value={email}
+                onChange={handleEmailChange}
+              ></input>
+              <input
+                type="password"
+                className="rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-primary m-1 focus:shadow-md focus:border-secondary-dark focus:outline-none focus:ring-0"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+              ></input>
+              <button
+                className="rounded-2xl m-2 text-white bg-primary w-2/5 px-4 py-2 shadow-md hover:text-primary hover:bg-white transition duration-200 ease-in"
+                onClick={() => handleClick()}
+              >
+                Sign In
+              </button>
+            </div>
+            <div className="inline-block border-[1px] justify-center w-20 border-primary border-solid"></div>
+            <p className="text-primary mt-4 text-sm">Don't have an account?</p>
+            <Link
+              to={`/signup/${path}`}
+              className="text-primary mb-4 text-sm font-medium cursor-pointer hover:underline"
+              onClick={() => setIsLogin(false)}
+            >
+              Create a New Account?
+            </Link>
+          </motion.div>
+        </main>
+      </div>
+    </>
+  );
+};
+
+export default Login;

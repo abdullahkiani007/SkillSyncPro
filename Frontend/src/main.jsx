@@ -1,13 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import Login from './Components/landingpage/Login.jsx'
+import Login from './Components/Login/index.jsx'
 import './index.css'
 import {
   createBrowserRouter,
   RouterProvider
 } from "react-router-dom"
 import GetStarted from './Components/landingpage/GetStarted.jsx'
+import SignUpForm from './Components/Signup/index.jsx'
 
 const router = createBrowserRouter([
   {
@@ -22,9 +23,18 @@ const router = createBrowserRouter([
       // },
     ],
   },{
-    path:"/login",
+    path:"/login/jobseeker",
     element: <Login/>
-  },
+  },{
+    path:"/signup/jobseeker",
+    element: <SignUpForm/>
+  },{
+    path:"/login/recruiter",
+    element: <Login/>
+  },{
+    path:"/signup/recruiter",
+    element: <SignUpForm/>
+  }
   // {
   //   path: "getstarted",
   //   element: <GetStarted/>,

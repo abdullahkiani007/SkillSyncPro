@@ -19,7 +19,7 @@ const Features = () => {
     //   border: '1px solid rgba(255, 255, 255, 0.34)',
     // }}
     >
-      <h1 id="feature" className="text-center text-4xl font-bold text-secondary-dark">
+      <h1 id="services" className="text-center text-4xl font-bold text-secondary-dark">
         Why SkillSync Pro
       </h1>
 

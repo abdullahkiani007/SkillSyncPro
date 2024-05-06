@@ -2,8 +2,9 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import Backdrop from '../backdrop'
 import './Modal.css'
+import { Link } from 'react-router-dom'
 
-const Modal = ({ handleClose , text}) => {
+const Modal = ({ handleClose , text , children}) => {
     console.log("I am the modal")
     const dropIn = {
         hidden:{ 
@@ -28,34 +29,15 @@ const Modal = ({ handleClose , text}) => {
   return (
     <Backdrop onClick={handleClose}>
         <motion.div
-        className='w-full md:w-auto md:max-w-[90%] h-1/2 md:max-h-[300px] 
-        m-auto p-8 rounded-lg flex flex-col items-center bg-primary text-white'
+        className='w-full m-2 md:w-auto md:max-w-[90%] h-1/2 md:max-h-[300px] 
+        md:m-auto p-8 rounded-lg flex flex-col items-center justify-center bg-primary text-white'
         onClick={(e)=>e.stopPropagation()}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
         >   
-            <h1 className='font-bold text-lg' >SkillSync Pro</h1>
-            <div className='flex flex-col justify-center align-center pt-4 pb-10' >
-            <motion.button 
-            className='bg-secondary-dark p-2 rounded-lg my-2'
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            >
-                I'm a Job Seeker
-            </motion.button>
-            <motion.button 
-            className='bg-secondary-dark p-2 rounded-lg my-2'
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            >
-                I want to hire
-            </motion.button>
-            </div>
-           <p className='underline hover:cursor-pointer'>
-            Already have an account?
-           </p>
+            {children}
         </motion.div>
     </Backdrop>
   )

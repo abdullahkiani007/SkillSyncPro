@@ -8,28 +8,33 @@ import FAQ from "./Components/landingpage/FAQ/FAQ";
 import Footer from "./Components/landingpage/Footer";
 import Reveal from "./Components/landingpage/Reveal";
 import { createPortal } from "react-dom";
-import { motion , AnimatePresence} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Login from "./Components/landingpage/Login";
 
 import { useState } from "react";
 import Modal from "./Components/landingpage/Modal";
+import Benefits from "./Components/landingpage/Benefits";
+import Header from "./Components/landingpage/Header";
+
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
-  
+
   const open = () => {
     setModalOpen(true);
-    document.body.classList.add('no-scroll');
-  }
-  
+    document.body.classList.add("no-scroll");
+  };
+
   const close = () => {
     setModalOpen(false);
-    document.body.classList.remove('no-scroll');
-  }
+    document.body.classList.remove("no-scroll");
+  };
 
   return (
     <div>
-      <Navbar />
+      {/* <Navbar />
+       */}
+       <Header/>
 
       {/* Hero Section */}
       <div
@@ -61,13 +66,37 @@ function App() {
             Get Started
           </motion.button>
 
-            <AnimatePresence
-            initial= {false}
-            mode='wait'
-            >
-          {modalOpen && <Modal modalOpen={modalOpen} handleClose={close} />}
-
-            </AnimatePresence>
+          <AnimatePresence initial={false} mode="wait">
+            {modalOpen && (
+              <Modal modalOpen={modalOpen} handleClose={close}>
+                <h1 className="font-bold text-lg">SkillSync Pro</h1>
+                <div className="flex flex-col justify-center align-center pt-4 pb-10">
+                <Link to="/login/jobseeker">
+                  <motion.button
+                    className="bg-secondary-dark p-2 rounded-lg my-2 w-40"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={close}
+                  >
+                   I'm a Job Seeker
+                  </motion.button>
+                  </Link>
+                  <Link to={"/login/recruiter"} className="w-full">
+                  <motion.button
+                    className="bg-secondary-dark p-2 rounded-lg my-2 w-40" 
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    I want to hire
+                  </motion.button>
+                  </Link>
+                </div>
+                <p className="underline hover:cursor-pointer">
+                  Already have an account?
+                </p>
+              </Modal>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="mt-10 ">
@@ -81,12 +110,15 @@ function App() {
         </div>
       </div>
 
+
+
+      <Banner />
       <div
       // className="bg-secondary-dark"
       >
         <Features />
       </div>
-      <Banner />
+     <Benefits/>
       <FAQ />
       <Footer />
     </div>
