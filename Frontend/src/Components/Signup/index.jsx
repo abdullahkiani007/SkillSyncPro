@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useFormik } from "formik";
 import signupSchema from "../../Schemas/Signup/signupSchema";
+import Controller from "../../API/index";
 
 const SignUpForm = () => {
   const route = window.location.pathname.split("/")[2];
-  const [path,setPath] = useState(route);
+  const [path, setPath] = useState(route);
   const { values, touched, handleBlur, handleChange, errors } = useFormik({
     initialValues: {
       name: "",
@@ -38,25 +39,20 @@ const SignUpForm = () => {
     },
   };
 
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
-  // const handleNameChange = (e) => {
-  //   setName(e.target.value);
-  // };
-
-  // const handleEmailChange = (e) => {
-  //   setEmail(e.target.value);
-  // };
-
-  // const handlePasswordChange = (e) => {
-  //   setPassword(e.target.value);
-  // };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Form Submitted");
+    try {
+      const data = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        role: path,
+      };
+      const response = await Controller.signUp(data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -66,9 +62,15 @@ const SignUpForm = () => {
           <p className=" text-2xl md:text-6xl text-primary font-bold">
             SkillSync Pro
           </p>
-          <p className="font-medium text-lg leading-1 m-2 text-center text-secondary-dark">
-            Unlock Your Potential, Land Your Dream Job with SkillSync Pro!
-          </p>
+          {path === "jobseeker" ? (
+            <p className="font-medium text-lg leading-1 m-2  text-secondary-dark">
+              Unlock Your Potential, Land Your Dream Job with SkillSync Pro!
+            </p>
+          ) : (
+            <p className="font-medium text-lg leading-1 m-2  text-secondary-dark">
+              "Streamline Hiring, Unleash Success with SkillSync Pro!"
+            </p>
+          )}
           <Link to="/">
             <motion.button
               whileHover={{ scale: 1.1 }}

@@ -6,13 +6,24 @@ export const navigation = [
   {
     id: "0",
     title: "Features",
-    url: "#features",
+    url: "/#features",
   },
   {
     id: "1",
     title:"Services",
-    url:"#services"
+    url:"/#services"
   },
+  {
+    id: "2",
+    title:"Jobseekers",
+    url:"/login/jobseeker"
+  },
+  {
+    id: "3",
+    title:"Employers",
+    url:"/login/employer"
+  },
+
 
  
 ];
@@ -63,7 +74,7 @@ export const benefits = [
   {
     id: "5",
     title: "Positive User Feedback",
-    text: "Receive positive feedback from recruiters and candidates on the effectiveness and user-friendly features of SkillSync Pro.",
+    text: "Receive positive feedback from employers and candidates on the effectiveness and user-friendly features of SkillSync Pro.",
     backgroundUrl: "./src/assets/benefits/card-6.svg",
   
     imageUrl: benefitImage2,

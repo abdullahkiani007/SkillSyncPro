@@ -3,16 +3,17 @@ import { Facebook, GitHub, Google } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 
 import { motion } from "framer-motion";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import loginSchema from "../../Schemas/Login/loginSchema";
+import Controller from "../../API/index"; 
 
-const Login = () => {
+const Login = ({userType}) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const route = window.location.pathname.split("/")[2];
   const [path, setPath] = useState(route);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); 
   const navigate = useNavigate();
 
   const { values, touched, handleBlur, handleChange, errors } = useFormik({
@@ -22,12 +23,14 @@ const Login = () => {
     },
     validationSchema: loginSchema,
   });
-
+  
+  const handleInputChange = (e) => {
+    setError("");
+    console.log(error)
+    handleChange(e);
+  }
   // get route path or url path
 
-  useEffect(() => {}, [path]);
-
-  console.log(route);
 
   const dropIn = {
     hidden: {
@@ -50,17 +53,29 @@ const Login = () => {
     },
   };
 
-  // const handleEmailChange = (e) => {
-  //   setEmail(e.target.value);
-  // };
-
-  // const handlePasswordChange = (e) => {
-  //   setPassword(e.target.value);
-  // };
-
-  const handleClick = () => {
-    alert("Login Successful");
+ 
+// on click send data to backend
+  const handleClick = async () => {
+    const data = {
+      email: values.email,
+      password: values.password,
+    };
+    try {
+      const response = await Controller.login(data);
+      console.log(response);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
+        navigate("/Dashboard");
+        
+      } else {
+        setError(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  
 
   return (
     <>
@@ -74,9 +89,15 @@ const Login = () => {
             <p className=" text-2xl md:text-6xl text-primary font-bold">
               SkillSync Pro
             </p>
-            <p className="font-medium text-lg leading-1 m-2 text-center text-secondary-dark">
+            {userType === "jobseeker" ? (
+            <p className="font-medium text-lg leading-1 m-2  text-secondary-dark">
               Unlock Your Potential, Land Your Dream Job with SkillSync Pro!
             </p>
+          ) : (
+            <p className="font-medium text-lg leading-1 m-2  text-secondary-dark">
+              "Streamline Hiring, Unleash Success with SkillSync Pro!"
+            </p>
+          )}
             <Link to="/">
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -121,7 +142,7 @@ const Login = () => {
                 className="rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-primary m-1 focus:shadow-md focus:border-secondary-dark focus:outline-none focus:ring-0"
                 value={values.email}
                 onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 placeholder="Email"
                 error={errors.email && touched.email ? 1 : undefined}
               ></input>
@@ -133,10 +154,11 @@ const Login = () => {
                 placeholder="Password"
                 value={values.password}
                 onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 error={errors.password && touched.password ? 1 : undefined}
               ></input>
               {<p className="text-red-700"> {errors.password}</p>}
+              {<p className="text-red-700 h-5">{error}</p>}
               <button
                 className="rounded-2xl m-2 text-white bg-primary w-2/5 px-4 py-2 shadow-md hover:text-primary hover:bg-white transition duration-200 ease-in disabled:bg-primary disabled:opacity-70 disabled:text-white"
                 onClick={() => handleClick()}

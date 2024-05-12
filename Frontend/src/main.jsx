@@ -12,6 +12,7 @@ import SignUpForm from './Components/Signup/index.jsx'
 import RootLayout from './RootLayout.jsx'
 import store from './redux/store.js'
 import { Provider } from 'react-redux'
+import Dashboard from './Components/Jobseeker/Dashboard/Dashboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -25,16 +26,19 @@ const router = createBrowserRouter([
         // loader: teamLoader,
       },,{
         path:"/login/jobseeker",
-        element: <Login/>
+        element: <Login userType={"jobseeker"}/>
       },{
         path:"/signup/jobseeker",
         element: <SignUpForm/>
       },{
-        path:"/login/recruiter",
-        element: <Login/>
+        path:"/login/employer",
+        element: <Login userType={"employer"}/>
       },{
-        path:"/signup/recruiter",
-        element: <SignUpForm/>
+        path:"/signup/employer",
+        element: <SignUpForm />
+      },{
+        path:"/Dashboard",
+        element:<Dashboard/>
       }
     ],
   }

@@ -38,7 +38,7 @@ function App() {
 
       {/* Hero Section */}
       <div
-        id="#"
+        id="hero"
         className="flex flex-col md:flex-row pt-24 mx-10 items-center justify-center md:items-start  "
       >
         <div className="mt-28 md:mt-48 md:ml-32">
@@ -81,7 +81,7 @@ function App() {
                    I'm a Job Seeker
                   </motion.button>
                   </Link>
-                  <Link to={"/login/recruiter"} className="w-full">
+                  <Link to={"/login/employer"} className="w-full">
                   <motion.button
                     className="bg-secondary-dark p-2 rounded-lg my-2 w-40" 
                     whileHover={{ scale: 1.1 }}
@@ -114,11 +114,14 @@ function App() {
 
       <Banner />
       <div
+      id="services"
       // className="bg-secondary-dark"
       >
         <Features />
       </div>
-     <Benefits/>
+      <div id="features">
+     <Benefits />
+      </div>
       <FAQ />
       <Footer />
     </div>

@@ -19,7 +19,7 @@ const Features = () => {
     //   border: '1px solid rgba(255, 255, 255, 0.34)',
     // }}
     >
-      <h1 id="services" className="text-center text-4xl font-bold text-secondary-dark">
+      <h1 id="" className="text-center text-4xl font-bold text-secondary-dark">
         Why SkillSync Pro
       </h1>
 
@@ -37,7 +37,7 @@ const Features = () => {
             <h2 className="text-secondary-dark text-xl font-bold mb-2">User Profiling</h2>
             {/* Detail */}
             <p className="text-secondary-dark">
-              Personalize user profiles for admins, recruiters, job seekers, and
+              Personalize user profiles for admins, employers, job seekers, and
               employers. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
               Illo, eaque aliquam. Fuga ut illum dolores minima, corporis
               voluptate ratione vel! Non mollitia, consequatur obcaecati iure
