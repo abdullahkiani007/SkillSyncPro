@@ -37,17 +37,17 @@ const FAQ = () => {
         {
           id: 3,
           question: "What types of skill assessments are available on SkillSync Pro?",
-          answer: "SkillSync Pro offers a wide range of skill assessments covering various domains such as programming, communication skills, leadership, and more. These assessments are designed to help recruiters evaluate candidates effectively."
+          answer: "SkillSync Pro offers a wide range of skill assessments covering various domains such as programming, communication skills, leadership, and more. These assessments are designed to help employers evaluate candidates effectively."
         },
         {
           id: 4,
           question: "Can I customize the skill assessments on SkillSync Pro?",
-          answer: "Yes, SkillSync Pro allows recruiters to customize skill assessments according to their specific requirements. You can create custom assessment tests tailored to your job roles and industry."
+          answer: "Yes, SkillSync Pro allows employers to customize skill assessments according to their specific requirements. You can create custom assessment tests tailored to your job roles and industry."
         },
         {
           id: 5,
           question: "How does SkillSync Pro help with resume management?",
-          answer: "SkillSync Pro provides tools for efficient resume management, allowing recruiters to upload, organize, and analyze resumes easily. The platform extracts key information from resumes, such as skills, experience, and education, making it easier to identify qualified candidates."
+          answer: "SkillSync Pro provides tools for efficient resume management, allowing employers to upload, organize, and analyze resumes easily. The platform extracts key information from resumes, such as skills, experience, and education, making it easier to identify qualified candidates."
         }
         // Add more FAQs as needed
     ];
