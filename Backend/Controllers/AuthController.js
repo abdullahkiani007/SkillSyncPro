@@ -2,24 +2,29 @@ const userAuth = require('../Services/auth.service')
 
 class AuthController  {
     async login(req, res,next) {
+        console.log("POST /login called ")
         const {email,password} = req.body;
 
         if (!email || !password) {
             return res.status(400).json({message: 'Email and password are required'});
         }
         try{
-            const user = await userAuth.login(email);
+            const user = await userAuth.login(email,password);
             if (user.error) {
                 const error = {
                     status: 401,
                     message: user.message
                 }
-                next(error);
+                return next(error);
             }
+            res.status(200).json({
+                user : user.user,
+                token : user.token
+            });
 
 
         }catch(error){
-            next(error);
+            return next(error);
         }
     }
 
@@ -33,11 +38,14 @@ class AuthController  {
                     status: 401,
                     message: user.message
                 }
-                next(error);
+                return next(error);
             }
-            res.status(201).json(user);
+            res.status(201).json({
+                user : user.user,
+                token : user.token
+            });
         }catch(error){
-            next(error);
+           return next(error);
         }
     }
 }

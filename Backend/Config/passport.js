@@ -5,12 +5,13 @@ const userModel = require('../Models/user.model');
 
 const opts = {
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.JWT_SECRET
+    secretOrKey: "my_secret_key",
 };
 
 module.exports = (passport) => {
     passport.use(
         new JWTStrategy(opts, async (jwt_payload, done) => {
+            console.log(opts.jwtFromRequest)
             try {
                 const user = await userModel.findById(jwt_payload.id);
                 if (user) {

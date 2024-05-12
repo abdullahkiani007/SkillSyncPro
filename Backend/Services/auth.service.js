@@ -21,10 +21,12 @@ class AuthService {
 
         // set up jwt token using passport js
         const token = generateToken(user._id, user.role);
-
         return{
             error: false,
-            user,
+            user:{name: user.name,
+            email: user.email,
+            role: user.role,
+            id: user._id},
             token
         }
     }
@@ -43,7 +45,12 @@ class AuthService {
 
         return {
             error: false,
-            user,
+            user:{
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                id: user._id
+            },
             token
         };
     }
