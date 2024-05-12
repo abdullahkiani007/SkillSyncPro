@@ -11,6 +11,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const route = window.location.pathname.split("/")[2];
   const [path, setPath] = useState(route);
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [error, setError] = useState("");
+
   // get route path or url path
 
   useEffect(() => {}, [path]);
@@ -47,10 +50,14 @@ const Login = () => {
   };
 
   const handleClick = () => {
-    if (email === "test@gmail.com" && password === "test") {
-      alert("Login Successful!");
+    if (emailRegex.test(email)) {
+      if (email === "test@gmail.com" && password === "test") {
+        alert("Login Successful!");
+      } else {
+        setError("Invalid email or password");
+      }
     } else {
-      alert("Invalid Credentials!");
+      setError("Invalid Email");
     }
   };
 
@@ -121,9 +128,13 @@ const Login = () => {
                 value={password}
                 onChange={handlePasswordChange}
               ></input>
+              {error && <p className="text-red-700"> {error}</p>}
               <button
-                className="rounded-2xl m-2 text-white bg-primary w-2/5 px-4 py-2 shadow-md hover:text-primary hover:bg-white transition duration-200 ease-in"
+                className="rounded-2xl m-2 text-white bg-primary w-2/5 px-4 py-2 shadow-md hover:text-primary hover:bg-white transition duration-200 ease-in disabled:bg-primary disabled:opacity-70 disabled:text-white"
                 onClick={() => handleClick()}
+                disabled={
+                  email === "" || !emailRegex.test(email) || password === ""
+                }
               >
                 Sign In
               </button>
