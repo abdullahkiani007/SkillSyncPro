@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import { Facebook, GitHub, Google } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useFormik } from "formik";
+import signupSchema from "../../Schemas/Signup/signupSchema";
 
 const SignUpForm = () => {
   const route = window.location.pathname.split("/")[2];
   const [path,setPath] = useState(route);
+  const { values, touched, handleBlur, handleChange, errors } = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: signupSchema,
+  });
 
   const dropIn = {
     hidden: {
@@ -28,28 +38,25 @@ const SignUpForm = () => {
     },
   };
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
+  // const handleNameChange = (e) => {
+  //   setName(e.target.value);
+  // };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  // const handleEmailChange = (e) => {
+  //   setEmail(e.target.value);
+  // };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+  // const handlePasswordChange = (e) => {
+  //   setPassword(e.target.value);
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
+    alert("Form Submitted");
   };
 
   return (
@@ -100,23 +107,35 @@ const SignUpForm = () => {
               type="text"
               className="text-black rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0"
               placeholder="Name"
-              value={name}
-              onChange={handleNameChange}
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.name && errors.name ? 1 : undefined}
             ></input>
+            <p className="text-white">{errors.name}</p>
             <input
               type="email"
               className="text-black rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0"
               placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.email && errors.email ? 1 : undefined}
             ></input>
+            <p className="text-white">{errors.email}</p>
             <input
               type="password"
               className="text-black rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0"
               placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.password && errors.password ? 1 : undefined}
             ></input>
+            <p className="text-white">{errors.password}</p>
             <button
               className="rounded-2xl m-4 text-primary bg-white w-3/5 px-4 py-2 shadow-md hover:text-white hover:bg-primary transition duration-200 ease-in"
               onClick={handleSubmit}
