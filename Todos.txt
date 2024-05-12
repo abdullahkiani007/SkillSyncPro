@@ -1,0 +1,7 @@
+Todo:
+manage user state
+setup Backend |> architecture > Models > controllers  <<<------ current
+connect frontend with backend
+create dashboard component
+create profile component
+allow user to edit profile
