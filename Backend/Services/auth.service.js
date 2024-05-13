@@ -4,7 +4,7 @@ const generateToken = require('../Utils/jwt');
 
 class AuthService {
     
-  async login(email, password) {
+  async login(email, password,userType) {
         const user = await userModel.findOne({ email });
         if (!user) {
             return {
@@ -12,7 +12,17 @@ class AuthService {
                 message: 'User not found'
             };
         }
-        if (user.password !== password) {
+
+         if (user.role.toLowerCase() !== userType.toLowerCase()) {
+            console.log(user.role , userType)
+            return {
+                error: true,
+                message: 'User not found'
+            };
+        }
+
+        if (user.password !== password ) {
+
             return {
                 error: true,
                 message: 'Incorrect password'

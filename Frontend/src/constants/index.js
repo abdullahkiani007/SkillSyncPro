@@ -79,6 +79,7 @@ export const benefits = [
   
     imageUrl: benefitImage2,
   },
+
 ];
 
 
