@@ -3,13 +3,13 @@ const userAuth = require('../Services/auth.service')
 class AuthController  {
     async login(req, res,next) {
         console.log("POST /login called ")
-        const {email,password} = req.body;
+        const {email,password,userType} = req.body;
 
         if (!email || !password) {
             return res.status(400).json({message: 'Email and password are required'});
         }
         try{
-            const user = await userAuth.login(email,password);
+            const user = await userAuth.login(email,password,userType);
             if (user.error) {
                 const error = {
                     status: 401,

@@ -59,6 +59,7 @@ const Login = ({userType}) => {
     const data = {
       email: values.email,
       password: values.password,
+      userType
     };
     try {
       const response = await Controller.login(data);
