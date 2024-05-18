@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use('/auth', authRoutes);
 router.use('/jobseeker', jobseekerRoutes);
-
+// rouuter.use('/employer',employerRoutes)
 
 module.exports = router;
 
