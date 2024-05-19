@@ -1,8 +1,15 @@
-import React from 'react';
-import { Typography, Container, Card, CardContent } from '@mui/material';
+import React , {useState , useEffect}from 'react';
+import { Typography, Container, Card, CardContent, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import jobseeker from '../../../API/jobseeker';
+import { useSelector } from 'react-redux';
+
 const AppliedJobs = () => {
     const navigate = useNavigate();
+    const user = useSelector((state)=>state.user);
+
+    const [jobs,setJobs] = useState([]);
+
   // Static data for applied jobs
   const applications = [
     {
@@ -53,6 +60,31 @@ const AppliedJobs = () => {
     },
   ];
 
+  useEffect(()=>{
+  const Jobs = localStorage.getItem("jobs")
+  if(Jobs){
+    console.log(JSON.parse(Jobs));
+
+    const jobItems = JSON.parse(Jobs).filter((job) => {
+      return job.applicants.includes(user._id)
+    })
+    setJobs(jobItems);
+    // console.log("job state" , job);
+  }
+},[])
+
+if (jobs.length === 0) {
+  return(
+    <Container maxWidth="md">
+      <Typography variant="h3" align="center" gutterBottom>
+        No Applied Jobs
+      </Typography>
+      <Button variant="contained" color="primary" onClick={() => navigate("/jobseeker/jobs")}>Consider Applying </Button>
+    
+    </Container>
+  
+  )
+}
   return (
     <Container maxWidth="md">
       <Typography variant="h3" align="center" gutterBottom>

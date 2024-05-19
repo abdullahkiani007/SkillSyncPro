@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Chip, Box, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const jobDetails = {
   title: 'Frontend Developer',
@@ -43,12 +44,26 @@ const jobDetails = {
 
 
 const Job = () => {
+  const id = window.location.pathname.split("/")[3];
+  const navigate = useNavigate();
+
+  console.log(id)
+    const [job,setJob] = useState({});
     const [applied,setApplied] = useState(false);
     const user = useSelector((state) => state.user);
     console.log(jobDetails.applicants.filter((applicant) => applicant._id === user._id))
     if (jobDetails.applicants.find((applicant) => applicant._id === user._id)) {
         setApplied(true);
         }
+
+    useEffect(()=>{
+      const jobs = localStorage.getItem("jobs")
+      if(jobs){
+        const jobItem = JSON.parse(jobs).filter((job) => job._id === id)
+        setJob(jobItem[0]);
+        console.log("job state" , job);
+      }
+    },[])   
   return (
     <Container maxWidth="md" className="mt-10">
       <Card className="shadow-2xl">
@@ -56,37 +71,40 @@ const Job = () => {
         <CardContent>
             <div>
           <Typography variant="h4" component="h1" className="mb-4">
-            {jobDetails.title}
+            {job.title}
           </Typography>
           {applied && <p className='bg-green-700 text-white px-3 py-2 w-fit rounded-lg my-4'>Already Applied</p>}
             </div>
           <Typography variant="h6" color="textSecondary" className="mb-2">
-            {jobDetails.company}
+            {job.companyName}
           </Typography>
           <Typography variant="body2" color="textSecondary" className="mb-4">
-            {jobDetails.location}
+            {job.location || "Hybrid"}
           </Typography>
           <Box className="mb-4">
-            <Chip label={jobDetails.employmentType} className="mr-2" />
-            <Chip label={jobDetails.salaryRange} />
+            <Chip label={job.employmentType || "Full-Time"} className="mr-2" />
+            <Chip label={job.salaryRange || "TBD"} />
           </Box>
           <Divider className="my-4" />
           <Typography variant="h6" className="mb-2">
             Job Description
           </Typography>
           <Typography variant="body1" className="mb-4">
-            {jobDetails.description}
+            {job.description}
           </Typography>
           <Typography variant="h6" className="mb-2">
             Requirements
           </Typography>
+          {job.requirements ?
           <ul className="list-disc ml-5">
-            {jobDetails.requirements.map((requirement, index) => (
+            {job.requirements.map((requirement, index) => (
               <li key={index}>
                 <Typography variant="body1">{requirement}</Typography>
               </li>
             ))}
-          </ul>
+          </ul> :
+          <p>No requirements Found</p>
+          }
           <Divider className="my-4" />
           { applied?(
             <>
@@ -118,7 +136,9 @@ const Job = () => {
               </CardContent>
             </Card>
             </>):(
-            <button className="bg-green-700 text-white px-3 py-2 w-fit rounded-lg my-4">Apply</button>
+            <button className="bg-green-700 text-white px-3 py-2 w-fit rounded-lg my-4"
+            onClick={() => navigate("../job/apply/"+job._id)}
+            >Apply</button>
             )    
             }
           <Divider className="my-4" />

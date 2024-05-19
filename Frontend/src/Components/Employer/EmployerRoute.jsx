@@ -6,12 +6,14 @@ import Sidebar from './navbar/Sidebar'
 import Header from './navbar/Header'
 import { useSelector } from 'react-redux';
 import Loader from '../Loader/Loader';
+import SignUpForm from '../Employer/Company/Signup'
 
 
 const EmployerRoute = () => {
   const user = useSelector((state)=>state.user);
   const navigate = useNavigate();
 
+  // return <SignUpForm/>
   if (user.auth && user.role === "employer"){
   return (
     <div className='flex h-full '>
