@@ -1,40 +1,57 @@
-import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Grid } from '@mui/material';
-import jobPostSchema from '../../../../Schemas/Employer/jobPost.schema';
+import React, { useState } from "react";
+import { TextField, Button, Typography, Container, Grid } from "@mui/material";
+import jobPostSchema from "../../../../Schemas/Employer/jobPost.schema";
 import { Formik, useFormik } from "formik";
-
+import EmployerController from "../../../../API/employer";
 
 const JobPost = () => {
-
+  const [mesage, setMessage] = useState("");
   const { values, touched, handleBlur, handleChange, errors } = useFormik({
     initialValues: {
-      title: '',
-      description: '',
-      requirements: '',
-      company: '',
-      location: '',
-      salaryRange: '',
-      employmentType: '',
+      title: "",
+      description: "",
+      requirements: "",
+      company: "",
+      location: "",
+      salaryRange: "",
+      employmentType: "",
     },
     validationSchema: jobPostSchema,
   });
 
-  
-
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values)
+
+    const token = localStorage.getItem("token");
+    try {
+      const response = await EmployerController.postJob(values, token);
+      if (response.status === 200) {
+        setMessage("Job Posted Successfully");
+        setTimeout(() => {
+          setMessage("");
+        },3000)
+      } else {
+        setMessage("Error Posting Job");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     // You can handle form submission here
     // console.log(values);
   };
 
   return (
     <Container maxWidth="md">
+      {mesage && (
+        <Typography className="mx-auto fixed bottom-0 right-0 z-100 bg-gray-800 text-white p-10 rounded-lg" variant="h6" component="h6" align="center" gutterBottom>
+          {mesage}
+        </Typography>
+      )}
       <Typography variant="h4" component="h1" align="center" gutterBottom>
         Post a Job
       </Typography>
-      <form onSubmit={handleSubmit}>
+      <form>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
@@ -76,7 +93,9 @@ const JobPost = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               variant="outlined"
-              error={errors.requirements && touched.requirements ? 1 : undefined}
+              error={
+                errors.requirements && touched.requirements ? 1 : undefined
+              }
               helperText={touched.requirements && errors.requirements}
             />
           </Grid>
@@ -132,15 +151,28 @@ const JobPost = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               variant="outlined"
-              error={errors.employmentType && touched.employmentType ? 1 : undefined}
+              error={
+                errors.employmentType && touched.employmentType ? 1 : undefined
+              }
               helperText={touched.employmentType && errors.employmentType}
             />
           </Grid>
           <Grid item xs={12}>
             <Button
+              onClick={(e) => handleSubmit(e)}
               type="submit"
               variant="contained"
               color="primary"
+              disabled={
+                !values.title ||
+                !values.description ||
+                !values.requirements ||
+                !values.company ||
+                !values.location ||
+                !values.salaryRange ||
+                !values.employmentType ||
+                Object.keys(errors).length > 0
+              }
             >
               Post Job
             </Button>

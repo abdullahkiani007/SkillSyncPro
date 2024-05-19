@@ -286,14 +286,14 @@ const [sidebarOpen,setSidebarOpen] = useState(true);
                 }}
               </SidebarLinkGroup>
               {/* Tasks */}
-              <SidebarLinkGroup activecondition={pathname.includes('tasks')}>
+              <SidebarLinkGroup activecondition={pathname.includes('companies')}>
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <a
                         href="#0"
                         className={`block text-slate-200 truncate transition duration-150 ${
-                          pathname.includes('tasks') ? 'hover:text-slate-200' : 'hover:text-white'
+                          pathname.includes('companies') ? 'hover:text-slate-200' : 'hover:text-white'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();

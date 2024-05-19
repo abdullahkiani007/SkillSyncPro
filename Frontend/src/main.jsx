@@ -29,6 +29,11 @@ import JobPost from './Components/Employer/Job/JobPost/jobPost.jsx'
 import CompaniesList from './Components/Jobseeker/companies/companiesList.jsx'
 import Company from './Components/Jobseeker/companies/company.jsx'
 import Analytics from './Components/Jobseeker/Analytics/analytics.jsx'
+import EmployerAnalytics from './Components/Employer/Analytics/analytics.jsx'
+import EmpCompany from './Components/Employer/Company/Company.jsx'
+import AdminRoutes from './Components/Admin/AdminRoutes.jsx'
+import AdminLoginPage from './Components/Admin/AdminLogin.jsx'
+import ApplyPage from './Components/Jobseeker/Jobs/JobApplication/ApplyPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -52,6 +57,9 @@ const router = createBrowserRouter([
       },{
         path:"/signup/employer",
         element: <SignUpForm />
+      },{
+        path:"/login/admin",
+        element:<AdminLoginPage/>
       }
     ],
   },{
@@ -80,7 +88,13 @@ const router = createBrowserRouter([
       },{
         path:"job/:id",
         element:<Job/>
-      },{
+      },
+      {
+        path:"job/apply/:id",
+        element:<ApplyPage/>
+      }
+      ,
+      {
         path:"companies",
         element:<CompaniesList/>
       },{
@@ -96,6 +110,14 @@ const router = createBrowserRouter([
         path:"dashboard",
         element:<EmpDashboard/>
       },{
+        path:"dashboard/analytics",
+        element:<EmployerAnalytics/>
+      },
+      {
+        path:"company-profile",
+        element:<EmpCompany/>
+      }
+      ,{
         path:"inbox",
         element:<h1>Messages</h1>
       },{
@@ -104,10 +126,37 @@ const router = createBrowserRouter([
       },{
         path:"job/job-post",
         element:<JobPost/>
+      },{
+        path:"job/:id",
+        element:<h1>Heyyy</h1>
       }
 
     ]
-  }
+  },{
+    path:"/admin",
+    element:<AdminRoutes/>,
+    children:[
+      {
+        path:"dashboard",
+        element:<h1>Dashboard</h1>
+      },{
+        path:"jobseekers",
+        element:<h1>Jobseekers</h1>
+      },{
+        path:"employers",
+        element:<h1>Employers</h1>
+      },{
+        path:"jobs",
+        element:<h1>Jobs</h1>
+      },{
+        path:"companies",
+        element:<h1>Companies</h1>
+      },{
+        path:"analytics",
+        element:<h1>Analytics</h1>
+      }
+    ]
+  },
   // {
   //   path: "getstarted",
   //   element: <GetStarted/>,
