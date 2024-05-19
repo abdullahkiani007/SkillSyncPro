@@ -19,7 +19,26 @@ const UserService = {
     },
 
     async getInfo(id){
-        
+        let response;
+        try{
+            response = await userModel.findById(id);
+            if (response){
+                return {
+                    "status":200,
+                    "data":response,
+                }
+            }else{
+                return{
+                    "status":404,
+                    "message":"User not found",
+                }
+            }
+        }catch(err){
+            return {
+                "status":500,
+                "message":"Internal server error"
+            }
+        }
     }
 }
 

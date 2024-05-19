@@ -1,7 +1,7 @@
 const userModel = require('../Models/user.model');
 const userService = require('./user.service');
 const generateToken = require('../Utils/jwt');
-const jobSeekerModel = require('../Models/jobSeeker.model');
+const jobSeekerModel = require('../Models/jobseeker.model');
 const employerModel = require('../Models/employer.model');
 
 const AuthService = {

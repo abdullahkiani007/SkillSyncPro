@@ -1,4 +1,4 @@
-const jobSeekerModel = require('../Models/jobSeeker.model');
+const jobSeekerModel = require('../Models/jobseeker.model');
 const userModel = require('../Models/user.model');
 const updateUserService = require('../Services/user.service');
 
@@ -9,23 +9,15 @@ const jobseekerService = {
         const jobSeeker = await jobSeekerModel.findOne({user:id}).populate('user');
         return jobSeeker;
     },
-    updateJobSeeker: async (id, data) => {
-        const user = await updateUserService.updateUser(id, {firstName: data.firstName, lastName: data.lastName});
-        const jobSeeker = await jobSeekerModel.findOneAndUpdate({user:id},
-            {
-                phone: data.phone,
-                address: data.address,
-                skills: data.skills,
-                education: data.education,
-                experience: data.experience,
-            }, {new: true});
 
-            console.log("jobSeeker", jobSeeker);
-        return {
-            status: 200,
-            message: "Jobseeker updated successfully",
-        }
-    }
+    addApplication: async(_id, applicationId) => {
+    const jobSeeker = await jobSeekerModel.findByIdAndUpdate(_id, {
+        $push: { applications: applicationId }
+    }, { new: true }); // return the updated document
+
+    return jobSeeker;
+}
+
 }
 
 module.exports = jobseekerService;
