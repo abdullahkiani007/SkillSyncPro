@@ -4,6 +4,7 @@ const router = express.Router();
 const authController = require('../../Controllers/AuthController');
 const passport = require('passport');
 const userController = require('../../Controllers/UserController');
+const jobseekerController = require('../../Controllers/JobseekerController');
 
 require('../../Config/passport')(passport);
 
@@ -13,9 +14,12 @@ router.get("/protected",passport.authenticate('jwt', { session: false }), (req, 
 
 router.get("/profile",
 passport.authenticate('jwt', { session: false }),userController.getInfo)
-
 router.put("/profile",
 passport.authenticate('jwt', { session: false }),userController.updateInfo)
+router.post("/job/apply",passport.authenticate('jwt',{
+    session:false
+}),jobseekerController.applyJob);
+
 
 
 module.exports = router;

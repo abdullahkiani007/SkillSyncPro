@@ -34,12 +34,20 @@ const companySchema = new mongoose.Schema({
       ref: 'Employer',
     }
   ],
+  createdBy:
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  
+  ,
   jobs: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Job',
     }
   ],
+  
 }, { timestamps: true });
 
 module.exports = mongoose.model('Company', companySchema);
