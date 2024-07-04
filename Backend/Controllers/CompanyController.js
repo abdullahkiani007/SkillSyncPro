@@ -80,6 +80,12 @@ const CompanyController = {
         res.status(500).json({
             "message":"Internal server error"
         })
+    },
+
+    async getEmployes(req,res,next){
+      const {id} = req.user;
+        const response = await companyService.getEmployes(id);
+
     }
 }
 

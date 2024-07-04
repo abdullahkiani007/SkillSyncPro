@@ -3,6 +3,7 @@ import CreatableSelect from 'react-select/creatable';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Controller from '../../../API/index';
+// import Upload from '../../Cloudinary/Upload';
 
 const ProfileForm = (props) => {
   const [formData, setFormData] = useState({ ...props.formData });
@@ -78,6 +79,16 @@ const ProfileForm = (props) => {
 
   return (
     <div className='w-1/2'>
+      {/* <TextField
+  label="Address"
+  name='address'
+  variant="outlined"
+  value={formData.address}
+  className='w-full'
+  onChange={handleChange}
+  sx={{ mt: '2rem', backgroundColor: 'white' }}
+/> */}
+<Upload />
       <TextField
         label="First Name"
         name='firstName'

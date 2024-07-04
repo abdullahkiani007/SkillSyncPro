@@ -10,11 +10,10 @@ const opts = {
 };
 
 module.exports = (passport) => {
-    console.log(1)
     passport.use(
         new JWTStrategy(opts, async (jwt_payload, done) => {
             try {
-                console.log("2")
+
                 const user = await userModel.findById(jwt_payload.id);
                 if (user) {
                     return done(null, user);

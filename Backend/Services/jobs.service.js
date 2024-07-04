@@ -45,7 +45,38 @@ const jobService = {
                 "message":"Internal Server Error"
             }
         }
+    },
+    getApplications: async (id) => {
+
+        try {
+            const jobseekerId = await JobseekerService.getJobSeeker(id);
+            const jobseeker = await JobseekerModel.findById(jobseekerId._id).populate('applications');
+            return {
+                status:200,
+                jobseeker
+            };
+        } catch (error) {
+            return { status:500, "message":"Internal server error" };
+        }
+    },
+
+    getAppliedJobs: async (id) => {
+        try {
+            const jobseekerId = await JobseekerService.getJobSeeker(id);
+            const applications = await ApplicationModel.find({jobSeeker:jobseekerId._id}).populate('job');
+
+            const jobs = applications.map((application)=>{
+                return application.job;
+            });
+            return {
+                status:200,
+                jobs
+            };
+        } catch (error) {
+            return { status:500, "message":"Internal server error" };
+        }
     }
+
 }
 
 module.exports = jobService

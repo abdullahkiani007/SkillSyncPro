@@ -11,7 +11,7 @@ const applicationStatusData = [
 ];
 
 const companyPopularityData = [
-  { name: 'Tech Innovators', applications: 15 },
+  { name: 'Codewar', applications: 15 },
   { name: 'Green Energy', applications: 10 },
   { name: 'Finance Corp', applications: 7 },
 ];

@@ -49,11 +49,11 @@ const Profile = () => {
     // ...
 
     return loading ? <Loader /> : (
-        <div className="w-full min-h-screen bg-gray-100 p-20 mt-20 flex flex-col items-center">
+        <div className="w-full  bg-gray-100 p-20 mt-20 flex flex-col items-center">
             <img src="https://source.unsplash.com/random" alt='profile' className='w-24 h-24 rounded-full mb-5' />
             <h1 className='font-bold text-2xl mb-5'>Profile management</h1>
             {readMode ? (
-                <div className="mt-5 w-full max-w-2xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div className="mt-5 w-full h-full max-w-2xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 overflow-auto">
                     <div className="flex flex-row">
                         <div className="w-1/2">
                             <p className="text-lg font-bold">First Name:</p>
