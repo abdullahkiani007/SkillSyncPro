@@ -6,9 +6,16 @@ class JobseekerController{
     }
     async getJobs(){
        try {
-           const response = await fetch(this.jobUrl);
-           const data = await response.json();
-           return data;
+           const response = await fetch(this.jobUrl,{
+                method: 'GET',
+                headers: {
+                     'Content-Type': 'application/json'
+                }
+           });
+     return {
+                data: await response.json(),
+                status: response.status 
+           }
        }catch(error){
               return { status:500, "message":"Internal server error" };
        }
@@ -37,6 +44,52 @@ class JobseekerController{
             }
         }
 
+    }
+
+    async getAppliedJobs(token){
+        try{
+            const response = await fetch(this.jobSeekerUrl+"/jobs/applied",{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token,
+                }
+            })
+
+            return {
+                data: await response.json(),
+                status: response.status
+            };
+
+        }catch(error){
+            return {
+                status:500,
+                "message":"Internal Server Error"
+            }
+        }
+    }
+
+    async getApplications(token){
+        try{
+            const response = await fetch(this.jobSeekerUrl+"/applications",{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token,
+                }
+            })
+
+            return {
+                data: await response.json(),
+                status: response.status
+            };
+
+        }catch(error){
+            return {
+                status:500,
+                "message":"Internal Server Error"
+            }
+        }
     }
 }
 

@@ -64,6 +64,39 @@ const EmployerServices = {
                 "message":"User or Company not found"
             }
         }
+    },
+    async getDashboard(_id){
+        let jobs;
+        const company = await CompanyService.getCompanybyUserId(_id);
+        if (company.status === 200)
+            try{
+                jobs = await Job.find({company:company.data._id});
+
+                if (jobs){
+                return {
+                    "status":200,
+                    "jobs":jobs,
+                    "company":company.data
+                }}
+                else{
+                    return{
+                        "status":404,
+                        "message":"No jobs Exists"
+                    }
+                }
+            }catch(err){
+                console.log(err)
+                return {
+                    "status":500,
+                    "message":"Internal server error"
+                }
+            }
+        else{
+            return {
+                "status":404,
+                "message":"Company not found"
+            }
+        }
     }
 }
 

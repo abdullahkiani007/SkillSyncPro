@@ -116,6 +116,8 @@ const companyService = {
             }
         }
     }
+    ,
+    // async getEmployees()
 }
 
 module.exports = companyService;

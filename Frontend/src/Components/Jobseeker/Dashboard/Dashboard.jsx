@@ -1,6 +1,30 @@
-import React from 'react';
-
+import React , {useState, useEffect}from 'react';
+import userController from '../../../API/index';
+import { useSelector } from 'react-redux';''
 const Dashboard = () => {
+  const user = useSelector((state) => state.user);
+
+  const [userData, setUserData] = useState(user);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+
+    // Fetch user data
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+
+      try {
+        const response = await userController.getProfile(token);
+        if (response.status ===200){
+          // setUserData(response.data.response.user);
+          console.log(response.data.response);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserData();
+
+  },[]);
   return (
     <div className="h-screen w-full p-10 bg-gray-100">
       <h1 className="text-3xl font-bold mb-10">Dashboard</h1>
@@ -11,10 +35,9 @@ const Dashboard = () => {
         <div className="flex flex-row">
           <img src="https://via.placeholder.com/100" alt="Profile" className="w-24 h-24 rounded-full mr-5" />
           <div>
-            <p><strong>Name:</strong> John Doe</p>
-            <p><strong>Email:</strong> john.doe@example.com</p>
-            <p><strong>Phone:</strong> +123456789</p>
-            <p><strong>Bio:</strong> Experienced software developer...</p>
+            <p><strong>Name:</strong> {userData.firstName ||"-"} {userData.lastName ||"-"}</p>
+            <p><strong>Email:</strong> {userData.email || "-"}</p>
+            <p><strong>Phone:</strong> {userData.phone || "-"}</p>
           </div>
         </div>
       </div>

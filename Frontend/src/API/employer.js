@@ -74,5 +74,19 @@ class EmployerController {
             status: response.status
         };
     }
+
+    async getDashboard(token){
+        const response = await fetch(this.url + "dashboard", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return {
+            data: await response.json(),
+            status: response.status
+        };
+    }
 }
 export default new EmployerController();
