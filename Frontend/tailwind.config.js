@@ -26,7 +26,6 @@
 //   plugins: [],
 // }
 
-
 /** @type {import('tailwindcss').Config} */
 import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
@@ -39,16 +38,20 @@ export default {
   ],
   theme: {
     extend: {
+      flex: {
+        "2/3": "2 2 0%",
+        "1/3": "1 1 0%",
+      },
       colors: {
         primary: {
-          light: '#FFD460',
-          DEFAULT: '#E14411',
-          dark: '#8B322C',
+          light: "#FFD460",
+          DEFAULT: "#E14411",
+          dark: "#8B322C",
         },
         secondary: {
-          light: '#FEFAE0',
-          DEFAULT: '#FFD700',
-          dark: '#2D4059',
+          light: "#FEFAE0",
+          DEFAULT: "#FFD700",
+          dark: "#2D4059",
         },
         color: {
           1: "#AC6AFF",
@@ -110,7 +113,8 @@ export default {
         DEFAULT: "0.0625rem",
       },
       backgroundImage: {
-        'parallax':"url('https://images.unsplash.com/photo-1535378620166-273708d44e4c?q=80&w=2157&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+        parallax:
+          "url('https://images.unsplash.com/photo-1535378620166-273708d44e4c?q=80&w=2157&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
         "radial-gradient": "radial-gradient(var(--tw-gradient-stops))",
         "conic-gradient":
           "conic-gradient(from 225deg, #FFC876, #79FFF7, #9F53FF, #FF98E2, #FFC876)",
@@ -180,5 +184,3 @@ export default {
     }),
   ],
 };
-
-

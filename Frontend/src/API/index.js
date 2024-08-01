@@ -32,6 +32,39 @@ class Controller {
         };
     }
 
+    async getProfile(token){
+        const response = await fetch(this.url + "/jobseeker/profile", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+           
+        });
+
+        return {
+            data: await response.json(),
+            status: response.status
+        };
+    }
+
+    async updateProfile(token,data){
+        const response = await fetch(this.url + "/jobseeker/profile", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        return {
+            data: await response.json(),
+            status: response.status
+        };
+    }
+
+
 }
 
 export default new Controller();
