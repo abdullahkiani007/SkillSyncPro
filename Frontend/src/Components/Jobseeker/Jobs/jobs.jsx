@@ -11,12 +11,78 @@ import {
 } from "@mui/material";
 import jobseekerController from "../../../API/jobseeker.js";
 import Loader from "../../../Components/Loader/Loader.jsx";
+import { FaFilter } from "react-icons/fa6";
+
+const jobDetails = {
+  title: "Frontend Developer",
+  companyInfo: "Lifafa is a software company",
+  description: "Develop and maintain web applications using React.js.",
+  requirements: [
+    "3+ years of experience in frontend development",
+    "Proficiency in React.js and JavaScript",
+    "Experience with CSS and responsive design",
+    "Strong problem-solving skills",
+  ],
+  companyName: "Tech Corp",
+  companyDescription:
+    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit doloremque ab commodi explicabo, minima facere? Perferendis exercitationem aliquam quia voluptate saepe obcaecati quas fugit vero doloremque commodi ducimus accusantium sed possimus, minus quam perspiciatis, nihil nostrum, neque dolorum. Debitis, repellat earum molestiae iusto nam, perspiciatis expedita architecto aut asperiores distinctio qui, sint odit. Omnis nam magni, odit tempora labore quas inventore expedita ut! Nobis temporibus iste repellat enim, quo animi eius illo debitis commodi? Asperiores adipisci quasi iure vero, ex dolorem recusandae maiores aut id non. Harum libero explicabo vitae animi sunt quae. Modi quasi tempore ut, quidem reiciendis harum?,",
+  postedBy: "John Doe",
+  location: "New York, NY",
+  salaryRange: "70k-90k PKR",
+  deadLine: "2024-05-25",
+  postedOn: "2024-04-25",
+  employmentType: "Full-time",
+  experienceLevel: "Mid-Level",
+  applicants: [
+    {
+      _id: "1",
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane@gmail.com",
+    },
+    {
+      _id: "2",
+      firstName: "John",
+      lastName: "Doe",
+      email: "john@gmai.com",
+    },
+  ],
+  application: {
+    jobSeeker: "Jane Smith",
+    status: "Under Review",
+    resume: "resume1.pdf",
+    coverLetter: "Looking forward to joining your team!",
+    interview: {
+      date: "2024-05-25",
+    },
+  },
+};
 
 const Jobs = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    sortBy: "",
+    location: "",
+    employmentType: "",
+    experienceLevel: "",
+    salaryRange: "",
+  });
+  const [filteredJobs, setFilteredJobs] = useState(); // Filtered list of jobs
+
+  const applyFilters = () => {
+    let result = jobs;
+    if (filters.location) {
+      result = result.filter((job) => job.location === filters.location);
+    }
+    if (filters.type) {
+      result = result.filter((job) => job.type === filters.type);
+    }
+    setFilteredJobs(result);
+  };
 
   useEffect(() => {
     async function getJobs() {
@@ -61,55 +127,9 @@ const Jobs = () => {
     return <Loader />;
   }
   return (
-    <Container maxWidth="lg" className="min-h-screen mt-20 p-20 bg-gray-100">
-      <Typography variant="h4" component="h1" className="font-bold mb-10">
-        Jobsss
-      </Typography>
-      <Grid container spacing={4}>
-        {jobs.map((job) => (
-          <Grid item xs={12} md={6} lg={4} key={job.id}>
-            <Card
-              className="h-full flex flex-col hover:bg-slate-100"
-              onClick={() => navigate(`/jobseeker/job/${job._id}`)}
-            >
-              {job.applied && (
-                <p className="bg-green-800 text-white px-3 py-2 rounded-lg">
-                  Applied
-                </p>
-              )}
-              <CardContent className="flex flex-col flex-grow">
-                <Typography variant="h5" component="h2" className="font-bold">
-                  {job.title}
-                </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  {job.company}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {job.location}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textPrimary"
-                  className="text-green-500"
-                >
-                  {job.salary}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  className="mt-2 flex-grow"
-                >
-                  {job.description}
-                </Typography>
-                <Typography variant="caption" color="textSecondary">
-                  {job.date}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+    <div>
+      <h1>Hello world</h1>
+    </div>
   );
 };
 
