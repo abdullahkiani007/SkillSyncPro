@@ -34,7 +34,7 @@ function App() {
     <div>
       {/* <Navbar />
        */}
-       <Header/>
+       {/* <Header/> */}
 
       {/* Hero Section */}
       <div

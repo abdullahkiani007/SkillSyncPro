@@ -8,6 +8,9 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 const cors = require('cors');
 
+
+require('./Config/passport')(passport); // This applies the JWTStrategy
+
 dotenv.config();
 app.use(cors());
 app.use(express.json());
