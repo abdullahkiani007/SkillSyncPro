@@ -31,6 +31,13 @@
   }
 }
 
+/* index.css or App.css */
+body {
+  @apply overflow-x-hidden;
+}
+
+
+
 .rotate-45 {
   @apply rotate-[45deg];
 }

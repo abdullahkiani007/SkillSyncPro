@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 import { Facebook, GitHub, Google } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useFormik } from "formik";
 import signupSchema from "../../Schemas/Signup/signupSchema";
 import Controller from "../../API/index";
+import Loader from "../Loader/Loader";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/userSlice";
+
+
+
 
 const SignUpForm = () => {
   const route = window.location.pathname.split("/")[2];
   const [path, setPath] = useState(route);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { values, touched, handleBlur, handleChange, errors } = useFormik({
     initialValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     },
@@ -40,22 +52,47 @@ const SignUpForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const data = {
-        name: values.name,
+        firstName: values.firstName,
+        lastName: values.lastName,
         email: values.email,
         password: values.password,
         role: path,
       };
       const response = await Controller.signUp(data);
-      console.log(response);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
+        console.log(response.data);
+
+        dispatch(
+          login({
+            _id: response.data.user.id,
+            name: `${response.data.user.firstName} ${ response.data.user.lastName}`,
+            email: response.data.user.email,
+            auth: true,
+            role: response.data.user.role,
+          })
+        );
+        navigate(`/${path}/Dashboard`);
+
+
+        console.log("/"+path+"/Dashboard");
+      } else {
+        setError(response.data);
+        setLoading(false)
+      }
     } catch (error) {
       console.log(error);
     }
+    setLoading(false)
   };
 
-  return (
+  return loading ?
+  <Loader/>
+  : (
     <div className="bg-gray-100 flex flex-col items-center justify-center min-h-screen md:py-2">
       <main className="flex flex-col md:flex-row  items-center w-full px-2 md:px-20 lg:px-96">
         <div className="flex md:inline-flex flex-col justify-center items-center md:items-start flex-1 space-y-1">
@@ -106,16 +143,28 @@ const SignUpForm = () => {
           {/* Inputs */}
           <div className="flex flex-col items-center justify-center mt-2">
             <input
-              type="text"
               className="text-black rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0"
-              placeholder="Name"
-              name="name"
-              value={values.name}
+              type="text"
+              placeholder="First Name"
+              name="firstName"
+              value={values.firstName}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.name && errors.name ? 1 : undefined}
+              error={touched.firstName && errors.firstName ? 1 : undefined}
             ></input>
-            <p className="text-white">{errors.name}</p>
+            <p className="text-white">{errors.firstName}</p>
+
+            <input
+              className="text-black rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0"
+              type="text"
+              placeholder="Last Name"
+              name="lastName"
+              value={values.lastName}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.lastName && errors.lastName ? 1 : undefined}
+            ></input>
+            <p className="text-white">{errors.lastName}</p>
             <input
               type="email"
               className="text-black rounded-2xl px-2 py-1 w-4/5 md:w-full border-[1px] border-blue-400 m-1 focus:shadow-md focus:border-pink-400 focus:outline-none focus:ring-0"
@@ -138,6 +187,7 @@ const SignUpForm = () => {
               error={touched.password && errors.password ? 1 : undefined}
             ></input>
             <p className="text-white">{errors.password}</p>
+            {error && <p className="text-red-700 h-5">{error}</p>}
             <button
               className="rounded-2xl m-4 text-primary bg-white w-3/5 px-4 py-2 shadow-md hover:text-white hover:bg-primary transition duration-200 ease-in"
               onClick={handleSubmit}

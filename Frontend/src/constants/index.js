@@ -2,6 +2,34 @@ import {
   benefitImage2,
 } from "../assets";
 
+export const jobseeker_links = [
+  {
+    id: "0",
+    title: "Home",
+    url: "/jobseeker",
+  },
+  {
+    id: "1",
+    title: "Profile",
+    url: "/jobseeker/profile",
+  },
+  {
+    id: "2",
+    title: "Applications",
+    url: "/jobseeker/applications",
+  },
+  {
+    id: "3",
+    title: "Jobs",
+    url: "/jobseeker/jobs",
+  },
+  {
+    id: "4",
+    title: "Logout",
+    url: "/",
+  },
+  
+]
 export const navigation = [
   {
     id: "0",
@@ -81,5 +109,196 @@ export const benefits = [
   },
 
 ];
+
+
+export const jobsData = [
+  {
+    id: "0",
+    title: "Software Engineer",
+    category: "Software Development",
+    company: "Google",
+    location: "Mountain View, CA",
+    date: "2 days ago",
+    salary: "$150,000",
+    imageUrl: "https://source.unsplash.com/random",
+  },{
+    id: "1",
+    title: "Front End Developer",
+    category: "Software Development",
+    company: "Facebook",
+    location: "Menlo Park, CA",
+    date: "1 day ago",
+    salary: "$120,000",
+    imageUrl: "https://source.unsplash.com/random",
+    
+  }
+]
+
+export const jobsListings = [
+  {
+    id: 1,
+    title: 'Software Engineer',
+    description: 'We are looking for a skilled software engineer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 2,
+    title: 'Backend Developer',
+    description: 'We are seeking a skilled backend developer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 3,
+    title: 'Data Scientist',
+    description: 'We are looking for a talented data scientist to work on our cutting-edge projects.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 4,
+    title: 'UI/UX Designer',
+    description: 'We are seeking a creative UI/UX designer to join our design team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 1,
+    title: 'Software Engineer',
+    description: 'We are looking for a skilled software engineer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 2,
+    title: 'Backend Developer',
+    description: 'We are seeking a skilled backend developer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 3,
+    title: 'Data Scientist',
+    description: 'We are looking for a talented data scientist to work on our cutting-edge projects.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 4,
+    title: 'UI/UX Designer',
+    description: 'We are seeking a creative UI/UX designer to join our design team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 1,
+    title: 'Software Engineer',
+    description: 'We are looking for a skilled software engineer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 2,
+    title: 'Backend Developer',
+    description: 'We are seeking a skilled backend developer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 3,
+    title: 'Data Scientist',
+    description: 'We are looking for a talented data scientist to work on our cutting-edge projects.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 4,
+    title: 'UI/UX Designer',
+    description: 'We are seeking a creative UI/UX designer to join our design team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 1,
+    title: 'Software Engineer',
+    description: 'We are looking for a skilled software engineer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 2,
+    title: 'Backend Developer',
+    description: 'We are seeking a skilled backend developer to join our team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 3,
+    title: 'Data Scientist',
+    description: 'We are looking for a talented data scientist to work on our cutting-edge projects.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  {
+    id: 4,
+    title: 'UI/UX Designer',
+    description: 'We are seeking a creative UI/UX designer to join our design team.',
+    company: 'Tech Innovations Inc.',
+    location: 'San Francisco, CA',
+  },
+  // ... Repeat the above pattern for 97 more job listings
+  
+];
+
+
+export const employerDashboardData = {
+  company: {
+    name: "Tech Innovators Inc.",
+    description: "Leading innovators in tech industry solutions.",
+    industry: "Technology",
+    website: "https://www.techinnovators.com",
+    logo: "https://via.placeholder.com/150",
+    address: "123 Tech Lane, Silicon Valley, CA",
+    contactEmail: "contact@techinnovators.com",
+    contactPhone: "123-456-7890",
+  },
+  jobs: [
+    {
+      _id: "1",
+      title: "Software Engineer",
+      description: "Develop and maintain web applications.",
+      location: "San Francisco, CA",
+      datePosted: "2023-04-15",
+    },
+    {
+      _id: "2",
+      title: "Product Manager",
+      description: "Lead product development teams.",
+      location: "San Francisco, CA",
+      datePosted: "2023-05-01",
+    },
+  ],
+  employees: [
+    {
+      _id: "1",
+      user: {
+        name: "Alice Johnson",
+        email: "alice.johnson@techinnovators.com",
+      },
+      role: "HR Manager",
+      phone: "123-456-7891",
+    },
+    {
+      _id: "2",
+      user: {
+        name: "Bob Smith",
+        email: "bob.smith@techinnovators.com",
+      },
+      role: "Lead Developer",
+      phone: "123-456-7892",
+    },
+  ],
+};
 
 
