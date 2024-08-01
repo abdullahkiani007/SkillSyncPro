@@ -10,7 +10,7 @@
 
 @layer components {
   .socialIcon {
-    @apply w-11 border-[1px] border-primary border-solid h-11 rounded-full px-2 py-1 text-primary  hover:text-primary-dark cursor-pointer transition duration-200 hover:animate-pulse;
+    @apply w-11 border-[1px] border-primary border-solid h-11 rounded-full px-2 py-1 text-primary hover:text-primary-dark cursor-pointer transition duration-200 hover:animate-pulse;
   }
 }
 
@@ -27,7 +27,7 @@
 
 @layer base {
   body {
-    @apply font-sans   text-base;
+    @apply font-sans text-base;
   }
 }
 
@@ -100,4 +100,30 @@ body {
 
 .-rotate-360 {
   @apply rotate-[-360deg];
+}
+
+/* Styles the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+/* Styles the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+  border: 3px solid #f0f0f0;
+}
+
+/* Styles the scrollbar itself (width and height) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Styles for Firefox */
+* {
+  scrollbar-width: thin;
+  /* Can be "auto", "thin", or "none" */
+  scrollbar-color: #182235 #f0f0f0;
+  /* Thumb and track color */
 }
