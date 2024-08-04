@@ -82,10 +82,47 @@ const CompanyController = {
         })
     },
 
-    async getEmployes(req,res,next){
+    async getEmployees(req,res,next){
       const {id} = req.user;
-        const response = await companyService.getEmployes(id);
+      const {companyId} = req.body;
 
+        const response = await companyService.getEmployees(companyId);
+        if (response.status == 200){
+            res.status(200).json({
+                "data":response.data
+            })
+            return ;
+        }
+        else if (response.status == 404){
+            res.status(404).json({
+                "message":response.message
+            })
+            return ;
+        }
+        res.status(500).json({
+            "message":"Internal server error"
+        })
+
+    }, async joinCompany(req,res,next){
+        const {id} = req.user;
+        const {companyId} = req.body;
+        const response = await companyService.joinCompany(id,companyId);
+        if (response.status == 200){
+            res.status(200).json({
+                "message":"Joined company successfully",
+                "data":response.data
+            })
+            return ;
+        }else if (response.status == 404){
+            res.status(404).json({
+                "message":response.message
+            })
+            return ;
+        }
+
+        res.status(500).json({
+            "message":"Internal server error"
+        })
     }
 }
 

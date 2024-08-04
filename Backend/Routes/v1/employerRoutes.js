@@ -12,8 +12,10 @@ EmployerRouter.post("/job",passport.authenticate('jwt',{session:false}),employer
 
 EmployerRouter.get("/dashboard",passport.authenticate('jwt',{session:false}),employerController.getDashboard)
 
-EmployerRouter.get("/employees",passport.authenticate('jwt',{session:false}),companyController.getEmployes)
+EmployerRouter.get("/company/employees",passport.authenticate('jwt',{session:false}),companyController.getEmployees)
 EmployerRouter.post("/company",passport.authenticate('jwt',{session:false}),companyController.register)
 EmployerRouter.get("/company",passport.authenticate('jwt',{session:false}),companyController.getCompany)
 EmployerRouter.put("/company",passport.authenticate('jwt',{session:false}),companyController.updateCompany)
+
+EmployerRouter.post("/company/join",passport.authenticate('jwt',{session:false}),companyController.joinCompany)
 module.exports = EmployerRouter;
