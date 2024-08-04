@@ -33,6 +33,7 @@ const AuthService = {
 
         // set up jwt token using passport js
         const token = generateToken(user._id, user.role);
+        console.log("token ", token)
         return{
             error: false,
             user:{firstName: user.firstName,

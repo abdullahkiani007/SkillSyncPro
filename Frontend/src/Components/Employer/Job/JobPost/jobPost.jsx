@@ -12,10 +12,13 @@ import {
 import Slider from "@mui/material/Slider";
 import EmployerController from "../../../../API/employer";
 import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 
 const JobPost = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
+  const [company, setCompany] = useState({});
+  const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [formValues, setFormValues] = useState({
     title: "",
@@ -26,13 +29,32 @@ const JobPost = () => {
     salaryRange: "",
     employmentType: "",
   });
-
+  const navigate = useNavigate();
   const steps = ["Step 1", "Step 2", "Step 3"];
   useEffect(() => {
     setTimeout(() => {
       setMessage("");
     }, 3000);
   }, [message]);
+
+  useEffect(() => {
+    const fetchCompany = async () => {
+      const token = localStorage.getItem("token");
+      const response = await EmployerController.getCompany(token);
+      if (response.status === 200) {
+        setCompany(response.data.data);
+        console.log("company ", response.data.data);
+        // setFormValues((prevValues) => ({
+        //   ...prevValues,
+        //   company: response.data.company.name,
+        // }));
+      } else {
+        setError(true);
+        setMessage("error fetching company");
+      }
+    };
+    fetchCompany();
+  }, []);
 
   const totalSteps = () => {
     return steps.length;
@@ -287,6 +309,25 @@ const JobPost = () => {
     }
   };
 
+  if (error)
+    return (
+      <div className="flex flex-col items-center my-40 w-96 mx-auto">
+        <h1 className="font-bold text-2xl text-center text-secondary-dark">
+          Error Fetching Company
+        </h1>
+        <p className="text-gray-400 text-center my-4">
+          You need to create a company before you can post a job. Click the
+          button below
+        </p>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/employer/company-profile")}
+        >
+          Join or Create a Company
+        </Button>
+      </div>
+    );
   return (
     <div>
       <h1 className="font-bold text-2xl text-center text-secondary-dark">

@@ -57,7 +57,27 @@ const companyService = {
                     "status":200,
                     "data":company
                 }
+            }else{
+                //check if user is an employee
+
+                // fetch employee id
+                const employer = await Employer.findOne({user:id});
+                if (!employer){
+                    return {
+                        "status":404,
+                        "message":"Employer not found"
+                    }
+                }
+
+                const company = await Company.findById(employer.company);
+                if (company){
+                    return {
+                        "status":200,
+                        "data":company
+                    }
+                }
             }
+
             return {
                 "status":404,
                 "message":"Company not found"
@@ -117,7 +137,62 @@ const companyService = {
         }
     }
     ,
-    // async getEmployees()
+    async joinCompany(userId, companyId) {
+        try {
+            const company = await Company.findById(companyId);
+            if (!company) {
+                return {
+                    "status": 404,
+                    "message": "Company not found"
+                }
+            }
+            const employer = await Employer.findOne({ user: userId });
+            if (!employer) {
+                return {
+                    "status": 404,
+                    "message": "Employer not found"
+                }
+            }
+            employer.company = company._id;
+            await employer.save();
+
+            company.employees.push(employer._id);
+            await company.save();
+
+            return {
+                "status": 200,
+                "data": company
+            }
+        } catch (err) {
+            console.log(err);
+            return {
+                "status": 500,
+                "message": "Internal server error"
+            }
+        }
+    },
+    async getEmployees(companyId){
+        try{
+            const company = await Company.findById(companyId);
+            if (!company){
+                return {
+                    "status":404,
+                    "message":"Company not found"
+                }
+            }
+            const employees = await company.populate('employees');
+            return {
+                "status":200,
+                "data":employees
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                "status":500,
+                "message":"Internal server error"
+            }
+        }
+    }
 }
 
 module.exports = companyService;
