@@ -30,6 +30,7 @@ const Company = () => {
     const fetchCompany = async () => {
       const token = localStorage.getItem("token");
       let company = await EmployerController.getCompany(token);
+      console.log("Company -->", company);
 
       if (company.status === 200) {
         let employees = [
