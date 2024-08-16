@@ -8,6 +8,12 @@ import {
   Stepper,
   Step,
   StepButton,
+  Select,
+  MenuItem,
+  Chip,
+  Input,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import Slider from "@mui/material/Slider";
 import EmployerController from "../../../../API/employer";
@@ -17,6 +23,8 @@ import { useNavigate } from "react-router-dom";
 const JobPost = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
+  const [submited, setSubmited] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
   const [company, setCompany] = useState({});
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -26,8 +34,10 @@ const JobPost = () => {
     requirements: "",
     company: "",
     location: "",
-    salaryRange: "",
+    salaryRange: [0, 100000], // Ensure this is an array
     employmentType: "",
+    experienceLevel: "",
+    skills: [],
   });
   const navigate = useNavigate();
   const steps = ["Step 1", "Step 2", "Step 3"];
@@ -38,22 +48,12 @@ const JobPost = () => {
   }, [message]);
 
   useEffect(() => {
-    const fetchCompany = async () => {
-      const token = localStorage.getItem("token");
-      const response = await EmployerController.getCompany(token);
-      if (response.status === 200) {
-        setCompany(response.data.data);
-        console.log("company ", response.data.data);
-        // setFormValues((prevValues) => ({
-        //   ...prevValues,
-        //   company: response.data.company.name,
-        // }));
-      } else {
-        setError(true);
-        setMessage("error fetching company");
-      }
-    };
-    fetchCompany();
+    let company = JSON.parse(localStorage.getItem("company"));
+    setCompany(company);
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      company: company._id,
+    }));
   }, []);
 
   const totalSteps = () => {
@@ -69,6 +69,8 @@ const JobPost = () => {
   };
 
   const allStepsCompleted = () => {
+    console.log(completedSteps(), totalSteps());
+
     return completedSteps() === totalSteps();
   };
 
@@ -105,7 +107,9 @@ const JobPost = () => {
         if (
           !formValues.company ||
           !formValues.salaryRange ||
-          !formValues.employmentType
+          !formValues.employmentType ||
+          !formValues.experienceLevel ||
+          formValues.skills.length === 0
         )
           isValid = false;
         break;
@@ -119,6 +123,7 @@ const JobPost = () => {
       handleNext();
     } else {
       setMessage("Please fill in all required fields before proceeding.");
+      setError(true);
     }
   };
 
@@ -131,6 +136,8 @@ const JobPost = () => {
   };
 
   const handleReset = () => {
+    setSubmissionError("");
+    setSubmited(false);
     setActiveStep(0);
     setCompleted({});
   };
@@ -143,22 +150,44 @@ const JobPost = () => {
     }));
   };
 
+  const handleSkillChange = (event) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      skills: event.target.value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
+    console.log(formValues);
+    const formattedValues = {
+      ...formValues,
+      salaryRange: `${formValues.salaryRange[0]}-${formValues.salaryRange[1]}`,
+    };
+    console.log(formattedValues);
     try {
-      const response = await EmployerController.postJob(formValues, token);
+      const response = await EmployerController.postJob(formattedValues, token);
+      console.log(response);
       if (response.status === 200) {
-        setMessage("Job Posted Successfully");
+        setSubmited(true);
         setTimeout(() => {
-          setMessage("");
+          setMessage("Job Posted Successfully");
+          navigate("/employer/jobs");
         }, 3000);
       } else {
+        setSubmited(true);
+        setSubmissionError("Error Posting Job");
         setMessage("Error Posting Job");
+        setError(true);
       }
     } catch (error) {
+      setSubmited(true);
+      setSubmissionError("Error Posting Job");
       console.log(error);
+      setMessage("Error Posting Job");
+      setError(true);
     }
   };
 
@@ -230,6 +259,7 @@ const JobPost = () => {
                   name="requirements"
                   label="Requirements"
                   variant="outlined"
+                  multiline
                   value={formValues.requirements}
                   onChange={handleInputChange}
                 />
@@ -240,29 +270,13 @@ const JobPost = () => {
       case 2:
         return (
           <Card className="my-20 mx-10 p-10">
-            <div>
-              <h1 className="font-bold text-lg text-secondary-dark">
-                Company:
-              </h1>
-              <div className="pl-3 pt-2">
-                <TextField
-                  className="w-full"
-                  id="company"
-                  name="company"
-                  label="Company"
-                  variant="outlined"
-                  value={formValues.company}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
             <div className="mt-4">
               <h1 className="font-bold text-lg text-secondary-dark">
                 Salary Range:
               </h1>
               <div className="pl-3 pt-2">
                 <Slider
-                  value={formValues.salaryRange || [0, 100000]} // Ensure this is an array
+                  value={formValues.salaryRange} // Ensure this is an array
                   onChange={handleSliderChange} // Updated to use the fixed function
                   valueLabelDisplay="auto"
                   aria-labelledby="range-slider"
@@ -283,57 +297,103 @@ const JobPost = () => {
                 Employment Type:
               </h1>
               <div className="pl-3 pt-2">
-                <TextField
-                  className="w-full"
-                  id="employmentType"
-                  name="employmentType"
-                  label="Employment Type"
-                  variant="outlined"
-                  value={formValues.employmentType}
-                  onChange={handleInputChange}
-                />
+                <FormControl variant="outlined" className="w-full">
+                  <InputLabel id="employmentType-label">
+                    Employment Type
+                  </InputLabel>
+                  <Select
+                    labelId="employmentType-label"
+                    id="employmentType"
+                    name="employmentType"
+                    label="Employment Type"
+                    value={formValues.employmentType}
+                    onChange={handleInputChange}
+                  >
+                    {["Full-time", "Part-time", "Contract", "Temporary"].map(
+                      (type) => (
+                        <MenuItem key={type} value={type}>
+                          {type}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                </FormControl>
               </div>
             </div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit}
-              sx={{ mt: 2 }}
-            >
-              Submit
-            </Button>
+            <div className="mt-4">
+              <h1 className="font-bold text-lg text-secondary-dark">
+                Experience Level:
+              </h1>
+              <div className="pl-3 pt-2">
+                <FormControl fullWidth>
+                  <InputLabel id="experienceLevel-label">
+                    Experience Level
+                  </InputLabel>
+                  <Select
+                    labelId="experienceLevel-label"
+                    id="experienceLevel"
+                    name="experienceLevel"
+                    value={formValues.experienceLevel}
+                    onChange={handleInputChange}
+                    label="Experience Level" // Ensure the label prop is set
+                  >
+                    {[
+                      "Fresher",
+                      "0-2 years",
+                      "2-5 years",
+                      "5-10 years",
+                      "10+ years",
+                    ].map((level) => (
+                      <MenuItem key={level} value={level}>
+                        {level}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+            <div className="mt-4">
+              <h1 className="font-bold text-lg text-secondary-dark">Skills:</h1>
+              <div className="pl-3 pt-2">
+                <FormControl className="w-full">
+                  <InputLabel id="skills-label">Skills</InputLabel>
+                  <Select
+                    labelId="skills-label"
+                    id="skills"
+                    name="skills"
+                    multiple
+                    value={formValues.skills}
+                    onChange={handleSkillChange}
+                    input={<Input id="select-multiple-chip" />}
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {selected.map((value) => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    )}
+                  >
+                    {["JavaScript", "React", "Node.js", "CSS", "HTML"].map(
+                      (skill) => (
+                        <MenuItem key={skill} value={skill}>
+                          {skill}
+                        </MenuItem>
+                      )
+                    )}
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
           </Card>
         );
       default:
-        return "Unknown step";
+        return null;
     }
   };
 
-  if (error)
-    return (
-      <div className="flex flex-col items-center my-40 w-96 mx-auto">
-        <h1 className="font-bold text-2xl text-center text-secondary-dark">
-          Error Fetching Company
-        </h1>
-        <p className="text-gray-400 text-center my-4">
-          You need to create a company before you can post a job. Click the
-          button below
-        </p>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/employer/company-profile")}
-        >
-          Join or Create a Company
-        </Button>
-      </div>
-    );
   return (
-    <div>
-      <h1 className="font-bold text-2xl text-center text-secondary-dark">
-        Post a Job
-      </h1>
-      <Box sx={{ width: "50%", margin: "auto", padding: "2rem" }}>
+    <div className="md:w-2/3 mx-auto mt-10">
+      <Box sx={{ width: "100%" }}>
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
@@ -343,19 +403,45 @@ const JobPost = () => {
             </Step>
           ))}
         </Stepper>
-        <div>
+        <div
+          className="
+        "
+        >
           {allStepsCompleted() ? (
-            <React.Fragment>
-              <Typography sx={{ mt: 2, mb: 1 }}>
-                All steps completed - you&apos;re finished
+            <div
+              className="flex flex-col 
+        items-center mt-10 bg-secondary-dark
+        rounded-xl"
+            >
+              <Typography
+                variant="h5"
+                sx={{ mt: 2, mb: 1, fontWeight: "bold", color: "white" }}
+              >
+                {!submited
+                  ? "All steps completed - you're finished"
+                  : submissionError
+                  ? "Error Posting Job"
+                  : "Job Posted Successfully"}
               </Typography>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                <Box sx={{ flex: "1 1 auto" }} />
-                <Button onClick={handleReset}>Reset</Button>
-              </Box>
-            </React.Fragment>
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={submited}
+              >
+                Submit
+              </Button>
+
+              <button
+                className="py-2 px-5 rounded-md my-6
+                text-secondary-dark
+                bg-white"
+                onClick={handleReset}
+              >
+                Back
+              </button>
+            </div>
           ) : (
-            <React.Fragment>
+            <>
               {renderStepContent(activeStep)}
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button
@@ -370,35 +456,30 @@ const JobPost = () => {
                 <Button onClick={handleNext} sx={{ mr: 1 }}>
                   Next
                 </Button>
-                {activeStep !== steps.length &&
-                  (completed[activeStep] ? (
-                    <Typography
-                      variant="caption"
-                      sx={{ display: "inline-block" }}
-                    >
-                      Step {activeStep + 1} already completed
-                    </Typography>
-                  ) : (
-                    <Button onClick={handleComplete}>
-                      {completedSteps() === totalSteps() - 1
-                        ? "Finish"
-                        : "Complete Step"}
-                    </Button>
-                  ))}
+                {activeStep !== steps.length && (
+                  <Button onClick={handleComplete}>
+                    {completedSteps() === totalSteps() - 1
+                      ? "Finish"
+                      : "Complete Step"}
+                  </Button>
+                )}
               </Box>
-            </React.Fragment>
+            </>
           )}
         </div>
       </Box>
       {message && (
-        <>
-          <div className=" bottom-0 right-0 fixed ">
-            <Alert severity="success">{message}</Alert>
-          </div>
-          <Typography color="primary" variant="h6" align="center">
-            {message}
-          </Typography>
-        </>
+        <Alert
+          severity={error ? "error" : "success"}
+          className=" 
+        fixed
+        bottom-0
+        right-0
+
+        mt-10 "
+        >
+          {message}
+        </Alert>
       )}
     </div>
   );

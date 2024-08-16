@@ -23,6 +23,7 @@ function Jobs() {
         setJobs(data.jobs);
         setFilteredJobs(data.jobs);
         setLoading(false);
+        localStorage.setItem("jobs", JSON.stringify(data.jobs));
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -37,10 +38,12 @@ function Jobs() {
 
   const handleFilterChange = (e) => {
     const { id, value } = e.target;
+    console.log(id, value);
     setFilters((prevFilters) => ({
       ...prevFilters,
       [id]: value,
     }));
+    console.log("filtered ", filters);
   };
 
   const filterJobs = () => {
@@ -79,6 +82,7 @@ function Jobs() {
       });
     }
 
+    console.log("filtered ", filtered);
     setFilteredJobs(filtered);
   };
 
@@ -88,7 +92,7 @@ function Jobs() {
         <div className="flex space-x-5 mb-5">
           <div className="flex flex-col space-y-2">
             <label className="font-bold" htmlFor="designer">
-              Designer
+              Role
             </label>
             <select
               id="designer"
@@ -179,7 +183,7 @@ function Jobs() {
           </div>
           <div className="flex flex-wrap justify-around">
             {filteredJobs.map((job) => (
-              <JobCard key={job._id} {...job} />
+              <JobCard key={job._id} props={job} />
             ))}
           </div>
         </div>

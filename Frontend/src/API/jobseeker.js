@@ -86,6 +86,27 @@ class JobseekerController {
       };
     }
   }
+
+  async getCompanies() {
+    try {
+      const response = await fetch(this.jobSeekerUrl + "/companies", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return {
+        data: await response.json(),
+        status: response.status,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        message: "Internal Server Error",
+      };
+    }
+  }
 }
 
 export default new JobseekerController();
