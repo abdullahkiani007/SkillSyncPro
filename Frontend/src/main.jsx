@@ -15,6 +15,7 @@ import JobseekerRoutes from "./Components/Jobseeker/JobseekerRoutes.jsx";
 import JsJobs from "./Components/Jobseeker/Jobs/jobs.jsx";
 import JsProfile from "./Components/Jobseeker/Profile/Profile.jsx";
 import AppliedJobs from "./Components/Jobseeker/Jobs/appliedJobs.jsx";
+import ResumeUpload from "./Components/Jobseeker/Jobs/JobApplication/ResumeUpload.jsx";
 import Job from "./Components/Jobseeker/Jobs/job.jsx";
 import Loader from "./Components/Loader/Loader.jsx";
 
@@ -34,18 +35,22 @@ import ApplyPage from "./Components/Jobseeker/Jobs/JobApplication/ApplyPage.jsx"
 import ResumeBuilder from "./Components/Jobseeker/Resume/ResumeBuilder.jsx";
 import JobDetails from "./Components/Employer/Job/JobDetails.jsx";
 
+import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
+import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
+import EmpProfile from "./Components/Employer/Profile/Profile.jsx";
+import EmpProfileForm from "./Components/Employer/Profile/ProfileForm.jsx";
+import VideoInterview from "./Components/Jobseeker/Jobs/JobApplication/VideoInterview.jsx";
+import SkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    // loader: rootLoader,
     children: [
       {
         path: "/",
         element: <App />,
-        // loader: teamLoader,
       },
-      ,
       {
         path: "/login/jobseeker",
         element: <Login role={"jobseeker"} />,
@@ -85,7 +90,11 @@ const router = createBrowserRouter([
         element: <JsProfile />,
       },
       {
-        path: "Jobs",
+        path: "profile/edit",
+        element: <ProfileForm />,
+      },
+      {
+        path: "jobs",
         element: <JsJobs />,
       },
       {
@@ -99,13 +108,27 @@ const router = createBrowserRouter([
       {
         path: "job/apply/:id",
         element: <ApplyPage />,
+        children: [
+          {
+            path: "",
+            element: <ResumeUpload />,
+          },
+          {
+            path: "interview",
+            element: <VideoInterview />,
+          },
+          {
+            path: "skillAssessment",
+            element: <SkillAssessment />,
+          },
+        ],
       },
       {
         path: "companies",
         element: <CompaniesList />,
       },
       {
-        path: "companies/:name",
+        path: "companies/:id",
         element: <Company />,
       },
       {
@@ -118,6 +141,14 @@ const router = createBrowserRouter([
     path: "/employer",
     element: <EmployerRoute />,
     children: [
+      {
+        path: "profile",
+        element: <EmpProfile />,
+      },
+      {
+        path: "profile/edit",
+        element: <EmpProfileForm />,
+      },
       {
         path: "dashboard",
         element: <EmpDashboard />,
@@ -139,12 +170,30 @@ const router = createBrowserRouter([
         element: <JobListing />,
       },
       {
-        path: "job/job-post",
-        element: <JobPost />,
-      },
-      {
         path: "job/:id",
         element: <JobDetails />,
+        children: [
+          {
+            path: "",
+            element: <Candidates />,
+          },
+          {
+            path: "jobdetails",
+            element: <h1>Job details</h1>,
+          },
+          {
+            path: "notes",
+            element: <h1>Notes</h1>,
+          },
+          {
+            path: "reports",
+            element: <h1>Reports</h1>,
+          },
+        ],
+      },
+      {
+        path: "job/job-post",
+        element: <JobPost />,
       },
     ],
   },
@@ -178,16 +227,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "getstarted",
-  //   element: <GetStarted/>,
-  //   // loader: teamLoader,
-  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* <App /> */}
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <RouterProvider router={router} />
