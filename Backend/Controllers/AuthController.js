@@ -20,9 +20,9 @@ const AuthController = {
                 return next(error);
             }
             res.status(200).json({
-                
                 user : user.user,
-                token : user.token
+                accessToken : user.accessToken,
+                refreshToken : user.refreshToken
             });
 
 

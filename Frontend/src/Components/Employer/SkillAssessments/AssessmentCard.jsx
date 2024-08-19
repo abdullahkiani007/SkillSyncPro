@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Button, Grid } from "@mui/material";
+import { Visibility, Edit, Delete } from "@mui/icons-material";
 
 const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
   return (
@@ -11,31 +12,13 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
         </Typography>
         <Grid container spacing={1}>
           <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => onView(assessment)}
-            >
-              View
-            </Button>
+            <Visibility color="primary" onClick={() => onView(assessment)} />
           </Grid>
           <Grid item>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => onEdit(assessment)}
-            >
-              Edit
-            </Button>
+            <Edit color="primary" onClick={() => onEdit(assessment)} />
           </Grid>
           <Grid item>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => onDelete(assessment)}
-            >
-              Delete
-            </Button>
+            <Delete color="error" onClick={() => onDelete(assessment)} />
           </Grid>
         </Grid>
       </CardContent>
