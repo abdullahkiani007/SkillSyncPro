@@ -6,6 +6,7 @@ const passport = require('passport');
 const userController = require('../../Controllers/UserController');
 const jobseekerController = require('../../Controllers/JobseekerController');
 const JobsController = require('../../Controllers/JobsController');
+const CompanyController = require('../../Controllers/CompanyController');
 
 require('../../Config/passport')(passport);
 
@@ -22,11 +23,13 @@ router.get("/profile",
 passport.authenticate('jwt', { session: false }),userController.getInfo)
 
 router.put("/profile",
-passport.authenticate('jwt', { session: false }),userController.updateInfo)
+passport.authenticate('jwt', { session: false }),
+userController.updateInfo)
 router.post("/job/apply",passport.authenticate('jwt',{
     session:false
 }),jobseekerController.applyJob);
 
+router.get("/companies", CompanyController.getCompanies);
 
 
 module.exports = router;

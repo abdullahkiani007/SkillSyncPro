@@ -31,6 +31,8 @@ const CompanyController = {
 
     },
 
+    
+
     async getCompany(req,res,next){
         console.log("GET company received");
         const {_id} = req.user;
@@ -123,6 +125,38 @@ const CompanyController = {
         res.status(500).json({
             "message":"Internal server error"
         })
+    },
+    async getCompanies(req,res,next){
+        console.log("GET/ Companies received")
+        const response = await companyService.getCompanies();
+        if (response.status === 200){
+            return (res.status(200).json({
+                "data":response.companies
+            }))
+        }else{
+            return (res.status(500).json({
+                "message":"Internal Server Error"
+            }))
+        }
+    },
+
+    async getAssessment(req,res,next){
+        console.log("GET/ Assessment received")
+        const companyId = req.query.companyId;
+        const response = await companyService.getAssessment(companyId);
+        if (response.status === 200){
+            return (res.status(200).json({
+                "assessment":response.assessment
+            }))
+        }
+        else if (response.status === 404){
+            return (res.status(404).json({
+                "message":response.message
+            }))
+        }
+        return (res.status(500).json({
+            "message":"Internal Server Error"
+        }))
     }
 }
 

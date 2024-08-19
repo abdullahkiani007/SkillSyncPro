@@ -6,10 +6,22 @@ const userSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     role: { type: String, enum: ['jobseeker', 'employer', 'recruiter', 'admin'], required: true },
-    profilePicture: String,
-    phone: String,
-    address: String,
-    bio: String,
+    profilePicture: {
+        type: String,
+        default: ""
+    },
+    phone: {
+        type: String,
+        default: ""
+    },
+    address: {
+        type: String,
+        default: ""
+    },
+    bio: {
+        type: String,
+        default: ""
+    },
     socialMedia: {
         linkedin: String,
         github: String,

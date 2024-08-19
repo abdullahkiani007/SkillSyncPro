@@ -34,13 +34,16 @@ import AdminLoginPage from "./Components/Admin/AdminLogin.jsx";
 import ApplyPage from "./Components/Jobseeker/Jobs/JobApplication/ApplyPage.jsx";
 import ResumeBuilder from "./Components/Jobseeker/Resume/ResumeBuilder.jsx";
 import JobDetails from "./Components/Employer/Job/JobDetails.jsx";
+import EmpSkillAssessment from "./Components/Employer/SkillAssessments/SkillAssessment.jsx";
+
+import JsSkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
 
 import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
 import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
 import EmpProfile from "./Components/Employer/Profile/Profile.jsx";
 import EmpProfileForm from "./Components/Employer/Profile/ProfileForm.jsx";
 import VideoInterview from "./Components/Jobseeker/Jobs/JobApplication/VideoInterview.jsx";
-import SkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
+import CreateAssessmentForm from "./Components/Employer/SkillAssessments/CreateAssessment.jsx";
 
 const router = createBrowserRouter([
   {
@@ -119,7 +122,7 @@ const router = createBrowserRouter([
           },
           {
             path: "skillAssessment",
-            element: <SkillAssessment />,
+            element: <JsSkillAssessment />,
           },
         ],
       },
@@ -194,6 +197,14 @@ const router = createBrowserRouter([
       {
         path: "job/job-post",
         element: <JobPost />,
+      },
+      {
+        path: "skill/assessments",
+        element: <EmpSkillAssessment />,
+      },
+      {
+        path: "skill/assessments/create",
+        element: <CreateAssessmentForm />,
       },
     ],
   },
