@@ -4,6 +4,7 @@ const authRoutes = require('./authRoutes');
 const employerRoutes = require('./employerRoutes');
 const jobRoutes = require('./jobsRoutes');
 const fastApiRoutes = require('./fastApiRoutes');
+const tokenRoutes = require('./tokenRoutes');
 
 
 const router = express.Router();
@@ -16,6 +17,8 @@ router.use('/fastapi',(req,res,next)=>{
     console.log("fastapi routes");
     next();
 },fastApiRoutes);
+router.use('/token',tokenRoutes);
+
 
 module.exports = router;
 

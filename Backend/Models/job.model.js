@@ -34,7 +34,11 @@ const jobSchema = new mongoose.Schema({
   skills: [
     {
       type: String
-    }]
+    }],
+  skillAssessment:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"CompanyAssessment"
+  }
   ,
   salaryRange: {
     type: String,

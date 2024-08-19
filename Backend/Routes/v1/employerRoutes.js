@@ -21,6 +21,11 @@ EmployerRouter.get("/company",passport.authenticate('jwt',{session:false}),compa
 EmployerRouter.put("/company",passport.authenticate('jwt',{session:false}),companyController.updateCompany)
 
 EmployerRouter.post("/company/join",passport.authenticate('jwt',{session:false}),companyController.joinCompany)
+
 EmployerRouter.post("/assessment",passport.authenticate('jwt',{session:false}),employerController.createAssessment)
 EmployerRouter.get("/assessments",passport.authenticate('jwt',{session:false}),companyController.getAssessment)
+EmployerRouter.get("/assessment",passport.authenticate('jwt',{session:false}),employerController.getAssessmentById)
+EmployerRouter.put("/assessment",passport.authenticate('jwt',{session:false}),employerController.editAssessment)
+EmployerRouter.delete("/assessment",passport.authenticate('jwt',{session:false}),employerController.deleteAssessment)
+
 module.exports = EmployerRouter;
