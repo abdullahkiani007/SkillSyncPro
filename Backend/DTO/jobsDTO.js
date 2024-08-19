@@ -6,6 +6,9 @@ class JobDTO {
         this.location = job.location;
         this.companyName = job.company.name;
         this.companyWebsite = job.company.website;
+        this.skills = job.skills;
+        this.salaryRange = job.salaryRange;
+        this.employmentType = job.employmentType;
         this.applicants = job.applicants;
         this.createdAt = job.createdAt;
     }
