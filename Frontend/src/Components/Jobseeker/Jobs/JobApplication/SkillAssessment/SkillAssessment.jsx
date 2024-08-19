@@ -17,6 +17,11 @@ const SkillAssessment = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const { goToNextStep } = useOutletContext();
 
+  useEffect(() => {
+    const getAssessment = async () => {
+      // Fetch the assessment details from the backend
+    };
+  }, []);
   const handleCodeSubmit = (submittedCode, timeSpent, keystrokes) => {
     // Check for time limit or pasting issues
     if (timeSpent > 1800000 || keystrokes === 0) {

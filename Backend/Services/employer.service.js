@@ -36,7 +36,7 @@ const EmployerServices = {
     },
 
     async createJob(_id,req){
-        const {title,description,employmentType,experienceLevel,requirements,company,skills,salaryRange,location} = req;
+        const {title,description,employmentType,experienceLevel,requirements,skillAssessment,company,skills,salaryRange,location} = req;
 
         let job;
         const empID = await Employer.findOne({user:_id});
@@ -50,6 +50,7 @@ const EmployerServices = {
                     location,
                     postedBy:empID._id,
                     company,
+                    skillAssessment,
                     skills,
                     salaryRange,
                     experienceLevel,
@@ -173,6 +174,73 @@ const EmployerServices = {
                 message:"Error creating assessment"
             }
         }
+        }catch(err){
+            console.log(err);
+            return {
+                status: 500,
+                message: "Internal server error"
+            }
+        }
+    },
+
+    deleteAssessment: async (id) => {
+        try{
+            const assessment = await Assessment.findByIdAndDelete(id);
+            if (assessment){
+                return {
+                    status: 200,
+                    message: "Assessment deleted successfully"
+                }
+            }else{
+                return {
+                    status: 404,
+                    message: "Assessment not found"
+                }
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                status: 500,
+                message: "Internal server error"
+            }
+        }
+    },
+
+    editAssessment: async (id, data) => {
+        try{
+            const assessment = await Assessment.findByIdAndUpdate(id, data, {new: true});
+            if (assessment){
+                return {
+                    status: 200,
+                    assessment
+                }
+            }
+            return {
+                status: 404,
+                message: "Assessment not found"
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                status: 500,
+                message: "Internal server error"
+            }
+        }
+    },
+
+    getAssessment: async (id) => {
+        try{
+            const assessment = await Assessment.findById(id);
+            if (assessment){
+                return {
+                    status: 200,
+                    assessment
+                }
+            }
+            return {
+                status: 404,
+                message: "Assessment not found"
+            }
         }catch(err){
             console.log(err);
             return {

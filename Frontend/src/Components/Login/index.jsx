@@ -66,7 +66,8 @@ const Login = ({ role }) => {
       const response = await Controller.login(data);
       console.log(response);
       if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
         console.log(response.data);
 
         dispatch(
