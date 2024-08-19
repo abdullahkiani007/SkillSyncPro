@@ -1,5 +1,6 @@
 const Company = require('../Models/company.model');
 const Employer = require('../Models/employer.model');
+const CompanyAssessment = require("../Models/companyAssessment.model")
 
 
 const companyService = {
@@ -184,6 +185,55 @@ const companyService = {
             return {
                 "status":200,
                 "data":employees
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                "status":500,
+                "message":"Internal server error"
+            }
+        }
+    },
+    async getCompanies(){
+        try{
+            let companies = await Company.find({}).populate('jobs').populate({
+                path:"employees",
+                populate:{
+                    path:'user'
+                }
+            });
+            // companies.employees = companies.employees?.map( (emp)=>{
+            //     return emp.populate("employers")
+            // })
+            companies.forEach((company)=>{
+                console.log("employe", company.employees)
+            })
+            return{
+                status:200,
+                companies
+            }
+        }catch(error){
+            console.log(error)
+            return {
+                status: 500,
+            }
+        }
+    },
+
+    async getAssessment(companyId){
+        try{
+            const assessment = await CompanyAssessment.find({company:companyId});
+            console.log("assessment",assessment)
+            console.log("company",companyId)
+            if (assessment){
+                return {
+                    "status":200,
+                    assessment
+                }
+            }
+            return {
+                "status":404,
+                "message":"Assessment not found"
             }
         }catch(err){
             console.log(err);

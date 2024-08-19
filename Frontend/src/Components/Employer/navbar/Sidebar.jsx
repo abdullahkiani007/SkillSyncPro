@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import codeEditor from "../../../assets/codeEditor.png";
 
 import SidebarLinkGroup from "./SidebarLinkGroup";
 
@@ -393,7 +394,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
-                            <svg
+                            {/* <svg
                               className="shrink-0 h-6 w-6"
                               viewBox="0 0 24 24"
                             >
@@ -405,7 +406,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                                 }`}
                                 d="M4 18h3v-8H4v8zM9 18h3V6H9v12zM14 18h3V12h-3v6zM19 18h3V8h-3v10z"
                               />
-                            </svg>
+                            </svg> */}
+                            <img
+                              className="shrink-0 h-7 w-7"
+                              src={codeEditor}
+                              alt="codeEditor"
+                            />
 
                             <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                               Skill Assessment
