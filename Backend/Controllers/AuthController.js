@@ -4,6 +4,7 @@ const AuthController = {
 
     async login(req, res,next) {
         console.log("POST /login called ")
+        console.log(req.body)
         const {email,password,role} = req.body;
 
         if (!email || !password) {
