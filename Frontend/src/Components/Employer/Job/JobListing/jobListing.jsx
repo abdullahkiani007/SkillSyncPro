@@ -1,58 +1,53 @@
-import React, { useState, useEffect } from "react";
-import JobCard from "./jobCard";
-import { jobsListings } from "../../../../constants";
-import employer from "../../../../API/employer";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./Layout";
+import Candidates from "./CanidateListings";
+import { Outlet, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import EmployeeController from "../../../../API/employer";
 import Loader from "../../../Loader/Loader";
-import { TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import JobCard from "./jobCard";
+
+const JobDetails = () => <h1>Job details</h1>;
+const Notes = () => <h1>Notes</h1>;
+const Reports = () => <h1>Reports</h1>;
 
 const JobListing = () => {
-  const [jobs, setJobs] = useState([]);
+  const [jobData, setJobData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [titleFilter, setTitleFilter] = useState(""); // Add this line
-
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchJobs = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await employer.getJobs(token);
-        if (response.status === 200) {
-          localStorage.setItem("empJobs", JSON.stringify(response.data.data));
-          setJobs(response.data.data);
-          console.log(response.data);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching jobs", error);
+      const token = localStorage.getItem("token");
+      const response = await EmployeeController.getJobs(token);
+
+      if (response.status === 200) {
+        setJobData(response.data.data);
+        console.log(response.data.data);
+        localStorage.setItem("empJobs", JSON.stringify(response.data.data));
+
+        setLoading(false);
+      } else {
+        setError("Something went wrong");
+        setLoading(false);
       }
     };
+
     fetchJobs();
   }, []);
 
-  // Add this function
-  const handleFilterChange = (event) => {
-    setTitleFilter(event.target.value);
-  };
-
-  if (loading) return <Loader />;
+  if (loading) {
+    return <Loader />;
+  } else if (error) {
+    return <h1>{error}</h1>;
+  }
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Job Listings</h1>
-      {/* Add this TextField for the title filter */}
-      <TextField
-        label="Filter by title"
-        value={titleFilter}
-        onChange={handleFilterChange}
-      />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {jobs
-          .filter((job) => job.title.includes(titleFilter))
-          .map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-      </div>
+    <div>
+      {jobData.map((job) => {
+        return <JobCard job={job} key={job._id} />;
+      })}
+      {/* <Outlet /> */}
     </div>
   );
 };
