@@ -1,12 +1,32 @@
-import React, { useState } from 'react';
-import CreatableSelect from 'react-select/creatable';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Controller from '../../../API/index';
+import React, { useEffect, useState } from "react";
+import CreatableSelect from "react-select/creatable";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Controller from "../../../API/index";
+import ImageUpload from "../../ImageUploader/ImageUploader";
+import placeholderImage_person from "../../../assets/placeholderImage_person.jpg";
+import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
-const ProfileForm = (props) => {
-  const [formData, setFormData] = useState({ ...props.formData });
-  const [edu, setEdu] = useState({ institution: '', degree: '', fieldOfStudy: '', startDate: '', endDate: '' });
+const ProfileForm = () => {
+  const [formData, setFormData] = useState({});
+  const [user, setUser] = useState({});
+  const [img, setImg] = useState("");
+  const navigate = useNavigate();
+  const [edu, setEdu] = useState({
+    institution: "",
+    degree: "",
+    fieldOfStudy: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("profile"));
+    setUser(data.user);
+    delete data.user;
+    setFormData(data);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,59 +35,37 @@ const ProfileForm = (props) => {
       [name]: value,
     }));
   };
-
-  const handleSkillChange = (selectedOptions) => {
-    const skills = selectedOptions.map(option => option.value);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      skills,
-    }));
-  };
-
-  const handleEduChange = ( e) => {
-
+  const handleUserChange = (e) => {
+    console.log(e.target.value);
     const { name, value } = e.target;
-    setEdu((prevEdu) => ({
-      ...prevEdu,
+    setUser((prevUser) => ({
+      ...prevUser,
       [name]: value,
-    }))
-  };
-
-  const addEducation = () => {
-    console.log(edu);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      education: [...prevFormData.education, edu],
-    }));
-    console.log(formData);
-  };
-
-  const removeEducation = (index) => {
-    const updatedEducation = formData.education.filter((_, i) => i !== index);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      education: updatedEducation,
     }));
   };
 
-  const options = [
-    { value: 'JavaScript', label: 'JavaScript' },
-    { value: 'Python', label: 'Python' },
-    { value: 'React', label: 'React' },
-    { value: 'Node', label: 'Node' },
-    { value: 'Express', label: 'Express' },
-    { value: 'MongoDB', label: 'MongoDB' },
-    { value: 'SQL', label: 'SQL' },
-  ];
+  const formatDate = (date) => {
+    return date ? format(new Date(date), "yyyy/MM/dd") : "";
+  };
 
   const handleSubmit = async () => {
-    props.setFormData(formData);
-    const token = localStorage.getItem('token');
+    user.profilePicture =
+      img ||
+      user.profilePicture ||
+      "https://res.cloudinary.com/ddl8sa4zy/image/upload/v1722860252/placeholderImage_person_tvhrx5.jpg";
+    const token = localStorage.getItem("token");
+
     try {
-      console.log(formData);
-      const response = await Controller.updateProfile(token, formData);
+      let updatedData = {
+        ...formData,
+        user,
+      };
+
+      console.log(updatedData);
+      const response = await Controller.updateEmpProfile(token, updatedData);
       if (response.status === 200) {
-        props.setreadMode(true);
+        console.log(response);
+        navigate("/employer/profile");
       } else {
         console.log(response);
       }
@@ -77,161 +75,188 @@ const ProfileForm = (props) => {
   };
 
   return (
-    <div className='w-1/2'>
+    <div className="w-full bg-white p-3">
+      <div className="flex items-center">
+        <img
+          src={img || placeholderImage_person}
+          alt="profile"
+          className="w-24 h-24 rounded-full mb-5 object-cover"
+        />
+        <div className="ml-10">
+          <ImageUpload setimg={setImg} />
+        </div>
+      </div>
       <TextField
         label="First Name"
-        name='firstName'
+        name="firstName"
         variant="outlined"
-        value={formData.firstName}
-        className='w-full'
-        onChange={handleChange}
-        sx={{ mt: '2rem', backgroundColor: 'white' }}
+        value={user.firstName}
+        className="w-full"
+        onChange={handleUserChange}
+        sx={{ mt: "2rem", backgroundColor: "white" }}
       />
+
       <TextField
         label="Last Name"
-        name='lastName'
+        name="lastName"
         variant="outlined"
-        value={formData.lastName}
-        className='w-full'
-        onChange={handleChange}
-        sx={{ mt: '2rem', backgroundColor: 'white' }}
+        value={user.lastName}
+        className="w-full"
+        onChange={handleUserChange}
+        sx={{ mt: "2rem", backgroundColor: "white" }}
       />
       <TextField
         label="Phone"
-        name='phone'
+        name="phone"
         variant="outlined"
-        value={formData.phone}
-        className='w-full'
-        onChange={handleChange}
-        sx={{ mt: '2rem', backgroundColor: 'white' }}
+        value={user.phone}
+        className="w-full"
+        onChange={handleUserChange}
+        sx={{ mt: "2rem", backgroundColor: "white" }}
       />
       <TextField
         label="Address"
-        name='address'
+        name="address"
         variant="outlined"
-        value={formData.address}
-        className='w-full'
-        onChange={handleChange}
-        sx={{ mt: '2rem', backgroundColor: 'white' }}
+        value={user.address}
+        className="w-full"
+        onChange={handleUserChange}
+        sx={{ mt: "2rem", backgroundColor: "white" }}
       />
-      <div className='mt-10'>
+      {/* <div className="mt-10">
         <h2>Skills</h2>
         <CreatableSelect
           isMulti
           options={options}
-          value={formData.skills.map(skill => ({ value: skill, label: skill }))}
+          value={
+            formData.skills &&
+            formData.skills.map((skill) => ({
+              value: skill,
+              label: skill,
+            }))
+          }
           onChange={handleSkillChange}
         />
-      </div>
-      <div className='mt-10'>
+      </div> */}
+      {/* <div className="mt-10">
         <h2>Education</h2>
-
-        {formData.education && formData.education.map((edu, index) => {
-          return(
-            <div  className='mb-4' key={index}>
-              <p>{edu.institution}</p>
-              <p>{edu.degree}</p>
-              <p>{edu.fieldOfStudy}</p>
-              <p>{edu.startDate}</p>
-              <p>{edu.endDate}</p>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => removeEducation(index)}
-                sx={{ mt: '1rem' }}
+        {formData.education &&
+          formData.education.map((edu, index) => {
+            return (
+              <div
+                key={index}
+                className="mt-3 bg-white shadow-2xl rounded-lg px-4 py-2 pb-4"
               >
-                Remove
-              </Button>
-            </div>)
-        })}
-
-
-          <div  className='mb-4'>
-            <TextField
-              label="Institution"
-              name='institution'
-              variant="outlined"
-              value={edu.institution}
-              className='w-full'
-              onChange={(e) => handleEduChange(e)}
-              sx={{ mt: '1rem', backgroundColor: 'white' }}
-            />
-            <TextField
-              label="Degree"
-              name='degree'
-              variant="outlined"
-              value={edu.degree}
-              className='w-full'
-              onChange={(e) => handleEduChange( e)}
-              sx={{ mt: '1rem', backgroundColor: 'white' }}
-            />
-            <TextField
-              label="Field of Study"
-              name='fieldOfStudy'
-              variant="outlined"
-              value={edu.fieldOfStudy}
-              className='w-full'
-              onChange={(e) => handleEduChange( e)}
-              sx={{ mt: '1rem', backgroundColor: 'white' }}
-            />
-            <TextField
-              label="Start Date"
-              name='startDate'
-              type="date"
-              variant="outlined"
-              value={edu.startDate}
-              className='w-full'
-              InputLabelProps={{ shrink: true }}
-              onChange={(e) => handleEduChange( e)}
-              sx={{ mt: '1rem', backgroundColor: 'white' }}
-            />
-            <TextField
-              label="End Date"
-              name='endDate'
-              type="date"
-              variant="outlined"
-              value={edu.endDate}
-              className='w-full'
-              InputLabelProps={{ shrink: true }}
-              onChange={(e) => handleEduChange(e)}
-              sx={{ mt: '1rem', backgroundColor: 'white' }}
-            />
-            {/* <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => removeEducation(index)}
-              sx={{ mt: '1rem' }}
-            >
-              Remove
-            </Button> */}
-          </div>
-        
+                <div>
+                  <h1 className="font-bold text-lg text-gray-600">Degree</h1>
+                  <p className="border-2 rounded-lg text-gray-500 px-3 py-2 border-gray-200">
+                    {edu.degree}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <h1 className="font-bold text-lg text-gray-600">
+                    Institution
+                  </h1>
+                  <p className="border-2 rounded-lg text-gray-500 px-3 py-2 border-gray-200">
+                    {edu.institution}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <h1 className="font-bold text-lg text-gray-600">Date</h1>
+                  <p className="border-2 rounded-lg text-gray-500 px-3 py-2 border-gray-200">
+                    {new Date(edu.startDate).toLocaleDateString()} -{" "}
+                    {new Date(edu.endDate).toLocaleDateString()}
+                  </p>
+                </div>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => removeEducation(index)}
+                  sx={{ mt: "1rem" }}
+                >
+                  Remove
+                </Button>
+              </div>
+            );
+          })}
+        <div className="mb-4">
+          <TextField
+            label="Institution"
+            name="institution"
+            variant="outlined"
+            value={edu.institution}
+            className="w-full"
+            onChange={handleEduChange}
+            sx={{ mt: "1rem", backgroundColor: "white" }}
+          />
+          <TextField
+            label="Degree"
+            name="degree"
+            variant="outlined"
+            value={edu.degree}
+            className="w-full"
+            onChange={handleEduChange}
+            sx={{ mt: "1rem", backgroundColor: "white" }}
+          />
+          <TextField
+            label="Field of Study"
+            name="fieldOfStudy"
+            variant="outlined"
+            value={edu.fieldOfStudy}
+            className="w-full"
+            onChange={handleEduChange}
+            sx={{ mt: "1rem", backgroundColor: "white" }}
+          />
+          <TextField
+            label="Start Date"
+            name="startDate"
+            type="date"
+            variant="outlined"
+            value={edu.startDate}
+            className="w-full"
+            InputLabelProps={{ shrink: true }}
+            onChange={handleEduChange}
+            sx={{ mt: "1rem", backgroundColor: "white" }}
+          />
+          <TextField
+            label="End Date"
+            name="endDate"
+            type="date"
+            variant="outlined"
+            value={edu.endDate}
+            className="w-full"
+            InputLabelProps={{ shrink: true }}
+            onChange={handleEduChange}
+            sx={{ mt: "1rem", backgroundColor: "white" }}
+          />
+        </div>
         <Button
           variant="contained"
           color="primary"
           onClick={addEducation}
-          sx={{ mt: '1rem' }}
+          sx={{ mt: "1rem" }}
         >
           Add Education
         </Button>
-      </div>
+      </div> */}
       <Button
         variant="contained"
         color="primary"
         onClick={handleSubmit}
-        sx={{ mt: '2rem' }}
+        sx={{ mt: "2rem" }}
       >
         Save
       </Button>
       <Button
         variant="outlined"
         color="secondary"
-        onClick={() => props.setreadMode(true)}
-        sx={{ mt: '2rem', ml: '1rem' }}
+        onClick={() => navigate("/jobseeker/profile")}
+        sx={{ mt: "2rem", ml: "1rem" }}
       >
         Cancel
       </Button>
     </div>
+    // <h1>hello</h1>
   );
 };
 

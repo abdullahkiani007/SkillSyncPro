@@ -1,5 +1,6 @@
 const Company = require('../Models/company.model');
 const Employer = require('../Models/employer.model');
+const CompanyAssessment = require("../Models/companyAssessment.model")
 
 
 const companyService = {
@@ -57,7 +58,27 @@ const companyService = {
                     "status":200,
                     "data":company
                 }
+            }else{
+                //check if user is an employee
+
+                // fetch employee id
+                const employer = await Employer.findOne({user:id});
+                if (!employer){
+                    return {
+                        "status":404,
+                        "message":"Employer not found"
+                    }
+                }
+
+                const company = await Company.findById(employer.company);
+                if (company){
+                    return {
+                        "status":200,
+                        "data":company
+                    }
+                }
             }
+
             return {
                 "status":404,
                 "message":"Company not found"
@@ -117,7 +138,111 @@ const companyService = {
         }
     }
     ,
-    // async getEmployees()
+    async joinCompany(userId, companyId) {
+        try {
+            const company = await Company.findById(companyId);
+            if (!company) {
+                return {
+                    "status": 404,
+                    "message": "Company not found"
+                }
+            }
+            const employer = await Employer.findOne({ user: userId });
+            if (!employer) {
+                return {
+                    "status": 404,
+                    "message": "Employer not found"
+                }
+            }
+            employer.company = company._id;
+            await employer.save();
+
+            company.employees.push(employer._id);
+            await company.save();
+
+            return {
+                "status": 200,
+                "data": company
+            }
+        } catch (err) {
+            console.log(err);
+            return {
+                "status": 500,
+                "message": "Internal server error"
+            }
+        }
+    },
+    async getEmployees(companyId){
+        try{
+            const company = await Company.findById(companyId);
+            if (!company){
+                return {
+                    "status":404,
+                    "message":"Company not found"
+                }
+            }
+            const employees = await company.populate('employees');
+            return {
+                "status":200,
+                "data":employees
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                "status":500,
+                "message":"Internal server error"
+            }
+        }
+    },
+    async getCompanies(){
+        try{
+            let companies = await Company.find({}).populate('jobs').populate({
+                path:"employees",
+                populate:{
+                    path:'user'
+                }
+            });
+            // companies.employees = companies.employees?.map( (emp)=>{
+            //     return emp.populate("employers")
+            // })
+            companies.forEach((company)=>{
+                console.log("employe", company.employees)
+            })
+            return{
+                status:200,
+                companies
+            }
+        }catch(error){
+            console.log(error)
+            return {
+                status: 500,
+            }
+        }
+    },
+
+    async getAssessment(companyId){
+        try{
+            const assessment = await CompanyAssessment.find({company:companyId});
+            console.log("assessment",assessment)
+            console.log("company",companyId)
+            if (assessment){
+                return {
+                    "status":200,
+                    assessment
+                }
+            }
+            return {
+                "status":404,
+                "message":"Assessment not found"
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                "status":500,
+                "message":"Internal server error"
+            }
+        }
+    }
 }
 
 module.exports = companyService;

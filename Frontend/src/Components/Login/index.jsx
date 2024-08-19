@@ -73,7 +73,7 @@ const Login = ({ role }) => {
           login({
             _id: response.data.user.id,
             firstName: response.data.user.firstName,
-            lastName:response.data.user.lastName,
+            lastName: response.data.user.lastName,
             email: response.data.user.email,
             auth: true,
             role: response.data.user.role,
@@ -83,7 +83,7 @@ const Login = ({ role }) => {
         navigate(`/${response.data.user.role}/Dashboard`);
       } else {
         setError(response.data);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -168,7 +168,7 @@ const Login = ({ role }) => {
             )}
             {error && <p className="text-red-700 h-5">{error}</p>}
             <button
-              className="rounded-2xl m-2 text-white bg-primary w-2/5 px-4 py-2 shadow-md hover:text-primary hover:bg-white transition duration-200 ease-in disabled:bg-primary disabled:opacity-70 disabled:text-white"
+              className="rounded-2xl m-2 text-white bg-primary w-fit px-4 py-2 shadow-md hover:text-primary hover:bg-white transition duration-200 ease-in disabled:bg-primary disabled:opacity-70 disabled:text-white"
               onClick={handleClick}
               disabled={errors.email || errors.password}
             >
