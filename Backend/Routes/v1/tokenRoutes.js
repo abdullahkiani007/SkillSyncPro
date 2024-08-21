@@ -8,6 +8,8 @@ const userModel = require('../../Models/user.model');
 router.post('/refresh', async (req, res) => {
     const { refreshToken } = req.body;
 
+    console.log("refresh token: ", refreshToken);
+
     if (!refreshToken) {
         return res.status(401).json({ message: 'Refresh Token is required' });
     }

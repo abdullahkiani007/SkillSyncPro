@@ -50,15 +50,18 @@ class ApiClient {
   // Function to refresh the token
   async refreshToken() {
     try {
-      const response = await fetch("/api/refresh-token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          refreshToken: localStorage.getItem("refreshToken"),
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/v1/token/refresh`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            refreshToken: localStorage.getItem("refreshToken"),
+          }),
+        }
+      );
 
       const data = await response.json();
 

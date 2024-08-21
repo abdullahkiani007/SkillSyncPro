@@ -107,6 +107,55 @@ class JobseekerController {
       };
     }
   }
+
+  async getAssessmentById(id) {
+    console.log("ID", id);
+    try {
+      const response = await fetch(
+        `${this.jobSeekerUrl}/assessment.?id=${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return {
+        data: await response.json(),
+        status: response.status,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        message: "Internal Server Error",
+      };
+    }
+  }
+
+  async submitApplication(data, token) {
+    console.log("Data", data);
+    try {
+      const response = await fetch(this.jobSeekerUrl + "/application", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(data),
+      });
+
+      return {
+        data: await response.json(),
+        status: response.status,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        message: "Internal Server Error",
+      };
+    }
+  }
 }
 
 export default new JobseekerController();
