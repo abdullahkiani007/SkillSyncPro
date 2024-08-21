@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 const JobPost = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [assessments, setAssessments] = useState([]);
   const [completed, setCompleted] = useState({});
   const [submited, setSubmited] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
@@ -37,10 +38,11 @@ const JobPost = () => {
     salaryRange: [0, 100000], // Ensure this is an array
     employmentType: "",
     experienceLevel: "",
+    skillAssessment: "",
     skills: [],
   });
   const navigate = useNavigate();
-  const steps = ["Step 1", "Step 2", "Step 3"];
+  const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
   useEffect(() => {
     setTimeout(() => {
       setMessage("");
@@ -54,6 +56,23 @@ const JobPost = () => {
       ...prevValues,
       company: company._id,
     }));
+  }, []);
+
+  useEffect(() => {
+    const getAssessments = async () => {
+      const company = JSON.parse(localStorage.getItem("company"));
+
+      const data = await EmployerController.getAssessments(
+        localStorage.getItem("token"),
+        company._id
+      );
+      if (data.status === 200) {
+        setAssessments(data.data.assessment);
+      } else {
+        console.log("Error fetching assessments");
+      }
+    };
+    getAssessments();
   }, []);
 
   const totalSteps = () => {
@@ -113,6 +132,9 @@ const JobPost = () => {
         )
           isValid = false;
         break;
+      case 3:
+        if (!formValues.skillAssessment) isValid = false;
+        break;
       default:
         isValid = false;
     }
@@ -156,6 +178,13 @@ const JobPost = () => {
       skills: event.target.value,
     }));
   };
+  const handleSkillAssessmentChange = (event) => {
+    console.log("skill assessment", event.target.value);
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      skillAssessment: event.target.value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -174,7 +203,7 @@ const JobPost = () => {
         setSubmited(true);
         setTimeout(() => {
           setMessage("Job Posted Successfully");
-          navigate("/employer/jobs");
+          // navigate("/employer/jobs");
         }, 3000);
       } else {
         setSubmited(true);
@@ -380,6 +409,36 @@ const JobPost = () => {
                         </MenuItem>
                       )
                     )}
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+          </Card>
+        );
+      // skill assessment
+      case 3:
+        return (
+          <Card className="my-20 mx-10 p-10">
+            <div>
+              <h1>Select Skill Assessment</h1>
+              <div className="mt-4">
+                <FormControl variant="outlined" className="w-full">
+                  <InputLabel id="employmentType-label">
+                    Skill Assessment
+                  </InputLabel>
+                  <Select
+                    labelId="SkillAssessment-label"
+                    id="SkillAssessment"
+                    name="SkillAssessment"
+                    label="SkillAssessment"
+                    value={formValues.skillAssessment}
+                    onChange={handleSkillAssessmentChange}
+                  >
+                    {assessments.map((assessment) => (
+                      <MenuItem key={assessment._id} value={assessment._id}>
+                        {assessment.title}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </div>

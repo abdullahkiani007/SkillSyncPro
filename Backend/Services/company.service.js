@@ -242,7 +242,9 @@ const companyService = {
                 "message":"Internal server error"
             }
         }
-    }
+    },
+
+    
 }
 
 module.exports = companyService;
