@@ -10,6 +10,8 @@ const companyController = require('../../Controllers/CompanyController');
 
 EmployerRouter.get("/jobs",passport.authenticate('jwt',{session:false}),employerController.getJobs)
 EmployerRouter.post("/job",passport.authenticate('jwt',{session:false}),employerController.postJob)
+EmployerRouter.put("/archiveJob",passport.authenticate('jwt',{session:false}),employerController.archiveJob)
+EmployerRouter.delete("/job",passport.authenticate('jwt',{session:false}),employerController.deleteJob)
 
 EmployerRouter.get("/dashboard",passport.authenticate('jwt',{session:false}),employerController.getDashboard)
 EmployerRouter.get("/profile",passport.authenticate('jwt', {session:false}), employerController.getEmployer)
@@ -21,6 +23,11 @@ EmployerRouter.get("/company",passport.authenticate('jwt',{session:false}),compa
 EmployerRouter.put("/company",passport.authenticate('jwt',{session:false}),companyController.updateCompany)
 
 EmployerRouter.post("/company/join",passport.authenticate('jwt',{session:false}),companyController.joinCompany)
+
 EmployerRouter.post("/assessment",passport.authenticate('jwt',{session:false}),employerController.createAssessment)
 EmployerRouter.get("/assessments",passport.authenticate('jwt',{session:false}),companyController.getAssessment)
+EmployerRouter.get("/assessment",passport.authenticate('jwt',{session:false}),employerController.getAssessmentById)
+EmployerRouter.put("/assessment",passport.authenticate('jwt',{session:false}),employerController.editAssessment)
+EmployerRouter.delete("/assessment",passport.authenticate('jwt',{session:false}),employerController.deleteAssessment)
+
 module.exports = EmployerRouter;

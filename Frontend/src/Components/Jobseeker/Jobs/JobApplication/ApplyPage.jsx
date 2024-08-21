@@ -1,12 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Outlet, useParams, useNavigate } from "react-router-dom";
-
+import jobSeeker from "../../../../API/jobseeker";
+import { useDispatch, useSelector } from "react-redux";
 const ApplyPage = () => {
   const { id } = useParams();
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const [application, setApplication] = useState({});
 
   // Step tracking state
   const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    console.log("Fetching assessments");
+    const getAssessments = async () => {
+      const company = JSON.parse(localStorage.getItem("company"));
+
+      const data = await jobSeeker.getAssessmentById(id);
+      console.log(data);
+      if (data.status === 200) {
+        console.log(data.data.assessment);
+        localStorage.setItem(
+          "assessment",
+          JSON.stringify(data.data.assessment)
+        );
+      } else {
+        console.log("Error fetching assessments");
+      }
+    };
+    getAssessments();
+
+    setApplication((prev) => {
+      return {
+        ...prev,
+        job: id,
+        user: user._id,
+        status: "Applied",
+      };
+    });
+
+    console.log("Application", application);
+  }, []);
 
   // Handler to move to the next step
   const goToNextStep = () => {
@@ -63,7 +97,7 @@ const ApplyPage = () => {
       </div>
 
       {/* Render the current step's content */}
-      <Outlet context={{ step, goToNextStep }} />
+      <Outlet context={{ step, goToNextStep, setApplication, application }} />
     </div>
   );
 };
