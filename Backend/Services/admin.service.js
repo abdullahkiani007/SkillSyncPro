@@ -391,6 +391,78 @@ const AdminService = {
       throw new Error('Error fetching employment types distribution data: ' + error.message);
     }
   },
+
+   fetchSalaryRangeDistribution : async () => {
+    try {
+      const results = await JobModel.aggregate([
+        {
+          $project: {
+            averageSalary: {
+              $avg: [
+                { $toInt: { $arrayElemAt: [{ $split: ["$salaryRange", "-"] }, 0] } }, // Parse the minimum salary
+                { $toInt: { $arrayElemAt: [{ $split: ["$salaryRange", "-"] }, 1] } }  // Parse the maximum salary
+              ]
+            }
+          }
+        },
+        {
+          $bucket: {
+            groupBy: "$averageSalary", // Group by the calculated average salary
+            boundaries: [0, 30000, 50000, 70000, 90000, 110000, 130000, 150000, 200000], // Define the bins
+            default: "Others", // Bucket for any value not within the boundaries
+            output: {
+              count: { $sum: 1 },
+            },
+          },
+        },
+        {
+          $sort: { _id: 1 }, // Sort bins by range
+        },
+      ]);
+  
+      return results;
+    //   return [ { _id: 30000, count: 1 }, { _id: 50000, count: 1 } ]
+    } catch (error) {
+      throw new Error('Error fetching salary range distribution data: ' + error.message);
+    }
+  },
+  
+     fetchJobPostingsByLocation : async () => {
+    try {
+      const results = await JobModel.aggregate([
+        {
+          $group: {
+            _id: "$location", // Group by the 'location' field
+            count: { $sum: 1 }, // Count the number of job postings for each location
+          },
+        },
+        {
+          $sort: { count: -1 }, // Sort locations by the number of job postings in descending order
+        },
+      ]);
+  
+    //   return results;
+      return [ 
+        {
+            "_id": "islamabad",
+            "count": 2
+        },{
+            "_id": "Karachi",
+            "count": 4
+        },
+        {
+            "_id": "peshawar",
+            "count": 2
+        },{
+            "_id": "New York",
+            "count": 40
+        },
+    ]
+    } catch (error) {
+      throw new Error('Error fetching job postings by location: ' + error.message);
+    }
+  },
+  
 };
 
 module.exports = AdminService;
