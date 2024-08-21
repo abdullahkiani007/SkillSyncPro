@@ -2,6 +2,8 @@ const JobModel = require('../Models/job.model');
 const ApplicationModel = require('../Models/application.model');
 const JobseekerModel = require('../Models/jobseeker.model');
 const JobseekerService = require('../Services/jobSeeker.service');
+const UserModel = require('../Models/user.model')
+const EmployerModel = require('../Models/employer.model')
 
 const jobDTO = require('../DTO/jobsDTO');
 const jobseekerService = require('../Services/jobSeeker.service');
@@ -75,8 +77,64 @@ const jobService = {
         } catch (error) {
             return { status:500, "message":"Internal server error" };
         }
+    },
+
+    // 
+    archiveJobEmployer: async(jobId , userId)=>{
+        try{
+            const employer = await EmployerModel.findOne({user:userId});
+            const job = await JobModel.findOne({_id:jobId});
+
+            if (job.company.toString() !== employer.company.toString()){
+                return {
+                    "status":401,
+                    "message":"Unauthorized"
+                }
+            }
+            await JobModel.findByIdAndUpdate(jobId,{
+                $set:{archived:!job.archived}
+            });
+            return {
+                "status":200,
+                "message":"Job archived successfully"
+            }
+        }catch(err){
+            console.log(err)
+            return {
+                "status":500,
+                "message":"Internal Server Error"
+            }
+
+        }
+        },
+
+    deleteJobEmployer: async(jobId , userId)=>{
+        try{
+            const employer = await EmployerModel.findOne({user:userId});
+            const job = await JobModel.findOne({_id:jobId});
+
+            if (job.company.toString() !== employer.company.toString()){
+                return {
+                    "status":401,
+                    "message":"Unauthorized"
+                }
+            }
+            await JobModel.findByIdAndDelete(jobId);
+            return {
+                "status":200,
+                "message":"Job deleted successfully"
+            }
+        }catch(err){
+            console.log(err)
+            return {
+                "status":500,
+                "message":"Internal Server Error"
+            }
+
+        }
     }
 
-}
+
+    }
 
 module.exports = jobService

@@ -1,16 +1,17 @@
-import {  useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
-import { HashLink as Link } from 'react-router-hash-link';
+import { HashLink as Link } from "react-router-hash-link";
 
 import { skillSync } from "../../assets";
 import { navigation } from "../../constants";
 import Button from "./Button";
 import MenuSvg from "../../assets/svg/MenuSvg";
 import { HamburgerMenu } from "./design/Header";
-import { useState  } from "react";
+import { useState, useEffect } from "react";
 
 const Header = () => {
   const pathname = useLocation();
+  const navigate = useNavigate();
   const [openNavigation, setOpenNavigation] = useState(false);
 
   const toggleNavigation = () => {
@@ -22,7 +23,23 @@ const Header = () => {
       disablePageScroll();
     }
   };
+  // Key combination listener for admin login
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Check for Ctrl + Shift + A (or any other key combination you prefer)
+      if (event.ctrlKey && event.shiftKey && event.key === "A") {
+        navigate("/login/admin"); // Redirect to the admin login page
+      }
+    };
 
+    // Add event listener
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [navigate]);
   const handleClick = () => {
     if (!openNavigation) return;
 

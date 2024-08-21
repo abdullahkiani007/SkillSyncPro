@@ -30,6 +30,6 @@ router.post("/job/apply",passport.authenticate('jwt',{
 }),jobseekerController.applyJob);
 
 router.get("/companies", CompanyController.getCompanies);
-
+router.get("/assessment",jobseekerController.getAssessmentByJobId)
 
 module.exports = router;
