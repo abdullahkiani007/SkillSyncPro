@@ -1,4 +1,5 @@
 const EmployerServices = require('../Services/employer.service');
+const jobService = require('../Services/jobs.service');
 
 
 const EmployerController = {
@@ -124,7 +125,112 @@ const EmployerController = {
        res.status(200).json({
             response
         })
+    },
+
+    async getAssessmentById(req,res,next){
+        console.log("GET emp/assessments received");
+        const id = req.query.id
+
+        const response = await EmployerServices.getAssessment(id);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+       }else if (response.status == 404){
+          return res.status(404).json({
+              "message":response.message
+          })
+       }
+
+       res.status(200).json({
+              "data":response.assessment
+       })
+    },
+
+    async editAssessment(req,res,next){
+        console.log("PUT emp/assessments received");
+        const id = req.query.id;
+        const data = req.body;
+
+        const response = await EmployerServices.editAssessment(id,data);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+       }else if (response.status == 404){
+          return res.status(404).json({
+              "message":response.message
+          })
+       }
+
+       res.status(200).json({
+              "data":response.assessment
+       })
+    },
+
+    async deleteAssessment(req,res,next){
+        console.log("DELETE emp/assessments received");
+        const id = req.query.id;
+
+        const response = await EmployerServices.deleteAssessment(id);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          res.status(200).json({
+            "message":"Assessment deleted"
+          })
+    },
+
+    async archiveJob(req,res,next){
+        console.log("PUT emp/jobs/archive received");
+        const JobId = req.query.id;
+        const {_id} = req.user;
+
+        const response = await jobService.archiveJobEmployer(JobId,_id);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          res.status(200).json({
+            "message":"Job archived"
+          })
+    },
+
+    async deleteJob(req,res,next){
+        console.log("DELETE emp/jobs received");
+        const JobId = req.query.id;
+        const {_id} = req.user;
+
+        const response = await jobService.deleteJobEmployer(JobId,_id);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          res.status(200).json({
+            "message":"Job deleted"
+          })
     }
+
+
 
   
 

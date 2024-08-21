@@ -27,6 +27,10 @@ const applicationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Interview',
   },
+  skillAssessment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CandidateAssessment',
+  },
 }, { timestamps: true });
 
 const ApplicationModel = mongoose.models.Application || mongoose.model('Application', applicationSchema)

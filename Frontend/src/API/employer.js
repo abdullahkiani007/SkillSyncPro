@@ -1,128 +1,212 @@
+import ApiClient from "./ApiClient";
 class EmployerController {
   constructor() {
-    this.url = "http://localhost:3000/api/v1/employer/";
+    this.apiClient = new ApiClient("http://localhost:3000/api/v1/employer"); // Create a new instance of the ApiClient class
   }
 
   async postJob(data, token) {
-    const response = await fetch(this.url + "job", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify(data),
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.post("job", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error posting job:", error);
+      throw error;
+    }
   }
 
   async getJobs(token) {
-    const response = await fetch(this.url + "jobs", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.get("jobs", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      throw error;
+    }
   }
 
   async registerCompany(data, token) {
-    const response = await fetch(this.url + "company", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify(data),
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.post("company", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error registering company:", error);
+      throw error;
+    }
   }
+
   async getCompany(token) {
-    const response = await fetch(this.url + "company", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.get("company", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching company:", error);
+      throw error;
+    }
   }
 
   async updateCompany(data, token) {
-    const response = await fetch(this.url + "company", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify(data),
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.put("company", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error updating company:", error);
+      throw error;
+    }
   }
 
   async getDashboard(token) {
-    const response = await fetch(this.url + "dashboard", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.get("dashboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching dashboard:", error);
+      throw error;
+    }
   }
 
   async createAssessment(data, token) {
-    console.log("Sending /post/assessment request");
-    console.log(data);
-    const response = await fetch(this.url + "assessment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify(data),
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      console.log("Sending /post/assessment request");
+      console.log(data);
+      const response = await this.apiClient.post("assessment", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error creating assessment:", error);
+      throw error;
+    }
   }
 
   async getAssessments(token, companyId) {
-    console.log("Sending /get/assessments request");
-    console.log(companyId);
-    const response = await fetch(
-      `${this.url}assessments?companyId=${companyId}`,
-      {
-        method: "GET",
+    try {
+      console.log("Sending /get/assessments request");
+      console.log(companyId);
+      const response = await this.apiClient.get(
+        `assessments?companyId=${companyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+      throw error;
+    }
+  }
+
+  async deleteAssessment(token, assessmentId) {
+    try {
+      console.log("Sending /delete/assessment request");
+      console.log(assessmentId);
+      const response = await this.apiClient.delete(
+        `assessment/?id=${assessmentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error deleting assessment:", error);
+      throw error;
+    }
+  }
+
+  async archiveJob(token, jobId) {
+    try {
+      console.log("Sending /archive/job request");
+      console.log(jobId);
+      const response = await this.apiClient.put(
+        `/archiveJob?id=${jobId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.message,
+        status: response.status,
+      };
+    } catch (error) {
+      console.log("Error deleting job ", error);
+    }
+  }
+
+  async deleteJob(token, jobId) {
+    try {
+      console.log("Sending /delete/job request");
+      console.log(jobId);
+      const response = await this.apiClient.delete(`/job?id=${jobId}`, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+      });
+      return {
+        data: response.message,
+        status: response.status,
+      };
+    } catch (error) {
+      console.log("Error deleting job ", error);
+    }
   }
 }
 

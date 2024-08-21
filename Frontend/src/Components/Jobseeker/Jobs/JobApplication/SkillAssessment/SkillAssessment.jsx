@@ -8,27 +8,92 @@ import {
   Button,
   Snackbar,
   Alert,
+  Typography,
 } from "@mui/material";
 import CodeEditor from "./CodingEnvironment"; // Adjust the path as needed
+import Loader from "../../../../Loader/Loader";
+import jobseeker from "../../../../../API/jobseeker";
 
 const SkillAssessment = () => {
   const [openDisclaimer, setOpenDisclaimer] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const { goToNextStep } = useOutletContext();
+  const { goToNextStep, application, setApplication } = useOutletContext();
+  const [assessments, setAssessments] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
+  const [submittedCode, setSubmittedCode] = useState([]);
 
-  const handleCodeSubmit = (submittedCode, timeSpent, keystrokes) => {
-    // Check for time limit or pasting issues
-    if (timeSpent > 1800000 || keystrokes === 0) {
-      setAlertMessage(
-        "Time limit exceeded or code was pasted! The task cannot be submitted."
-      );
-      setOpenAlert(true);
+  useEffect(() => {
+    let localAssessments = JSON.parse(localStorage.getItem("assessment"));
+    if (localAssessments) {
+      setAssessments(localAssessments);
+      setLoading(false);
+      console.log("Assessments", localAssessments);
     } else {
-      console.log("Submitted Code:", submittedCode);
-      // Here you would send the code to your backend to evaluate it
-      goToNextStep();
+      console.log("Fetching assessments");
     }
+  }, []);
+
+  useEffect(() => {
+    const handlePaste = (event) => {
+      setAlertMessage("Pasting code is not allowed!");
+      setOpenAlert(true);
+    };
+
+    window.addEventListener("paste", handlePaste);
+
+    return () => {
+      window.removeEventListener("paste", handlePaste);
+    };
+  }, []);
+
+  const handleCodeSubmit = async (code, timeSpent, keystrokes) => {
+    // Check for time limit or pasting issues
+    // if (timeSpent > 1800000 || keystrokes === 0) {
+    //   setAlertMessage(
+    //     "Time limit exceeded or code was pasted! The task cannot be submitted."
+    //   );
+    //   setOpenAlert(true);
+    // } else {
+
+    console.log("Submitted Code:", code);
+    const newCode = {
+      code,
+      timeSpent,
+      keystrokes,
+      _id: assessments.problems[currentProblemIndex]._id,
+    };
+
+    setSubmittedCode([...submittedCode, newCode]);
+
+    console.log("Submitted Code:", submittedCode);
+    console.log("newCode", newCode);
+    // Proceed to next problem or end the assessment
+    if (currentProblemIndex < assessments.problems.length - 1) {
+      setCurrentProblemIndex(currentProblemIndex + 1);
+    } else {
+      // Here you would send all the code to your backend to evaluate it
+      console.log("All problems solved!");
+
+      const data = {
+        ...application,
+        code: submittedCode,
+        assesmentId: assessments._id,
+      };
+      const token = localStorage.getItem("accessToken");
+      const response = await jobseeker.submitApplication(data, token);
+      console.log("Response", response);
+      if (response.status === 200) {
+        console.log("Application submitted successfully");
+        goToNextStep();
+        console.log("response", response);
+      } else {
+        setAlertMessage("Failed to submit application. Please try again.");
+        setOpenAlert(true);
+      }
+    }
+    // }
   };
 
   const handleCloseDisclaimer = () => {
@@ -39,8 +104,14 @@ const SkillAssessment = () => {
     setOpenAlert(false);
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
+  const currentProblem = assessments.problems[currentProblemIndex];
+
   return (
-    <div className="skill-assessment-container">
+    <div className="skill-assessment-container p-5 bg-gray-900 text-white min-h-screen">
       <Dialog
         open={openDisclaimer}
         onClose={handleCloseDisclaimer}
@@ -49,11 +120,11 @@ const SkillAssessment = () => {
       >
         <DialogTitle id="disclaimer-dialog-title">Disclaimer</DialogTitle>
         <DialogContent>
-          <p>
+          <Typography>
             This is a coding challenge to assess your skills. Please do not copy
             code from external sources or other candidates. Your code should be
             original and written by you.
-          </p>
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDisclaimer} color="primary">
@@ -81,17 +152,28 @@ const SkillAssessment = () => {
         </Alert>
       </Snackbar>
 
-      <h2 className="text-xl font-semibold mb-4">Coding Challenge</h2>
-      <p>Write a function that solves the following problem:</p>
-      {/* Example Problem Statement */}
-      <p>
-        Write a function that takes an array of numbers and returns the maximum
-        sum of any contiguous subarray.
-      </p>
+      <Typography variant="h4" className="text-xl font-semibold mb-4">
+        Coding Challenge {currentProblemIndex + 1} /{" "}
+        {assessments.problems.length}
+      </Typography>
+
+      <div className="problem-statement mb-4">
+        <Typography variant="h5" className="mb-2">
+          {currentProblem.title}
+        </Typography>
+        <Typography variant="body1">{currentProblem.description}</Typography>
+        <Typography variant="body2" className="mt-4">
+          <strong>Input:</strong> {currentProblem.input}
+        </Typography>
+        <Typography variant="body2">
+          <strong>Output:</strong> {currentProblem.output}
+        </Typography>
+      </div>
+
       <CodeEditor
-        initialCode={`// Write your code here`}
+        initialCode={currentProblem.initialCode}
         onSubmit={handleCodeSubmit}
-        language="javascript"
+        language={currentProblem.language || "javascript"}
       />
     </div>
   );
