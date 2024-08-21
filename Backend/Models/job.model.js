@@ -47,6 +47,7 @@ const jobSchema = new mongoose.Schema({
     type: String,
     enum: ['Full-time', 'Part-time', 'Contract', 'Temporary'],
   },
+  archived: { type: Boolean, default: false }, // Archived jobs will not be shown to job seekers
   applicants: [
     {
       type: mongoose.Schema.Types.ObjectId,

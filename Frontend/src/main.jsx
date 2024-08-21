@@ -44,6 +44,10 @@ import EmpProfile from "./Components/Employer/Profile/Profile.jsx";
 import EmpProfileForm from "./Components/Employer/Profile/ProfileForm.jsx";
 import VideoInterview from "./Components/Jobseeker/Jobs/JobApplication/VideoInterview.jsx";
 import CreateAssessmentForm from "./Components/Employer/SkillAssessments/CreateAssessment.jsx";
+import AdminUsersList from "./Components/Admin/UsersManagement/UsersList.jsx";
+import AdminJobsList from "./Components/Admin/Job/JobsList.jsx";
+import AdminCompaniesList from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
+import AdminDashboard from "./Components/Admin/Dashboard/Dashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -214,23 +218,39 @@ const router = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <h1>Dashboard</h1>,
+        element: <AdminDashboard />,
       },
       {
-        path: "jobseekers",
-        element: <h1>Jobseekers</h1>,
+        path: "users",
+        element: <AdminUsersList />,
+        children: [
+          {
+            path: "jobseekers",
+            element: <h1>Jobseeker</h1>,
+          },
+          {
+            path: "recruiters",
+            element: <h1>Recruiter</h1>,
+          },
+        ],
       },
       {
-        path: "employers",
-        element: <h1>Employers</h1>,
-      },
-      {
-        path: "jobs",
-        element: <h1>Jobs</h1>,
+        path: "job/listings",
+        element: <AdminJobsList />,
       },
       {
         path: "companies",
-        element: <h1>Companies</h1>,
+        element: <AdminCompaniesList />,
+        children: [
+          {
+            path: "view",
+            element: <h1>View Company</h1>,
+          },
+          {
+            path: "authorize",
+            element: <h1>Authorize Company</h1>,
+          },
+        ],
       },
       {
         path: "analytics",

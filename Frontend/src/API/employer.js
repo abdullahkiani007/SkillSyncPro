@@ -1,5 +1,4 @@
-import ApiClient from "./ApiClient"; // Import the ApiClient class
-
+import ApiClient from "./ApiClient";
 class EmployerController {
   constructor() {
     this.apiClient = new ApiClient("http://localhost:3000/api/v1/employer"); // Create a new instance of the ApiClient class
@@ -167,6 +166,46 @@ class EmployerController {
     } catch (error) {
       console.error("Error deleting assessment:", error);
       throw error;
+    }
+  }
+
+  async archiveJob(token, jobId) {
+    try {
+      console.log("Sending /archive/job request");
+      console.log(jobId);
+      const response = await this.apiClient.put(
+        `/archiveJob?id=${jobId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.message,
+        status: response.status,
+      };
+    } catch (error) {
+      console.log("Error deleting job ", error);
+    }
+  }
+
+  async deleteJob(token, jobId) {
+    try {
+      console.log("Sending /delete/job request");
+      console.log(jobId);
+      const response = await this.apiClient.delete(`/job?id=${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.message,
+        status: response.status,
+      };
+    } catch (error) {
+      console.log("Error deleting job ", error);
     }
   }
 }
