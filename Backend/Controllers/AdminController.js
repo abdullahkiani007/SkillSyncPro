@@ -63,9 +63,36 @@ const AdminController = {
 
         try{
             const employmentType= await AdminService.fetchEmploymentTypesDistribution()
-            console.log(employmentType)
             res.status(200).json({
                 employmentType
+            })
+        }catch(error){
+            next(error);
+            console.log(error)
+        }
+    },
+
+    async fetchSalaryRangeDistribution(req,res,next){
+
+        try{
+            const salaryRange= await AdminService.fetchSalaryRangeDistribution()
+            console.log(salaryRange)
+            res.status(200).json({
+                salaryRange
+            })
+        }catch(error){
+            next(error);
+            console.log(error)
+        }
+    },
+   
+    async  fetchJobPostingsByLocation(req,res,next){
+
+        try{
+            const locations= await AdminService.fetchJobPostingsByLocation()
+            console.log(locations)
+            res.status(200).json({
+                locations
             })
         }catch(error){
             next(error);

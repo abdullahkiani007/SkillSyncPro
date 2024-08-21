@@ -49,6 +49,9 @@ import AdminJobsList from "./Components/Admin/Job/JobsList.jsx";
 import AdminCompaniesList from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 import AdminDashboard from "./Components/Admin/Dashboard/Dashboard.jsx";
 
+import { MantineProvider } from "@mantine/core";
+import { NotFoundImage } from "./Components/NotFound/NotFoundImage.jsx";
+import "@mantine/core/styles.css";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -256,6 +259,10 @@ const router = createBrowserRouter([
         path: "analytics",
         element: <h1>Analytics</h1>,
       },
+      {
+        path: "*", // Wildcard route for 404 errors
+        element: <NotFoundImage />,
+      },
     ],
   },
 ]);
@@ -264,7 +271,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <RouterProvider router={router} />
+        <MantineProvider>
+          <RouterProvider router={router} />
+        </MantineProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 class Controller {
   constructor() {
     this.url = "http://localhost:3000/api/v1/";
@@ -89,6 +91,32 @@ class Controller {
       data: await response.json(),
       status: response.status,
     };
+  }
+
+  async getCoordinates(address) {
+    const GEOCODING_API_KEY = import.meta.env.VITE_GEOCODE_API_KEY;
+    const GEOCODING_API_URL = "https://api.opencagedata.com/geocode/v1/json";
+
+    try {
+      const response = await axios.get(GEOCODING_API_URL, {
+        params: {
+          q: address,
+          key: GEOCODING_API_KEY,
+          limit: 1,
+        },
+      });
+      const { results } = response.data;
+      if (results.length > 0) {
+        return {
+          lat: results[0].geometry.lat,
+          lng: results[0].geometry.lng,
+        };
+      }
+      return { lat: 0, lng: 0 }; // Default if no result found
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+      return { lat: 0, lng: 0 }; // Default in case of error
+    }
   }
 }
 

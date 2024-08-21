@@ -4,6 +4,9 @@ import JobApplicationsChart from "../Charts/JobApplicationChart";
 import TopCompaniesChart from "../Charts/TopCompaniesChart";
 import JobseekerRegistrationsChart from "../Charts/JobSeekerRegistrationsChart";
 import EmploymentTypesDistributionChart from "../Charts/EmloyementTypeDistributionChart";
+import SalaryRangeDistributionChart from "../Charts/SalaryRangeDistributionChart";
+import JobPostingsByLocationBarChart from "../Charts/JobPostingByLocationBarChar";
+import JobPostingsByLocationMapChart from "../Charts/JobPostingByLocationMapChart";
 
 const AdminDashboard = () => {
   return (
@@ -41,6 +44,24 @@ const AdminDashboard = () => {
         <div className="bg-white p-4 shadow-lg rounded-lg">
           <h2 className="text-lg mb-2">Employment Type Distribution</h2>
           <EmploymentTypesDistributionChart />
+        </div>
+
+        {/* Salary range distribution chart */}
+        <div className="bg-white p-4 shadow-lg rounded-lg">
+          <h2 className="text-lg mb-2">Salary Range Distribution</h2>
+          <SalaryRangeDistributionChart />
+        </div>
+
+        {/* Job Locations Bar chart */}
+        <div className="bg-white p-4 shadow-lg rounded-lg">
+          <h2 className="text-lg mb-2">Job posting by Location</h2>
+          <JobPostingsByLocationBarChart />
+        </div>
+
+        {/* Job locations map chart */}
+        <div className="bg-white p-4 shadow-lg rounded-lg">
+          <h2 className="text-lg mb-2">Job posting by Location</h2>
+          <JobPostingsByLocationMapChart />
         </div>
       </div>
     </div>

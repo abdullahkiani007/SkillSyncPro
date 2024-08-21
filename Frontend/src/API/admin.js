@@ -73,6 +73,32 @@ class Admin {
       throw error;
     }
   }
+
+  async fetchSalaryDistribution() {
+    try {
+      const response = await this.apiClient.get(`/salaryRange`);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching Salary Range Distribution", error);
+      throw error;
+    }
+  }
+
+  async fetchJobsByLocation() {
+    try {
+      const response = await this.apiClient.get(`/jobLocations`);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching Job locations", error);
+      throw error;
+    }
+  }
 }
 
 export default new Admin();

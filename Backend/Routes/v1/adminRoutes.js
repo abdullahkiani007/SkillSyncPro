@@ -11,5 +11,6 @@ AdminRouter.get("/jobApplications", adminController.fetchJobApplications);
 AdminRouter.get("/topComapaniesByJobPosts", adminController.fetchTopCompaniesByJobPostings)
 AdminRouter.get("/jobSeekerRegistrations", adminController.fetchJobSeekerRegistrationOverTime)
 AdminRouter.get("/EmploymentTypesDistribution", adminController.fetchEmploymentTypesDistribution)
-
+AdminRouter.get("/salaryRange", adminController.fetchSalaryRangeDistribution)
+AdminRouter.get("/jobLocations",adminController.fetchJobPostingsByLocation)
 module.exports = AdminRouter
