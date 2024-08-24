@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import EmployeeController from "../../../../API/employer";
 import Loader from "../../../Loader/Loader";
-import JobCard from "./JobCard";
+import JobCard from "./jobCard";
 
 const JobListing = () => {
   const [jobs, setJobs] = useState([]);
