@@ -7,8 +7,8 @@ const employerSchema = new mongoose.Schema({
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company',
-    
   },
+  
   role: {
     type: String,
   },

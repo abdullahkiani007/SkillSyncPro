@@ -35,8 +35,9 @@ import ApplyPage from "./Components/Jobseeker/Jobs/JobApplication/ApplyPage.jsx"
 import ResumeBuilder from "./Components/Jobseeker/Resume/ResumeBuilder.jsx";
 import JobDetails from "./Components/Employer/Job/JobDetails.jsx";
 import EmpSkillAssessment from "./Components/Employer/SkillAssessments/SkillAssessment.jsx";
-
+import EmpManageCompany from "./Components/Employer/Dashboard/ManageCompany.jsx";
 import JsSkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
+import ManageEmployees from "./Components/Employer/Dashboard/ManageEmployees.jsx";
 
 import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
 import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
@@ -44,7 +45,6 @@ import EmpProfile from "./Components/Employer/Profile/Profile.jsx";
 import EmpProfileForm from "./Components/Employer/Profile/ProfileForm.jsx";
 import VideoInterview from "./Components/Jobseeker/Jobs/JobApplication/VideoInterview.jsx";
 import CreateAssessmentForm from "./Components/Employer/SkillAssessments/CreateAssessment.jsx";
-import AdminUsersList from "./Components/Admin/UsersManagement/UsersList.jsx";
 import AdminJobsList from "./Components/Admin/Job/JobsList.jsx";
 import AdminCompaniesList from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 import AdminDashboard from "./Components/Admin/Dashboard/Dashboard.jsx";
@@ -52,6 +52,9 @@ import AdminDashboard from "./Components/Admin/Dashboard/Dashboard.jsx";
 import { MantineProvider } from "@mantine/core";
 import { NotFoundImage } from "./Components/NotFound/NotFoundImage.jsx";
 import "@mantine/core/styles.css";
+import AdminManageEmployees from "./Components/Admin/UsersManagement/ManageEmployees.jsx";
+import AdminManageJobSeekers from "./Components/Admin/UsersManagement/ManageJobSeekers.jsx";
+import ManageCompanies from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -80,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: "/login/admin",
         element: <AdminLoginPage />,
+      },
+      {
+        path: "*", // Wildcard route for 404 errors
+        element: <NotFoundImage />,
       },
     ],
   },
@@ -168,6 +175,14 @@ const router = createBrowserRouter([
         element: <EmployerAnalytics />,
       },
       {
+        path: "dashboard/employees/manage",
+        element: <ManageEmployees />,
+      },
+      {
+        path: "dashboard/company/manage",
+        element: <EmpManageCompany />,
+      },
+      {
         path: "company-profile",
         element: <EmpCompany />,
       },
@@ -224,18 +239,12 @@ const router = createBrowserRouter([
         element: <AdminDashboard />,
       },
       {
-        path: "users",
-        element: <AdminUsersList />,
-        children: [
-          {
-            path: "jobseekers",
-            element: <h1>Jobseeker</h1>,
-          },
-          {
-            path: "recruiters",
-            element: <h1>Recruiter</h1>,
-          },
-        ],
+        path: "users/jobseekers",
+        element: <AdminManageJobSeekers />,
+      },
+      {
+        path: "users/employees",
+        element: <AdminManageEmployees />,
       },
       {
         path: "job/listings",
@@ -243,17 +252,7 @@ const router = createBrowserRouter([
       },
       {
         path: "companies",
-        element: <AdminCompaniesList />,
-        children: [
-          {
-            path: "view",
-            element: <h1>View Company</h1>,
-          },
-          {
-            path: "authorize",
-            element: <h1>Authorize Company</h1>,
-          },
-        ],
+        element: <ManageCompanies />,
       },
       {
         path: "analytics",

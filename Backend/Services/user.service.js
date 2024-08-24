@@ -1,4 +1,9 @@
 const userModel = require('../Models/user.model');
+const AWS = require('aws-sdk');
+
+
+const s3 = new AWS.S3();
+
 
 const UserService = {
     async createUser(email, password, firstName,lastName, role) {
@@ -39,6 +44,37 @@ const UserService = {
                 "message":"Internal server error"
             }
         }
+    },
+
+    // generate presigned url
+    async generatePreSignedUrl(folderName,fileName , fileType){
+        console.log("Access key check: ", process.env.S3_ACCESS_KEY);
+        const params = {
+          Bucket: 'skillsyncprobucket', // Your bucket name
+          Key: `${folderName}/${fileName}`,
+          Expires: 120, // URL expiration time in seconds
+          ContentType: fileType,
+        };
+      
+        try {
+          const url = await s3.getSignedUrlPromise('putObject', params);
+          const itemUrl = `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/${folderName}/${fileName}`
+            console.log('Presigned URL:', url);
+            console.log('Item URL:',itemUrl);
+          return {
+              "status":200,
+              "data":url
+          }
+
+
+        } catch (err) {
+          console.error(err);
+          return {
+              "status":500,
+              "message":"Internal server error"
+          }
+        }
+      
     }
 }
 

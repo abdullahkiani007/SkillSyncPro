@@ -7,6 +7,7 @@ const fastApiRoutes = require('./fastApiRoutes');
 const AdminRoutes = require('./adminRoutes')
 const tokenRoutes = require('./tokenRoutes');
 
+const {generatePreSignedUrl} = require('../../Controllers/UserController');
 
 const router = express.Router();
 
@@ -20,6 +21,8 @@ router.use('/fastapi',(req,res,next)=>{
     next();
 },fastApiRoutes);
 router.use('/token',tokenRoutes);
+
+router.get("/generate-presigned-url",generatePreSignedUrl);
 
 
 module.exports = router;

@@ -54,6 +54,18 @@ const CompanyController = {
         res.status(404).json({
             "message":"Company not found"
         })
+    },
+    async getCompanyNames(req,res,next){
+        console.log("GET company names received");
+        try{
+            const companies = await companyService.getCompanyNames();
+            res.status(200).json({
+                companies
+            })
+        }catch(err){
+            console.log(err)
+            next(err)
+        }
     }
     ,
     async updateCompany(req,res,next){
@@ -85,29 +97,27 @@ const CompanyController = {
     },
 
     async getEmployees(req,res,next){
+        console.log("Get/ employees received")
       const {id} = req.user;
-      const {companyId} = req.body;
+      const {companyId} = req.query;
 
-        const response = await companyService.getEmployees(companyId);
-        if (response.status == 200){
+      try{
+
+      
+        const employees = await companyService.getEmployees(companyId);
             res.status(200).json({
-                "data":response.data
+                employees
             })
             return ;
-        }
-        else if (response.status == 404){
-            res.status(404).json({
-                "message":response.message
-            })
-            return ;
-        }
-        res.status(500).json({
-            "message":"Internal server error"
-        })
+      }catch(err){
+        console.log(err)
+            next(err)
+      }
+        
 
     }, async joinCompany(req,res,next){
         const {id} = req.user;
-        const {companyId} = req.body;
+        const companyId = req.query.id;
         const response = await companyService.joinCompany(id,companyId);
         if (response.status == 200){
             res.status(200).json({
@@ -120,12 +130,36 @@ const CompanyController = {
                 "message":response.message
             })
             return ;
+        }else if (response.status == 403){
+            res.status(403).json({
+                "message":response.message
+            })
+            return ;
         }
 
         res.status(500).json({
             "message":"Internal server error"
         })
     },
+    async authorizeEmployee(req,res,next){
+        const {employeeId , companyId} = req.body;
+        console.log("Authorize employee received")
+        console.log(employeeId,companyId)
+        const {id} = req.user;
+
+        try{
+            const response = await companyService.authorizeEmployee(employeeId,id,companyId);
+           return res.status(response.status).json({
+                "message":response.message
+            })
+        }catch(err){
+            console.log(err)
+            next(err)
+        }
+
+
+    }
+    ,
     async getCompanies(req,res,next){
         console.log("GET/ Companies received")
         const response = await companyService.getCompanies();

@@ -17,68 +17,40 @@ import { FaBookmark } from "react-icons/fa6";
 import { IoCaretForwardOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-const jobDetails = {
-  title: "Frontend Developer",
-  companyInfo: "Lifafa is a software company",
-  description: "Develop and maintain web applications using React.js.",
-  requirements: [
-    "3+ years of experience in frontend development",
-    "Proficiency in React.js and JavaScript",
-    "Experience with CSS and responsive design",
-    "Strong problem-solving skills",
-  ],
-  companyName: "Tech Corp",
-  companyDescription:
-    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit doloremque ab commodi explicabo, minima facere? Perferendis exercitationem aliquam quia voluptate saepe obcaecati quas fugit vero doloremque commodi ducimus accusantium sed possimus, minus quam perspiciatis, nihil nostrum, neque dolorum. Debitis, repellat earum molestiae iusto nam, perspiciatis expedita architecto aut asperiores distinctio qui, sint odit. Omnis nam magni, odit tempora labore quas inventore expedita ut! Nobis temporibus iste repellat enim, quo animi eius illo debitis commodi? Asperiores adipisci quasi iure vero, ex dolorem recusandae maiores aut id non. Harum libero explicabo vitae animi sunt quae. Modi quasi tempore ut, quidem reiciendis harum?,",
-  postedBy: "John Doe",
-  location: "New York, NY",
-  salaryRange: "70k-90k PKR",
-  deadLine: "2024-05-25",
-  postedOn: "2024-04-25",
-  employmentType: "Full-time",
-  experienceLevel: "Mid-Level",
-  applicants: [
-    {
-      _id: "1",
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane@gmail.com",
-    },
-    {
-      _id: "2",
-      firstName: "John",
-      lastName: "Doe",
-      email: "john@gmai.com",
-    },
-  ],
-  application: {
-    jobSeeker: "Jane Smith",
-    status: "Under Review",
-    resume: "resume1.pdf",
-    coverLetter: "Looking forward to joining your team!",
-    interview: {
-      date: "2024-05-25",
-    },
-  },
-};
+import JobPerformanceTracker from "../../../API/JobPerfomanceTracker";
+import Loader from "../../Loader/Loader";
 
 const Job = () => {
   const id = window.location.pathname.split("/")[3];
   const navigate = useNavigate();
+  const [jobDetails, setJobDetails] = useState({});
+  const [loading, setLoading] = useState(true);
 
   console.log(id);
   const [job, setJob] = useState({});
   const [applied, setApplied] = useState(false);
   const user = useSelector((state) => state.user);
-  console.log(
-    jobDetails.applicants.filter((applicant) => applicant._id === user._id)
-  );
-  if (jobDetails.applicants.find((applicant) => applicant._id === user._id)) {
-    setApplied(true);
-  }
+  // console.log(
+  //   jobDetails.applicants.filter((applicant) => applicant._id === user._id)
+  // );
+  // if (jobDetails.applicants.find((applicant) => applicant._id === user._id)) {
+  //   setApplied(true);
+  // }
 
   useEffect(() => {
+    async function handlView() {
+      try {
+        await JobPerformanceTracker.trackJobView(id, user._id);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    handlView();
+  });
+
+  useEffect(() => {
+    console.log("retrieving job from local storage");
     const jobs = JSON.parse(localStorage.getItem("jobs"));
     console.log(jobs);
     if (jobs) {
@@ -86,8 +58,13 @@ const Job = () => {
       const jobItem = jobs.filter((job) => job._id.trim() === id.trim());
       setJob(jobItem[0]);
       console.log("job state", jobItem[0]);
+      setLoading(false);
     }
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <>
       <div className="flex items-center pl-10 py-2 border border-b-gray-200">
@@ -147,7 +124,7 @@ const Job = () => {
               <div className="p-5">
                 <h1 className="font-bold  text-lg">Requirements</h1>
 
-                {jobDetails.requirements.map((requirement, index) => (
+                {job.requirements?.map((requirement, index) => (
                   <div className="flex flex-row items-center">
                     <IoCaretForwardOutline />
                     <p key={index} className="text-sm ml-1 text-gray-700 my-1">
@@ -200,21 +177,19 @@ const Job = () => {
             <div className="p-5">
               <h1 className="font-bold text-lg mb-8">About the Job</h1>
               <h2 className="text-gray-500 text-sm">Apply Before</h2>
-              <p className="mt-0.5 mb-5">{jobDetails.deadLine}</p>
+              <p className="mt-0.5 mb-5">{job.deadLine}</p>
               <h2 className="text-gray-500 text-sm">Posted on</h2>
-              <p className="mt-0.5 mb-5">{job.postedOn}</p>
+              <p className="mt-0.5 mb-5">{job.createdAt.toString()}</p>
               <h2 className="text-gray-500 text-sm">Job type</h2>
-              <p className="mt-0.5 mb-5">{jobDetails.employmentType}</p>
+              <p className="mt-0.5 mb-5">{job.employmentType}</p>
               <h2 className="text-gray-500 text-sm">Experience level</h2>
               <p className="mt-0.5 mb-5 text-gray-500  rounded-sm p-1 border border-gray-400 w-fit text-xs">
-                {jobDetails.experienceLevel}
+                {job.experienceLevel}
               </p>
               <h2 className="text-gray-500 text-sm">Salary</h2>
               <div className="flex flex-row items-center py-1 ">
                 <HiOutlineCurrencyDollar className="text-xl" />
-                <p className="text-sm text-gray-500">
-                  {jobDetails.salaryRange}
-                </p>
+                <p className="text-sm text-gray-500">{job.salaryRange}</p>
               </div>
             </div>
           </CardContent>

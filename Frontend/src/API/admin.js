@@ -1,4 +1,5 @@
 import ApiClient from "./ApiClient";
+import axios from "axios";
 
 class Admin {
   constructor() {
@@ -56,7 +57,7 @@ class Admin {
         status: response.status,
       };
     } catch (error) {
-      console.error("Error fetching top companies", error);
+      console.error("Error fetching job seeker registrations", error);
       throw error;
     }
   }
@@ -69,7 +70,7 @@ class Admin {
         status: response.status,
       };
     } catch (error) {
-      console.error("Error fetching Employment types", error);
+      console.error("Error fetching employment types", error);
       throw error;
     }
   }
@@ -82,7 +83,7 @@ class Admin {
         status: response.status,
       };
     } catch (error) {
-      console.error("Error fetching Salary Range Distribution", error);
+      console.error("Error fetching salary range distribution", error);
       throw error;
     }
   }
@@ -95,7 +96,132 @@ class Admin {
         status: response.status,
       };
     } catch (error) {
-      console.error("Error fetching Job locations", error);
+      console.error("Error fetching job locations", error);
+      throw error;
+    }
+  }
+
+  async getJobsForAdmin() {
+    try {
+      const response = await this.apiClient.get(`/jobs`);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching jobs for admin", error);
+      throw error;
+    }
+  }
+
+  async getJobSeekersForAdmin(token) {
+    try {
+      const response = await this.apiClient.get(`/jobseekers`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching job seekers for admin", error);
+      throw error;
+    }
+  }
+
+  async getAllEmployees(token) {
+    try {
+      const response = await this.apiClient.get(`/employees`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching all employees", error);
+      throw error;
+    }
+  }
+
+  async getEmployeeDetails(employeeId, token) {
+    try {
+      const response = await this.apiClient.get(`/employees/${employeeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching employee details", error);
+      throw error;
+    }
+  }
+
+  async getCompanies() {
+    try {
+      const response = await this.apiClient.get(`/companies`);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching companies", error);
+      throw error;
+    }
+  }
+
+  async getCompanies(req, res, next) {
+    try {
+      const response = await this.apiClient.get(`/companies`);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching companies", error);
+      throw error;
+    }
+  }
+
+  async authorizeCompany(companyId, token) {
+    try {
+      const response = await this.apiClient.put(
+        `/company/authorize?id=${companyId}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error authorizing company", error);
+      throw error;
+    }
+  }
+
+  async getCompanyDetails(companyId, token) {
+    try {
+      const response = await this.apiClient.get(`/company?id=${companyId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching company details", error);
       throw error;
     }
   }

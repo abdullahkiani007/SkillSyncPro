@@ -38,6 +38,20 @@ class EmployerController {
     }
   }
 
+  async getAllCompanyNames() {
+    try {
+      console.log("Sending /get/companies/names request");
+      const response = await this.apiClient.get("companies/names");
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+      throw error;
+    }
+  }
+
   async registerCompany(data, token) {
     try {
       const response = await this.apiClient.post("company", data, {
@@ -55,6 +69,29 @@ class EmployerController {
     }
   }
 
+  async joinCompany(companyId, token) {
+    console.log("access token in here", token);
+
+    try {
+      const response = await this.apiClient.post(
+        `company/join?id=${companyId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error joining company:", error);
+      throw error;
+    }
+  }
+
   async getCompany(token) {
     try {
       const response = await this.apiClient.get("company", {
@@ -68,6 +105,26 @@ class EmployerController {
       };
     } catch (error) {
       console.error("Error fetching company:", error);
+      throw error;
+    }
+  }
+
+  async getEmployees(token, companyId) {
+    try {
+      const response = await this.apiClient.get(
+        `company/employees?companyId=${companyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching employees:", error);
       throw error;
     }
   }
@@ -102,6 +159,30 @@ class EmployerController {
       };
     } catch (error) {
       console.error("Error fetching dashboard:", error);
+      throw error;
+    }
+  }
+
+  async authorizeEmployee(token, companyId, employeeId) {
+    try {
+      const response = await this.apiClient.put(
+        `company/employee/authorize`,
+        {
+          employeeId,
+          companyId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error authorizing employee:", error);
       throw error;
     }
   }
