@@ -3,7 +3,7 @@ import CreatableSelect from "react-select/creatable";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Controller from "../../../API/index";
-import ImageUpload from "../../ImageUploader/ImageUploader";
+import ImageUpload from "../../Uploader/ImageUploader";
 import placeholderImage_person from "../../../assets/placeholderImage_person.jpg";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";

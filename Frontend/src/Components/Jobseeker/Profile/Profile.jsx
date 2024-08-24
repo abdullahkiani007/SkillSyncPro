@@ -20,7 +20,7 @@ const Profile = () => {
   useEffect(() => {
     const getUserInfo = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("accessToken");
         const response = await Controller.getProfile(token);
 
         if (response.status === 200) {

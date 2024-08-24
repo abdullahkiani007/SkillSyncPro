@@ -1,43 +1,52 @@
 import React, { useState } from "react";
-import FastApi from "../../../../API/FastApi";
-import { useSelector } from "react-redux";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import axios from "axios";
+import UserController from "../../../../API/index";
+import { useOutletContext } from "react-router-dom";
 
 const ResumeUpload = () => {
   const [file, setFile] = useState(null);
-  const { step, goToNextStep } = useOutletContext();
-
-  const user = useSelector((state) => state.user);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(null);
+  const { goToNextStep } = useOutletContext();
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
+    setFile(event.target.files[0]);
   };
 
   const handleUpload = async () => {
-    const userName = `${user.firstName}${user.lastName}`;
-    console.log("User name is :", userName);
-    const fileName = `${userName}.pdf`;
-
     if (!file) {
       alert("No file selected");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("resume", file, fileName);
+    setUploading(true);
+    setError(null);
 
     try {
-      const response = await FastApi.uploadResume(formData);
-      if (response) {
-        alert("Resume uploaded successfully");
-        goToNextStep();
-      } else {
-        alert("Failed to upload resume");
-      }
-    } catch (error) {
-      console.error("Error uploading resume:", error);
-      alert("Failed to upload resume");
+      // Get pre-signed URL from backend
+      const response = await UserController.generatePresignedUrl(
+        "Resume",
+        file.name,
+        file.type
+      );
+      console.log("Presigned URL response:", response);
+
+      // Upload file directly to S3
+      const { url } = response;
+      console.log("Uploading file to S3:", url.data);
+      await axios.put(url.data, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      alert("File uploaded successfully");
+      goToNextStep();
+    } catch (err) {
+      console.error("Upload error:", err);
+      setError("Failed to upload file");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -45,13 +54,10 @@ const ResumeUpload = () => {
     <div className="mt-10 flex flex-col items-center justify-center">
       <div className="w-full max-w-2xl p-6 bg-white shadow-lg rounded-lg">
         <h1 className="font-bold text-2xl mb-6 text-center text-secondary-dark">
-          <span className="text-gray-500 font-light">Step {step}:</span> Upload
-          Your Resume
+          Upload Your Resume
         </h1>
         <p className="text-gray-600 mb-8 text-center">
-          Please upload your resume to proceed to the next step of your
-          application. Ensure your resume is up-to-date and clearly outlines
-          your skills and experiences.
+          Please upload your resume to proceed.
         </p>
         <div className="flex flex-col items-center md:flex-row md:justify-between">
           <input
@@ -63,14 +69,18 @@ const ResumeUpload = () => {
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-md transition duration-300 ease-in-out w-full md:w-48"
             onClick={handleUpload}
+            disabled={uploading}
           >
-            Upload Resume
+            {uploading ? "Uploading..." : "Upload Resume"}
           </button>
         </div>
         {file && (
           <p className="text-gray-500 mt-4 text-center">
             Selected file: <span className="font-medium">{file.name}</span>
           </p>
+        )}
+        {error && (
+          <p className="text-red-500 mt-4 text-center">Error: {error}</p>
         )}
       </div>
     </div>

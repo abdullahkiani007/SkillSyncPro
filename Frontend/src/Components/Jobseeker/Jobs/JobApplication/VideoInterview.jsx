@@ -1,8 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
-import FastApi from "../../../../API/FastApi"; // Adjust the import path as needed
-
+import axios from "axios";
+import UserController from "../../../../API/index";
 const questions = [
   "So please tell me about yourself.",
   "Tell me about a time when you demonstrated leadership.",
@@ -29,7 +29,7 @@ const VideoInterview = () => {
     timerRef.current = setInterval(() => setTimer((prev) => prev + 1), 1000); // Start the timer
 
     mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-      mimeType: "video/webm",
+      mimeType: "video/mp4",
     });
 
     mediaRecorderRef.current.addEventListener(
@@ -71,27 +71,43 @@ const VideoInterview = () => {
   // Download the entire recording
   const handleDownload = useCallback(() => {
     if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, { type: "video/webm" });
+      const blob = new Blob(recordedChunks, { type: "video/mp4" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";
       a.href = url;
-      a.download = "interview.webm";
+      a.download = "interview.mp4";
       a.click();
       window.URL.revokeObjectURL(url);
     }
   }, [recordedChunks]);
 
   // Submit the video interview
+  // Modify handleSubmit in VideoInterview Component
   const handleSubmit = async () => {
     if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, { type: "video/webm" });
+      const blob = new Blob(recordedChunks, { type: "video/mp4" });
+
       const formData = new FormData();
-      formData.append("video", blob, "interview.webm");
+      formData.append("video", blob, "interview.mp4");
 
       try {
-        await FastApi.uploadVideo(formData); // Adjust the API call as needed
+        // Call the backend to get the pre-signed URL
+        const response = await UserController.generatePresignedUrl(
+          "interviews",
+          "interview.mp4",
+          "video/mp4"
+        );
+        const { url } = response;
+
+        // Upload the video to S3 using the pre-signed URL
+        await axios.put(url.data, blob, {
+          headers: {
+            "Content-Type": "video/mp4",
+          },
+        });
+
         alert("Interview video uploaded successfully!");
         goToNextStep();
       } catch (error) {

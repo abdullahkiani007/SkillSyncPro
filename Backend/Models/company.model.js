@@ -29,6 +29,11 @@ const companySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  authorized:{
+    type: Boolean,
+    default: false
+  }
+  ,
   contactPhone: {
     type: String,
   },
@@ -38,6 +43,13 @@ const companySchema = new mongoose.Schema({
       ref: 'Employer',
     }
   ],
+  unAuthEmployees: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Employer',
+    }
+  ]
+  ,
   createdBy:
     {
       type: mongoose.Schema.Types.ObjectId,

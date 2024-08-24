@@ -1,96 +1,120 @@
-import axios from "axios";
+import ApiClient from "./ApiClient"; // Adjust the import path as needed
 
 class Controller {
   constructor() {
-    this.url = "http://localhost:3000/api/v1/";
+    this.apiClient = new ApiClient("http://localhost:3000/api/v1/"); // Initialize with base URL
   }
+
   async signUp(data) {
-    const response = await fetch(this.url + "auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.post("auth/signup", data);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error signing up:", error);
+      return {
+        data: null,
+        status: error.response ? error.response.status : 500,
+      };
+    }
   }
 
   async login(data) {
-    console.log("/POST login called with data", data);
-    const response = await fetch(this.url + "auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.post("auth/login", data);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error logging in:", error);
+      return {
+        data: null,
+        status: error.response ? error.response.status : 500,
+      };
+    }
   }
 
   async getProfile(token) {
-    const response = await fetch(this.url + "/jobseeker/profile", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.get("/jobseeker/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      return {
+        data: null,
+        status: error.response ? error.response.status : 500,
+      };
+    }
   }
+
   async getEmpProfile(token) {
-    const response = await fetch(this.url + "/employer/profile", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.get("/employer/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching employer profile:", error);
+      return {
+        data: null,
+        status: error.response ? error.response.status : 500,
+      };
+    }
   }
 
   async updateEmpProfile(token, data) {
-    const response = await fetch(this.url + "/employer/profile", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.put("/employer/profile", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error updating employer profile:", error);
+      return {
+        data: null,
+        status: error.response ? error.response.status : 500,
+      };
+    }
   }
 
   async updateProfile(token, data) {
-    const response = await fetch(this.url + "/jobseeker/profile", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    return {
-      data: await response.json(),
-      status: response.status,
-    };
+    try {
+      const response = await this.apiClient.put("/jobseeker/profile", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      return {
+        data: null,
+        status: error.response ? error.response.status : 500,
+      };
+    }
   }
 
   async getCoordinates(address) {
@@ -116,6 +140,24 @@ class Controller {
     } catch (error) {
       console.error("Error fetching coordinates:", error);
       return { lat: 0, lng: 0 }; // Default in case of error
+    }
+  }
+
+  async generatePresignedUrl(folderName, fileName, fileType) {
+    console.log("Sending request to generate presigned URL");
+    try {
+      const response = await this.apiClient.get("generate-presigned-url", {
+        params: {
+          fileName,
+          fileType,
+          folderName,
+        },
+      });
+      console.log("Presigned URL response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error generating presigned URL:", error);
+      return null;
     }
   }
 }

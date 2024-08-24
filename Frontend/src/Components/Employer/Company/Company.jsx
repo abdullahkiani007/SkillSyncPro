@@ -33,21 +33,21 @@ const Company = () => {
       console.log("Company -->", company);
 
       if (company.status === 200) {
-        let employees = [
-          {
-            name: "John Doe",
-            position: "Software Engineer",
-          },
-          {
-            name: "Abdullah",
-            position: "Founder",
-          },
-          {
-            name: "Tehsin",
-            position: "CEO",
-          },
-        ];
-        let newCompany = { ...company.data.data, employees: employees };
+        let Employees = await EmployerController.getEmployees(
+          token,
+          company.data.data._id
+        );
+
+        if (Employees.status === 200) {
+          Employees = Employees.data.employees;
+        } else {
+          console.log(Employees.message);
+        }
+
+        let newCompany = {
+          ...company.data.data,
+          employees: Employees.authEmployees,
+        };
         setCompany(newCompany);
         console.log(newCompany);
 
@@ -133,6 +133,9 @@ const Company = () => {
                   {company.name.toUpperCase()}
                 </h1>
                 <h2 className="text-sm text-gray-400">{company.industry}</h2>
+              </div>
+              <div className="ml-auto" variant="Outlined">
+                <Button onClick={() => setEdit(true)}>Manage</Button>
               </div>
             </div>
             {/* company info */}
@@ -333,7 +336,7 @@ const Company = () => {
                           objectPosition: "center",
                           transform: "scale(1)",
                         }}
-                        image={personImage}
+                        image={employee.user.profilePicture}
                         alt="companyLogo"
                       />
                     </Grid>
@@ -352,7 +355,7 @@ const Company = () => {
                           fontWeight: "bold",
                         }}
                       >
-                        {employee.name}
+                        {employee.user.firstName}
                       </Typography>
                       <Typography
                         variant="subtitle2"
@@ -361,7 +364,7 @@ const Company = () => {
                           color: "gray",
                         }}
                       >
-                        {employee.position}
+                        {employee.position || "Recruiter"}
                       </Typography>
                     </Grid>
                   </Grid>

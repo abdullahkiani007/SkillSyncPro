@@ -4,6 +4,9 @@ const JobseekerModel = require('../Models/jobseeker.model');
 const JobseekerService = require('../Services/jobSeeker.service');
 const UserModel = require('../Models/user.model')
 const EmployerModel = require('../Models/employer.model')
+const JobPerformance = require('../Models/jobPerfomance.model');
+const mongoose = require('mongoose');
+
 
 const jobDTO = require('../DTO/jobsDTO');
 const jobseekerService = require('../Services/jobSeeker.service');
@@ -132,6 +135,131 @@ const jobService = {
             }
 
         }
+    },
+
+    trackJobView : async (jobId, userId) => {
+        console.log("trackJobView");
+        console.log("Job viewed by user", userId);
+        try {
+            // Set to today's date, midnight
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Find or create a performance record for the job on today's date
+            let jobPerformance = await JobPerformance.findOne({ job: jobId, date: today });
+    
+            if (!jobPerformance) {
+                
+                // If no record exists, create a new one
+                jobPerformance = new JobPerformance({
+                    job: jobId,
+                    date: today,
+                    views: 1,
+                    userViews: [userId],
+                });
+                console.log("Created new job performance record:", jobPerformance);
+            } else {
+                // Update existing record
+                if (!jobPerformance.userViews.includes(userId)) {
+                    jobPerformance.userViews.push(userId);
+                    jobPerformance.views += 1;
+                    console.log("Updated existing job performance record:", jobPerformance);
+                } else {
+                    console.log("User has already viewed the job today.");
+                }
+            }
+            // Save the updated performance record
+            await jobPerformance.save();
+            console.log("Saved job performance record.");
+        } catch (err) {
+            console.error('Error tracking job view:', err);
+        }
+    },
+    
+    
+    trackJobApplication : async (jobId) => {
+        try {
+            const today = new Date().setHours(0, 0, 0, 0);
+          
+            await JobPerformance.findOneAndUpdate(
+              { job: jobId, date: today },
+              { $inc: { applications: 1 } },
+              { upsert: true, new: true }
+            );
+        } catch (err) {
+            console.error('Error tracking job application:', err);
+        }
+    },
+    
+    trackJobHire : async (jobId) => {
+        try {
+            const today = new Date().setHours(0, 0, 0, 0);
+          
+            await JobPerformance.findOneAndUpdate(
+              { job: jobId, date: today },
+              { $inc: { hires: 1 } },
+              { upsert: true, new: true }
+            );
+        } catch (err) {
+            console.error('Error tracking job hire:', err);
+        }
+    },
+    
+     getJobPerformance : async (jobId, startDate, endDate) => {
+        try {
+            return await JobPerformance.find({
+              job: jobId,
+              date: { $gte: startDate, $lte: endDate },
+            }).sort({ date: 1 });
+        } catch (err) {
+            console.error('Error retrieving job performance:', err);
+        }
+    },
+
+    getJobPerformanceByDate: async(companyId,startDate,endDate) =>{
+
+    console.log("In service function of getjob performance by date");
+    console.log("state" , companyId, startDate , endDate)
+  const performances = await JobPerformance.aggregate([
+    {
+      $match: {
+        date: { $gte: new Date(startDate), $lte: new Date(endDate) },
+      }
+    },
+    {
+      $lookup: {
+        from: 'jobs',
+        localField: 'job',
+        foreignField: '_id',
+        as: 'job',
+      },
+    },
+    {
+      $unwind: '$job'
+    },
+    {
+      $match: {
+        'job.company':new mongoose.Types.ObjectId(companyId)
+      }
+    },
+    {
+      $group: {
+        _id: {
+          job_id: '$job._id',
+          date: '$date'
+        },
+        views: { $sum: '$views' },
+        applications: { $sum: '$applications' },
+        hires: { $sum: '$hires' },
+      }
+    },
+    {
+      $sort: { '_id.date': 1 }
+    }
+  ]);
+
+
+        return performances;
     }
 
 

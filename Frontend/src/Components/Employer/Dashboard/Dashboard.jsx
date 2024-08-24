@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { employerDashboardData } from "../../../constants/index";
+import { useStore } from "react-redux";
 import Loader from "../../Loader/Loader";
 import employerController from "../../../API/employer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import JobPerformanceChart from "./Charts/JobPerformanceChart";
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { user } = useStore((state) => state.user).getState();
+  const { admin, setAdmin } = useOutletContext();
 
   useEffect(() => {
     async function fetchData() {
@@ -17,15 +20,18 @@ const Dashboard = () => {
       try {
         const response = await employerController.getDashboard(token);
         if (response.status === 200) {
-          console.log(response.data);
+          setAdmin(response.data.company.createdBy == user._id);
           setDashboardData(response.data);
           localStorage.setItem(
             "company",
             JSON.stringify(response.data.company)
           );
+        } else {
+          console.log("Error fetching dashboard data:", response);
         }
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        navigate("/employer/company-profile");
+        console.error("Error fetching dashboard data in catch block:", error);
       }
       setLoading(false);
     }
@@ -37,52 +43,64 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10 ">
-      <h1 className="text-3xl font-bold mb-8">Employer Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-blue-100 p-10">
+      <h1 className="text-4xl font-extrabold text-gray-800 mb-10">
+        {admin ? "Admin" : "Employee"} Dashboard
+      </h1>
       {dashboardData && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
-            className="bg-white p-6 rounded-lg shadow-md"
+            className="bg-white p-8 rounded-xl shadow-lg transform transition-all hover:scale-105 cursor-pointer"
             onClick={() => {
               navigate("../company-profile");
             }}
           >
-            <h2 className="text-2xl font-bold">Company Info</h2>
-            <p>Name: {dashboardData.company.name}</p>
-            <p>Industry: {dashboardData.company.industry}</p>
+            <h2 className="text-3xl font-semibold mb-4">Company Info</h2>
+            <p className="text-lg text-gray-700 mb-2">
+              Name: {dashboardData.company.name}
+            </p>
+            <p className="text-lg text-gray-700 mb-4">
+              Industry: {dashboardData.company.industry}
+            </p>
             <a
               href={dashboardData.company.website}
               target="_blank"
-              className="text-green-800 text-sm"
+              rel="noopener noreferrer"
+              className="text-blue-600 text-lg underline"
             >
-              Website: {dashboardData.company.website}
+              Visit Website
             </a>
           </div>
           <div
-            className="bg-white p-6 rounded-lg shadow-md"
+            className="bg-white p-8 rounded-xl shadow-lg transform transition-all hover:scale-105 cursor-pointer"
             onClick={() => {
               navigate("../job/job-listing");
             }}
           >
-            <h2 className="text-2xl font-bold">Jobs Posted</h2>
-            <p>Total Jobs: {dashboardData.jobs.length}</p>
-            <ul>
+            <h2 className="text-3xl font-semibold mb-4">Jobs Posted</h2>
+            <p className="text-lg text-gray-700 mb-4">
+              Total Jobs: {dashboardData.jobs.length}
+            </p>
+            <ul className="list-disc list-inside">
               {dashboardData.jobs.slice(0, 3).map((job) => (
-                <li key={job._id}>{job.title}</li>
+                <li key={job._id} className="text-gray-700 text-lg">
+                  {job.title}
+                </li>
               ))}
             </ul>
           </div>
-          {/* <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold">Employees</h2>
-            <p>Total Employees: {dashboardData.employees.length}</p>
-            <ul>
-              {dashboardData.employees.map((employee) => (
-                <li key={employee._id}>{employee.user.name}</li>
-              ))}
-            </ul>
-          </div> */}
         </div>
       )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h2 className="text-3xl font-semibold mb-4">Job Performance</h2>
+          <JobPerformanceChart />
+        </div>
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h2 className="text-3xl font-semibold mb-4">Job Performance</h2>
+          <JobPerformanceChart />
+        </div>
+      </div>
     </div>
   );
 };

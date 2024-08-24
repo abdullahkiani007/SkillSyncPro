@@ -1,4 +1,5 @@
 const jobseekerService = require('../Services/jobSeeker.service');
+const UserService = require('../Services/user.service');
 
 const UserController =  {
     async getInfo(req,res,next){
@@ -40,6 +41,21 @@ const UserController =  {
             }
         res.status(200).json({
             "message":"Employer route"
+        })
+    },
+
+    async generatePreSignedUrl(req,res,next){
+        console.log("Generate presigned url route")
+        const {fileName,fileType,folderName} = req.query;
+        console.log(fileName,fileType)
+        const url = await UserService.generatePreSignedUrl(folderName,fileName,fileType);
+        if(url.status === 200){
+            return res.status(200).json({
+                url
+            })
+        }
+        return res.status(500).json({
+            "message":"Internal server error"
         })
     }
 }
