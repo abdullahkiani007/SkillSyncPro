@@ -33,6 +33,8 @@ const CompanyController = {
 
     
 
+    
+
     async getCompany(req,res,next){
         console.log("GET company received");
         const {_id} = req.user;

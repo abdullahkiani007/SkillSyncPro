@@ -8,6 +8,7 @@ const companyController = require('../../Controllers/CompanyController');
 
 
 
+
 EmployerRouter.get("/jobs",passport.authenticate('jwt',{session:false}),employerController.getJobs)
 EmployerRouter.post("/job",passport.authenticate('jwt',{session:false}),employerController.postJob)
 EmployerRouter.put("/archiveJob",passport.authenticate('jwt',{session:false}),employerController.archiveJob)

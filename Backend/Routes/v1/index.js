@@ -13,6 +13,7 @@ const router = express.Router();
 
 router.use('/auth', authRoutes);
 router.use('/admin',AdminRoutes);
+router.use('/admin',AdminRoutes);
 router.use('/jobseeker', jobseekerRoutes);
 router.use('/employer',employerRoutes)
 router.use('/jobs',jobRoutes)
