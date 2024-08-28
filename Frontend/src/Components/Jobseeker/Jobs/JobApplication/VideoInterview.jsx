@@ -12,7 +12,7 @@ const questions = [
 ];
 
 const VideoInterview = () => {
-  const { step, goToNextStep } = useOutletContext();
+  const { step, goToNextStep, handleState } = useOutletContext();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [recordedChunks, setRecordedChunks] = useState([]);
@@ -107,6 +107,12 @@ const VideoInterview = () => {
             "Content-Type": "video/mp4",
           },
         });
+
+        // Update application state with interview video URL
+        handleState(
+          "videoIntroduction",
+          `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/interview.mp4`
+        );
 
         alert("Interview video uploaded successfully!");
         goToNextStep();

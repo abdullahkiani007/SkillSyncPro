@@ -58,6 +58,7 @@ const Job = () => {
       const jobItem = jobs.filter((job) => job._id.trim() === id.trim());
       setJob(jobItem[0]);
       console.log("job state", job);
+      setLoading(false);
     }
   }, []);
 

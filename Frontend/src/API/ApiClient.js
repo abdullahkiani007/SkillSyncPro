@@ -13,8 +13,6 @@ class ApiClient {
         console.log("Interceptor setup");
 
         let accessToken = this.getAccessToken();
-        console.log("Access token:", accessToken);
-
         if (this.isTokenExpired(accessToken)) {
           accessToken = await this.refreshToken();
         }
@@ -66,6 +64,7 @@ class ApiClient {
       const data = await response.json();
 
       if (response.ok) {
+        console.log("storing new access token");
         localStorage.setItem("accessToken", data.accessToken);
         return data.accessToken;
       } else {
@@ -79,6 +78,7 @@ class ApiClient {
 
   // Example method to make a GET request
   async get(url, config = {}) {
+    console.log("Sending get request");
     return this.apiClient.get(url, config);
   }
 

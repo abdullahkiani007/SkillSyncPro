@@ -20,8 +20,9 @@ const applicationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  coverLetter: {
-    type: String,
+  videoIntroduction:{
+    type:String,
+    require:true
   },
   interview: {
     type: mongoose.Schema.Types.ObjectId,

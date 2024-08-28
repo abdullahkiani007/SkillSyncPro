@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-
 const candidateAssessmentSchema = new mongoose.Schema({
   application: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,6 +19,30 @@ const candidateAssessmentSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    testResults: [{
+      testCase: {
+        type: String,
+        required: true,
+      },
+      expectedOutput: {
+        type: String,
+        required: true,
+      },
+      actualOutput: {
+        type: String,
+        required: true,
+      },
+      passed: {
+        type: Boolean,
+        required: true,
+      },
+    }],
+    timeSpent: {
+      type: Number, // Time spent in milliseconds
+    },
+    keystrokes: {
+      type: Number, // Number of keystrokes made by the candidate
+    },
   }],
   score: {
     type: Number,
@@ -29,5 +51,3 @@ const candidateAssessmentSchema = new mongoose.Schema({
     type: String,
   },
 }, { timestamps: true });
-
-module.exports = mongoose.model('CandidateAssessment', candidateAssessmentSchema);

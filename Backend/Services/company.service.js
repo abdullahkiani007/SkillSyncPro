@@ -2,6 +2,7 @@ const Company = require('../Models/company.model');
 const Employer = require('../Models/employer.model');
 const CompanyAssessment = require("../Models/companyAssessment.model")
 const EmployerDTO = require('../DTO/employerDTO');
+const ApplicationModel = require('../Models/application.model')
 
 const companyService = {
     async register(company){
@@ -321,6 +322,32 @@ const companyService = {
             }
         }
     },
+    async getApplicationSummaryForCompany(companyId){
+        try {
+          const company = await Company.findById(companyId).populate('jobs');
+          
+          if (!company) {
+            throw new Error('Company not found');
+          }
+      
+          const jobIds = company.jobs.map(job => job._id);
+      
+          const summary = await ApplicationModel.aggregate([
+            { $match: { job: { $in: jobIds } } },
+            {
+              $group: {
+                _id: "$status",
+                count: { $sum: 1 }
+              }
+            }
+          ]);
+      
+          return summary;
+        } catch (error) {
+          console.error("Error fetching application summary for company:", error);
+          throw error;
+        }
+      },      
 
     
 }
