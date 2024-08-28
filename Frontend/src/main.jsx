@@ -38,6 +38,8 @@ import EmpSkillAssessment from "./Components/Employer/SkillAssessments/SkillAsse
 import EmpManageCompany from "./Components/Employer/Dashboard/ManageCompany.jsx";
 import JsSkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
 import ManageEmployees from "./Components/Employer/Dashboard/ManageEmployees.jsx";
+import EmpCandidatesList from "./Components/Employer/Dashboard/ManageCandidates/CandidatesList.jsx";
+import ManageCandidate from "./Components/Employer/Dashboard/ManageCandidates/ManageCandidate/Candidate.jsx";
 
 import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
 import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
@@ -181,6 +183,14 @@ const router = createBrowserRouter([
       {
         path: "dashboard/company/manage",
         element: <EmpManageCompany />,
+      },
+      {
+        path: "dashboard/candidates/manage",
+        element: <EmpCandidatesList />,
+      },
+      {
+        path: "dashboard/candidates/manage/:id",
+        element: <ManageCandidate />,
       },
       {
         path: "company-profile",

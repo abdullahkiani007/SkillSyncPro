@@ -25,7 +25,7 @@ const EmployerRoute = () => {
 
   useEffect(() => {
     const fetchCompany = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       try {
         const response = await employer.getCompany(token);
 
@@ -82,7 +82,7 @@ const EmployerRoute = () => {
           setSidebarOpen={setSidebarOpen}
           isAdmin={admin}
         />
-        <div className="flex flex-col flex-1 md:ml-64">
+        <div className="flex flex-col flex-1 ">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="bg-gray-200">
             <Outlet context={{ admin, setAdmin }} />

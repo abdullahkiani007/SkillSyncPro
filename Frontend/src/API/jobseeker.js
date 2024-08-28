@@ -111,15 +111,12 @@ class JobseekerController {
   async getAssessmentById(id) {
     console.log("ID", id);
     try {
-      const response = await fetch(
-        `${this.jobSeekerUrl}/assessment.?id=${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${this.jobSeekerUrl}/assessment?id=${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       return {
         data: await response.json(),

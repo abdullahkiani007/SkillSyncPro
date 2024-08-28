@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import {
   Dialog,
   DialogTitle,
@@ -13,26 +13,32 @@ import {
 import CodeEditor from "./CodingEnvironment"; // Adjust the path as needed
 import Loader from "../../../../Loader/Loader";
 import jobseeker from "../../../../../API/jobseeker";
+import Judge0 from "../../../../../API/Assessment";
 
 const SkillAssessment = () => {
   const [openDisclaimer, setOpenDisclaimer] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const { goToNextStep, application, setApplication } = useOutletContext();
+  const { goToNextStep, handleSubmit, handleState } = useOutletContext();
   const [assessments, setAssessments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [submittedCode, setSubmittedCode] = useState([]);
+  const { id } = useParams();
 
   useEffect(() => {
-    let localAssessments = JSON.parse(localStorage.getItem("assessment"));
-    if (localAssessments) {
-      setAssessments(localAssessments);
-      setLoading(false);
-      console.log("Assessments", localAssessments);
-    } else {
-      console.log("Fetching assessments");
-    }
+    console.log("Fetching assessments");
+    const getAssessments = async () => {
+      const data = await jobseeker.getAssessmentById(id);
+      console.log(data);
+      if (data.status === 200) {
+        setAssessments(data.data.assessment);
+        setLoading(false);
+      } else {
+        console.log("Error fetching assessments");
+      }
+    };
+    getAssessments();
   }, []);
 
   useEffect(() => {
@@ -48,16 +54,49 @@ const SkillAssessment = () => {
     };
   }, []);
 
-  const handleCodeSubmit = async (code, timeSpent, keystrokes) => {
-    // Check for time limit or pasting issues
-    // if (timeSpent > 1800000 || keystrokes === 0) {
-    //   setAlertMessage(
-    //     "Time limit exceeded or code was pasted! The task cannot be submitted."
-    //   );
-    //   setOpenAlert(true);
-    // } else {
+  const getLanguageId = (language) => {
+    language = language.toLowerCase();
+    const languageMap = {
+      javascript: 63,
+      python: 71,
+      java: 62,
+      // Add other languages and their IDs here
+    };
 
+    return languageMap[language.toLowerCase()] || 63; // Default to JavaScript if unknown
+  };
+
+  const handleCodeSubmit = async (code, timeSpent, keystrokes) => {
     console.log("Submitted Code:", code);
+
+    const languageId = getLanguageId(currentProblem.language || "javascript"); // Map your language to Judge0's ID
+    const token = await Judge0.submitCodeToJudge0(code, languageId, "hello");
+
+    if (token) {
+      // Poll Judge0 for results
+      let status = "queued";
+      while (status === "queued" || status === "running") {
+        const result = await Judge0.checkSubmissionStatus(token);
+        console.log("Result:", result);
+        status = result.status.description;
+
+        if (status === "accepted") {
+          console.log("Code Accepted:", result);
+          // Handle accepted code (e.g., score, feedback)
+          break;
+        } else if (
+          status === "rejected" ||
+          status === "time limit exceeded" ||
+          status === "runtime error"
+        ) {
+          console.log("Code Rejected:", result);
+          setAlertMessage("Code rejected: " + result.status.description);
+          setOpenAlert(true);
+          break;
+        }
+      }
+    }
+
     const newCode = {
       code,
       timeSpent,
@@ -67,33 +106,28 @@ const SkillAssessment = () => {
 
     setSubmittedCode([...submittedCode, newCode]);
 
-    console.log("Submitted Code:", submittedCode);
-    console.log("newCode", newCode);
-    // Proceed to next problem or end the assessment
     if (currentProblemIndex < assessments.problems.length - 1) {
       setCurrentProblemIndex(currentProblemIndex + 1);
     } else {
-      // Here you would send all the code to your backend to evaluate it
       console.log("All problems solved!");
+      handleSubmit();
 
       const data = {
-        ...application,
         code: submittedCode,
         assesmentId: assessments._id,
       };
-      const token = localStorage.getItem("accessToken");
-      const response = await jobseeker.submitApplication(data, token);
-      console.log("Response", response);
-      if (response.status === 200) {
-        console.log("Application submitted successfully");
-        goToNextStep();
-        console.log("response", response);
-      } else {
-        setAlertMessage("Failed to submit application. Please try again.");
-        setOpenAlert(true);
-      }
+      // const token = localStorage.getItem("accessToken");
+      // const response = await jobseeker.submitApplication(data, token);
+      // console.log("Response", response);
+      // if (response.status === 200) {
+      //   console.log("Application submitted successfully");
+      //   goToNextStep();
+      //   console.log("response", response);
+      // } else {
+      //   setAlertMessage("Failed to submit application. Please try again.");
+      //   setOpenAlert(true);
+      // }
     }
-    // }
   };
 
   const handleCloseDisclaimer = () => {

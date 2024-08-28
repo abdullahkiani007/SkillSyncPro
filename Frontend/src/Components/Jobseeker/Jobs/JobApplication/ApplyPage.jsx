@@ -11,6 +11,15 @@ const ApplyPage = () => {
   // Step tracking state
   const [step, setStep] = useState(1);
 
+  const handleState = (fieldName, value) => {
+    setApplication((prev) => {
+      return {
+        ...prev,
+        [fieldName]: value,
+      };
+    });
+  };
+
   useEffect(() => {
     console.log("Fetching assessments");
     const getAssessments = async () => {
@@ -50,6 +59,10 @@ const ApplyPage = () => {
     } else if (step === 2) {
       navigate(`./skillAssessment`);
     }
+  };
+
+  const handleSubmit = async () => {
+    console.log("Application", application);
   };
 
   // Define active and disabled styles
@@ -97,7 +110,7 @@ const ApplyPage = () => {
       </div>
 
       {/* Render the current step's content */}
-      <Outlet context={{ step, goToNextStep, setApplication, application }} />
+      <Outlet context={{ step, goToNextStep, handleState, handleSubmit }} />
     </div>
   );
 };

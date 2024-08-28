@@ -42,27 +42,19 @@ const Company = () => {
       console.log("companies", company);
 
       let jobs = company.jobs;
-      console.log("jobs", jobs);
-      let date = Date.now();
-      let jobDate = jobs[0].createdAt;
-      let newDate = new Date(jobDate);
-
-      // Calculate the difference in milliseconds
-      let differenceInMilliseconds = date - newDate.getTime();
-
-      // Convert the difference from milliseconds to days
-      let differenceInDays = Math.floor(
-        differenceInMilliseconds / (1000 * 60 * 60 * 24)
-      );
-
-      // console.log(`The job was posted ${differenceInDays} days ago.`);
-
       jobs = jobs.map((job) => {
+        let newDate = new Date(job.createdAt);
+        let differenceInMilliseconds = Date.now() - newDate.getTime();
+        let differenceInDays = Math.floor(
+          differenceInMilliseconds / (1000 * 60 * 60 * 24)
+        );
+
         return {
           ...job,
           jobPostDays: differenceInDays,
         };
       });
+
       if (jobs) {
         setJobs(jobs);
       }
@@ -155,7 +147,7 @@ const Company = () => {
                 Jobs from {company.name}
               </h1>
               {/* jobs container */}
-              {jobs &&
+              {jobs.length > 0 ? (
                 jobs.map((job) => (
                   <div key={job._id} className="my-2">
                     <Card
@@ -272,7 +264,10 @@ const Company = () => {
                       </CardContent>
                     </Card>
                   </div>
-                ))}
+                ))
+              ) : (
+                <p>No Jobs Found</p>
+              )}
             </div>
           </div>
 
