@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import { useContext, createContext } from "react";
+import { SocketProvider } from "./Context/SocketContext";
 import Login from "./Components/Login/index.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -18,6 +20,8 @@ import AppliedJobs from "./Components/Jobseeker/Jobs/appliedJobs.jsx";
 import ResumeUpload from "./Components/Jobseeker/Jobs/JobApplication/ResumeUpload.jsx";
 import Job from "./Components/Jobseeker/Jobs/job.jsx";
 import Loader from "./Components/Loader/Loader.jsx";
+
+import MessageComponent from "./Components/Components/Message.jsx";
 
 // Employer Routes
 import EmployerRoute from "./Components/Employer/EmployerRoute.jsx";
@@ -169,6 +173,10 @@ const router = createBrowserRouter([
         element: <EmpProfileForm />,
       },
       {
+        path: "messages/",
+        element: <MessageComponent />,
+      },
+      {
         path: "dashboard",
         element: <EmpDashboard />,
       },
@@ -281,7 +289,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <MantineProvider>
-          <RouterProvider router={router} />
+          <SocketProvider>
+            <RouterProvider router={router} />
+          </SocketProvider>
         </MantineProvider>
       </PersistGate>
     </Provider>

@@ -6,6 +6,8 @@ const jobRoutes = require('./jobsRoutes');
 const fastApiRoutes = require('./fastApiRoutes');
 const AdminRoutes = require('./adminRoutes')
 const tokenRoutes = require('./tokenRoutes');
+const messageRoutes = require('./messageRoutes');
+
 
 const {generatePreSignedUrl} = require('../../Controllers/UserController');
 
@@ -17,6 +19,7 @@ router.use('/admin',AdminRoutes);
 router.use('/jobseeker', jobseekerRoutes);
 router.use('/employer',employerRoutes)
 router.use('/jobs',jobRoutes)
+router.use('/message',messageRoutes);
 router.use('/fastapi',(req,res,next)=>{
     console.log("fastapi routes");
     next();

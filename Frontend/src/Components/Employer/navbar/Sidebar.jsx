@@ -606,7 +606,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, isAdmin }) {
               >
                 <NavLink
                   end
-                  to="messages"
+                  to="./messages"
                   className={`block text-slate-200 truncate transition duration-150 ${
                     pathname.includes("messages")
                       ? "hover:text-slate-200"

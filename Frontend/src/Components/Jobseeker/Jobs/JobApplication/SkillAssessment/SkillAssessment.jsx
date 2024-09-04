@@ -26,11 +26,62 @@ const SkillAssessment = () => {
   const [submittedCode, setSubmittedCode] = useState([]);
   const { id } = useParams();
 
+  // Prevent back navigation
   useEffect(() => {
-    console.log("Fetching assessments");
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = ""; // This triggers the browser's "Are you sure you want to leave?" dialog.
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      setAlertMessage("Navigation back is not allowed!");
+      setOpenAlert(true);
+      window.history.pushState(null, null, window.location.pathname);
+    };
+
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
+  // Prevent copy-paste
+  useEffect(() => {
+    const handlePaste = (event) => {
+      setAlertMessage("Pasting code is not allowed!");
+      setOpenAlert(true);
+      event.preventDefault();
+    };
+
+    const handleCopy = (event) => {
+      setAlertMessage("Copying code is not allowed!");
+      setOpenAlert(true);
+      event.preventDefault();
+    };
+
+    window.addEventListener("paste", handlePaste);
+    window.addEventListener("copy", handleCopy);
+
+    return () => {
+      window.removeEventListener("paste", handlePaste);
+      window.removeEventListener("copy", handleCopy);
+    };
+  }, []);
+
+  // Fetch assessments
+  useEffect(() => {
     const getAssessments = async () => {
       const data = await jobseeker.getAssessmentById(id);
-      console.log(data);
       if (data.status === 200) {
         setAssessments(data.data.assessment);
         setLoading(false);
@@ -39,23 +90,38 @@ const SkillAssessment = () => {
       }
     };
     getAssessments();
-  }, []);
+  }, [id]);
 
+  // Full-screen mode
   useEffect(() => {
-    const handlePaste = (event) => {
-      setAlertMessage("Pasting code is not allowed!");
-      setOpenAlert(true);
+    const enterFullScreen = () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozRequestFullScreen();
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+      } else if (document.documentElement.msRequestFullscreen) {
+        document.documentElement.msRequestFullscreen();
+      }
     };
 
-    window.addEventListener("paste", handlePaste);
+    enterFullScreen();
 
     return () => {
-      window.removeEventListener("paste", handlePaste);
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     };
   }, []);
 
   const getLanguageId = (language) => {
-    language = language.toLowerCase();
     const languageMap = {
       javascript: 63,
       python: 71,
@@ -67,29 +133,22 @@ const SkillAssessment = () => {
   };
 
   const handleCodeSubmit = async (code, timeSpent, keystrokes) => {
-    console.log("Submitted Code:", code);
-
-    const languageId = getLanguageId(currentProblem.language || "javascript"); // Map your language to Judge0's ID
+    const languageId = getLanguageId(currentProblem.language || "javascript");
     const token = await Judge0.submitCodeToJudge0(code, languageId, "hello");
 
     if (token) {
-      // Poll Judge0 for results
       let status = "queued";
       while (status === "queued" || status === "running") {
         const result = await Judge0.checkSubmissionStatus(token);
-        console.log("Result:", result);
         status = result.status.description;
 
         if (status === "accepted") {
-          console.log("Code Accepted:", result);
-          // Handle accepted code (e.g., score, feedback)
           break;
         } else if (
           status === "rejected" ||
           status === "time limit exceeded" ||
           status === "runtime error"
         ) {
-          console.log("Code Rejected:", result);
           setAlertMessage("Code rejected: " + result.status.description);
           setOpenAlert(true);
           break;
@@ -109,7 +168,6 @@ const SkillAssessment = () => {
     if (currentProblemIndex < assessments.problems.length - 1) {
       setCurrentProblemIndex(currentProblemIndex + 1);
     } else {
-      console.log("All problems solved!");
       handleSubmit();
 
       const data = {
@@ -118,11 +176,8 @@ const SkillAssessment = () => {
       };
       // const token = localStorage.getItem("accessToken");
       // const response = await jobseeker.submitApplication(data, token);
-      // console.log("Response", response);
       // if (response.status === 200) {
-      //   console.log("Application submitted successfully");
       //   goToNextStep();
-      //   console.log("response", response);
       // } else {
       //   setAlertMessage("Failed to submit application. Please try again.");
       //   setOpenAlert(true);

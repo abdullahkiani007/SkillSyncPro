@@ -4,15 +4,18 @@ const UserService = require('./user.service');
 const CompanyService = require('./company.service')
 const Employer = require('../Models/employer.model');
 const Assessment = require('../Models/companyAssessment.model')
+const Company = require('../Models/company.model');
 
 const EmployerServices = {
     async getJobs(id){
 
         let jobs;
         try{
-            const Empid = await Employer.findOne({user:id});
-            
-            jobs = await Job.find({postedBy:Empid});
+            // check if user is employer or admin of company
+            const company = await CompanyService.getCompanybyUserId(id);
+
+
+            jobs = await Job.find({company:company.data._id});
 
             if (jobs){
                 console.log(jobs)

@@ -151,6 +151,7 @@ const CompanyController = {
 
         try{
             const response = await companyService.authorizeEmployee(employeeId,id,companyId);
+            console.log(response)
            return res.status(response.status).json({
                 "message":response.message
             })
@@ -160,6 +161,38 @@ const CompanyController = {
         }
 
 
+    },
+    async revokeEmployee(req,res,next){
+        const {employeeId , companyId} = req.body;
+        console.log("Revoke employee received")
+        console.log(employeeId,companyId)
+        const {id} = req.user;
+
+        try{
+            const response = await companyService.revokeEmployee(employeeId,id,companyId);
+           return res.status(response.status).json({
+                "message":response.message
+            })
+        }catch(err){
+            console.log(err)
+            next(err)
+        }
+    },
+    async deleteJoinRequest(req,res,next){
+        const {employeeId , companyId} = req.body;
+        console.log("Delete join request received")
+        console.log(employeeId,companyId)
+        const {id} = req.user;
+
+        try{
+            const response = await companyService.deleteJoinRequest(employeeId,id,companyId);
+           return res.status(response.status).json({
+                "message":response.message
+            })
+        }catch(err){
+            console.log(err)
+            next(err)
+        }
     }
     ,
     async getCompanies(req,res,next){

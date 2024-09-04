@@ -23,7 +23,7 @@ const JobseekerRoutes = () => {
       <div className="flex h-full">
         {/* <Navbar /> */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="flex flex-col flex-1 lg:ml-64">
+        <div className="flex flex-col flex-1 ">
           {/* <Topbar /> */}
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="">
