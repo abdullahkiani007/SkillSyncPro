@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Notification } from "@mantine/core";
+import { useSocket } from "../../Context/SocketContext";
 
 import Navbar from "./navbar/Navbar";
 import Topbar from "./navbar/Topbar";
@@ -19,9 +20,25 @@ const EmployerRoute = () => {
   const [loading, setLoading] = useState(true);
   const [joinCompany, setJoinCompany] = useState(false);
   const [allClear, setAllClear] = useState(false);
-
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  const socket = useSocket();
+
+  // useEffect(() => {
+  //   if (socket) {
+  //     console.log("socket rooms ", socket);
+  //     socket.emit("join_room", 1234);
+  //     socket.on("notification", (notification) => {
+  //       console.log(notification);
+  //       alert("Notfication received");
+  //     });
+
+  //     return () => {
+  //       socket.off("notification");
+  //     };
+  //   }
+  // }, [socket]);
 
   useEffect(() => {
     const fetchCompany = async () => {
@@ -82,9 +99,9 @@ const EmployerRoute = () => {
           setSidebarOpen={setSidebarOpen}
           isAdmin={admin}
         />
-        <div className="flex flex-col flex-1 ">
+        <div className="flex flex-col flex-1  ">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div className="bg-gray-200">
+          <div className="flex-1 overflow-y-auto bg-gray-200">
             <Outlet context={{ admin, setAdmin }} />
           </div>
         </div>

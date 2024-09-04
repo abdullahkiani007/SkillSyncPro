@@ -25,6 +25,9 @@ EmployerRouter.put("/company",passport.authenticate('jwt',{session:false}),compa
 EmployerRouter.get("/companies/names",companyController.getCompanyNames)
 EmployerRouter.post("/company/join",passport.authenticate('jwt',{session:false}),companyController.joinCompany)
 EmployerRouter.put("/company/employee/authorize",passport.authenticate('jwt',{session:false}),companyController.authorizeEmployee)
+EmployerRouter.delete("/company/employee/revoke",passport.authenticate('jwt',{session:false}),companyController.revokeEmployee)
+EmployerRouter.delete("/company/employee/JoinRequest",passport.authenticate('jwt',{session:false}),companyController.deleteJoinRequest)
+
 
 EmployerRouter.post("/assessment",passport.authenticate('jwt',{session:false}),employerController.createAssessment)
 EmployerRouter.get("/assessments",passport.authenticate('jwt',{session:false}),companyController.getAssessment)

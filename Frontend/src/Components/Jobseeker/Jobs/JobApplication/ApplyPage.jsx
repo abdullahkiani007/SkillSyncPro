@@ -85,7 +85,7 @@ const ApplyPage = () => {
           className={({ isActive }) =>
             isActive ? activeClassName : defaultClassName
           }
-          style={step >= 1 ? {} : { pointerEvents: "none" }}
+          style={{ pointerEvents: "none" }}
         >
           Resume
         </NavLink>
@@ -94,7 +94,7 @@ const ApplyPage = () => {
           className={({ isActive }) =>
             isActive ? activeClassName : defaultClassName
           }
-          style={step >= 2 ? {} : { pointerEvents: "none" }}
+          style={{ pointerEvents: "none" }}
         >
           Interview
         </NavLink>
@@ -103,7 +103,7 @@ const ApplyPage = () => {
           className={({ isActive }) =>
             isActive ? activeClassName : defaultClassName
           }
-          style={step >= 3 ? {} : { pointerEvents: "none" }}
+          style={{ pointerEvents: "none" }}
         >
           Skills
         </NavLink>

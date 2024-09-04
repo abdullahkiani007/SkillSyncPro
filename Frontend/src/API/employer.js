@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import ApiClient from "./ApiClient";
 class EmployerController {
   constructor() {
@@ -184,6 +185,48 @@ class EmployerController {
     } catch (error) {
       console.error("Error authorizing employee:", error);
       throw error;
+    }
+  }
+
+  async revokeEmployee(token, companyId, employeeId) {
+    try {
+      const response = await this.apiClient.delete(`company/employee/revoke`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          companyId,
+          employeeId,
+        },
+      });
+    } catch (err) {
+      console.log("Error removing employee", err);
+      throw err;
+    }
+  }
+
+  async deleteJoinRequest(token, EmployeeId, companyId) {
+    try {
+      const response = await this.apiClient.delete(
+        `company/employee/joinRequest`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          data: {
+            EmployeeId,
+            companyId,
+          },
+        }
+      );
+
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (err) {
+      console.log("Error removing employee", err);
+      throw err;
     }
   }
 
