@@ -61,6 +61,9 @@ import "@mantine/core/styles.css";
 import AdminManageEmployees from "./Components/Admin/UsersManagement/ManageEmployees.jsx";
 import AdminManageJobSeekers from "./Components/Admin/UsersManagement/ManageJobSeekers.jsx";
 import ManageCompanies from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
+
+import TailorResume from "./Components/Components/TailorResume/TailorResume.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -70,6 +73,11 @@ const router = createBrowserRouter([
         path: "/",
         element: <App />,
       },
+      {
+        path:"/tailor-resume",
+        element:<TailorResume/>
+      }
+      ,
       {
         path: "/login/jobseeker",
         element: <Login role={"jobseeker"} />,

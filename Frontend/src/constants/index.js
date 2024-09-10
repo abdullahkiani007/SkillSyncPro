@@ -51,6 +51,11 @@ export const navigation = [
     title:"Employers",
     url:"/login/employer"
   },
+  {
+    id:"4",
+    title:"Tailor Resume",
+    url:"/tailor-resume"
+  }
 
 
  
