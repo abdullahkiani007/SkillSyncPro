@@ -3,20 +3,21 @@ const FastApiRouter = express.Router();
 const fastApiController = require('../../Controllers/FastApiController');
 const multer = require('multer');
 const path = require('path');
+const upload = require('../../Config/multer');
 
 
-// Configure multer for file storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
+// // Configure multer for file storage
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads/');
+//     },
+//     filename: (req, file, cb) => {
         
-        cb(null,file.originalname);
-    }
-});
+//         cb(null,file.originalname);
+//     }
+// });
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
 
 // Define routes
 
