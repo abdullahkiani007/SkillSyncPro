@@ -1,8 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import Webcam from "react-webcam";
 import axios from "axios";
+import Loader from "../../../../Components/Loader/Loader";
 import UserController from "../../../../API/index";
+
 const questions = [
   "So please tell me about yourself.",
   "Tell me about a time when you demonstrated leadership.",
@@ -15,46 +17,88 @@ const VideoInterview = () => {
   const { step, goToNextStep, handleState } = useOutletContext();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [recordedChunks, setRecordedChunks] = useState([]);
+  const [recordedVideoChunks, setRecordedVideoChunks] = useState([]);
+  const [recordedAudioChunks, setRecordedAudioChunks] = useState([]);
   const [recording, setRecording] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [timer, setTimer] = useState(0); // Timer state
   const webcamRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
+  const videoRecorderRef = useRef(null);
+  const audioRecorderRef = useRef(null);
   const timerRef = useRef(null);
 
   // Start the recording
   const handleStartCaptureClick = useCallback(() => {
-    setRecording(true);
-    setTimer(0); // Reset the timer
-    timerRef.current = setInterval(() => setTimer((prev) => prev + 1), 1000); // Start the timer
+    if (webcamRef.current && webcamRef.current.stream) {
+      setRecording(true);
+      setTimer(0); // Reset the timer
+      timerRef.current = setInterval(() => setTimer((prev) => prev + 1), 1000); // Start the timer
 
-    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-      mimeType: "video/mp4",
-    });
+      // Start video recording
+      videoRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+        mimeType: "video/webm;codecs=vp8,opus",
+      });
 
-    mediaRecorderRef.current.addEventListener(
-      "dataavailable",
-      handleDataAvailable
-    );
-    mediaRecorderRef.current.start();
+      videoRecorderRef.current.addEventListener(
+        "dataavailable",
+        handleVideoDataAvailable
+      );
+      videoRecorderRef.current.start();
+
+      // Start audio recording
+      navigator.mediaDevices.getUserMedia({ audio: true }).then((audioStream) => {
+        audioRecorderRef.current = new MediaRecorder(audioStream, {
+          mimeType: "audio/webm",
+        });
+
+        audioRecorderRef.current.addEventListener(
+          "dataavailable",
+          handleAudioDataAvailable
+        );
+        audioRecorderRef.current.start();
+      });
+    } else {
+      console.error("Webcam stream is not available.");
+    }
   }, [webcamRef, setRecording, setTimer]);
 
-  // Collect the data available from media recorder
-  const handleDataAvailable = useCallback(
+  // Collect the video data available from media recorder
+  const handleVideoDataAvailable = useCallback(
     ({ data }) => {
       if (data.size > 0) {
-        setRecordedChunks((prev) => prev.concat(data));
+        setRecordedVideoChunks((prev) => prev.concat(data));
       }
     },
-    [setRecordedChunks]
+    [setRecordedVideoChunks]
+  );
+
+  // Collect the audio data available from media recorder
+  const handleAudioDataAvailable = useCallback(
+    ({ data }) => {
+      if (data.size > 0) {
+        setRecordedAudioChunks((prev) => prev.concat(data));
+      }
+    },
+    [setRecordedAudioChunks]
   );
 
   // Stop the recording
   const handleStopCaptureClick = useCallback(() => {
-    mediaRecorderRef.current.stop();
+    if (videoRecorderRef.current) {
+      videoRecorderRef.current.stop();
+    } else {
+      console.error("Video MediaRecorder is not initialized.");
+    }
+
+    if (audioRecorderRef.current) {
+      audioRecorderRef.current.stop();
+    } else {
+      console.error("Audio MediaRecorder is not initialized.");
+    }
+
     clearInterval(timerRef.current); // Stop the timer
     setRecording(false);
-  }, [mediaRecorderRef]);
+  }, [videoRecorderRef, audioRecorderRef]);
 
   // Move to the next question
   const handleNextQuestion = () => {
@@ -70,31 +114,62 @@ const VideoInterview = () => {
 
   // Download the entire recording
   const handleDownload = useCallback(() => {
-    if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, { type: "video/mp4" });
-      const url = URL.createObjectURL(blob);
+    if (recordedVideoChunks.length) {
+      const videoBlob = new Blob(recordedVideoChunks, { type: "video/webm" });
+      const videoUrl = URL.createObjectURL(videoBlob);
       const a = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";
-      a.href = url;
-      a.download = "interview.mp4";
+      a.href = videoUrl;
+      a.download = "interview_video.webm";
       a.click();
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(videoUrl);
     }
-  }, [recordedChunks]);
+
+    if (recordedAudioChunks.length) {
+      const audioBlob = new Blob(recordedAudioChunks, { type: "audio/webm" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = audioUrl;
+      a.download = "interview_audio.webm";
+      a.click();
+      window.URL.revokeObjectURL(audioUrl);
+    }
+  }, [recordedVideoChunks, recordedAudioChunks]);
 
   // Submit the video interview
-  // Modify handleSubmit in VideoInterview Component
   const handleSubmit = async () => {
-    if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, { type: "video/mp4" });
+    console.log("Submitting interview to backend...");
+    setIsProcessing(true);
+
+    if (recordedVideoChunks.length && recordedAudioChunks.length) {
+      console.log("Uploading video and audio...");
+      const videoBlob = new Blob(recordedVideoChunks, { type: "video/webm" });
+      const audioBlob = new Blob(recordedAudioChunks, { type: "audio/webm" });
 
       const formData = new FormData();
-      formData.append("video", blob, "interview.mp4");
+      formData.append("video", videoBlob, "interview_video.webm");
+      formData.append("audio", audioBlob, "interview_audio.webm");
 
       try {
-        // Call the backend to get the pre-signed URL
-        const response = await UserController.generatePresignedUrl(
+        let response = await axios.post(
+          "http://localhost:8000/transcribe_audio_test/", // Your FastAPI endpoint
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Upload successful:", response.data);
+        alert("Interview uploaded successfully!");
+        setIsProcessing(false);
+
+        if (response.data.transcription) {
+          // Call the backend to get the pre-signed URL
+        let response = await UserController.generatePresignedUrl(
           "interviews",
           "interview.mp4",
           "video/mp4"
@@ -107,25 +182,26 @@ const VideoInterview = () => {
             "Content-Type": "video/mp4",
           },
         });
-
+        }
         // Update application state with interview video URL
         handleState(
           "videoIntroduction",
           `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/interview.mp4`
         );
-
         alert("Interview video uploaded successfully!");
         goToNextStep();
       } catch (error) {
-        console.error("Error uploading video:", error);
-        alert("Failed to upload interview video.");
+        console.error("Error uploading interview:", error);
+        alert("Failed to upload interview.");
+        setIsProcessing(false);
       }
     }
   };
 
   // Re-record the video (reset everything)
   const handleRedo = () => {
-    setRecordedChunks([]);
+    setRecordedVideoChunks([]);
+    setRecordedAudioChunks([]);
     setCurrentQuestion(0);
     setRecording(false);
     setTimer(0);
@@ -142,6 +218,7 @@ const VideoInterview = () => {
 
   return (
     <div className="mt-10 flex flex-col items-center justify-center">
+      {isProcessing && <Loader />}
       <div className="w-full max-w-2xl p-6 bg-white shadow-lg rounded-lg">
         <h1 className="font-bold text-2xl mb-6 text-center text-secondary-dark">
           Step 2: Video Interview
