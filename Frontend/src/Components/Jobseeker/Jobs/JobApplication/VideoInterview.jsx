@@ -139,57 +139,61 @@ const VideoInterview = () => {
     }
   }, [recordedVideoChunks, recordedAudioChunks]);
 
-  // Submit the video interview
+    // Submit the video interview
   const handleSubmit = async () => {
     console.log("Submitting interview to backend...");
     setIsProcessing(true);
-
+  
     if (recordedVideoChunks.length && recordedAudioChunks.length) {
       console.log("Uploading video and audio...");
       const videoBlob = new Blob(recordedVideoChunks, { type: "video/webm" });
       const audioBlob = new Blob(recordedAudioChunks, { type: "audio/webm" });
+  
+      const formDataAudio = new FormData();
+      const formDataVideo = new FormData();
 
-      const formData = new FormData();
-      formData.append("video", videoBlob, "interview_video.webm");
-      formData.append("audio", audioBlob, "interview_audio.webm");
-
+      formDataVideo.append("video", videoBlob, "interview_video.webm");
+      formDataAudio.append("audio", audioBlob, "interview_audio.webm");
+      // Update application state with interview video URL
+      handleState(
+        "videoIntroduction",
+        `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/interview.mp4`
+      );
+      goToNextStep();
+  
       try {
-        let response = await axios.post(
+        // Upload audio to FastAPI server
+        let audioResponse = await axios.post(
           "http://localhost:8000/transcribe_audio_test/", // Your FastAPI endpoint
-          formData,
+          formDataAudio,
           {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           }
         );
-        console.log("Upload successful:", response.data);
-        alert("Interview uploaded successfully!");
-        setIsProcessing(false);
-
-        if (response.data.transcription) {
-          // Call the backend to get the pre-signed URL
-        let response = await UserController.generatePresignedUrl(
+        console.log("Audio upload successful:", audioResponse.data);
+  
+        // Call the backend to get the pre-signed URL for video
+        let videoResponse = await UserController.generatePresignedUrl(
           "interviews",
           "interview.mp4",
           "video/mp4"
         );
-        const { url } = response;
-
+        const { url } = videoResponse;
+  
+        console.log("Pre-signed URL received:", url);
+  
         // Upload the video to S3 using the pre-signed URL
-        await axios.put(url.data, blob, {
+        await axios.put(url.data, videoBlob, {
           headers: {
             "Content-Type": "video/mp4",
           },
         });
-        }
-        // Update application state with interview video URL
-        handleState(
-          "videoIntroduction",
-          `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/interview.mp4`
-        );
-        alert("Interview video uploaded successfully!");
-        goToNextStep();
+  
+  
+        alert("Interview uploaded successfully!");
+        setIsProcessing(false);
       } catch (error) {
         console.error("Error uploading interview:", error);
         alert("Failed to upload interview.");

@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const candidateAssessmentSchema = new mongoose.Schema({
   application: {
     type: mongoose.Schema.Types.ObjectId,
@@ -51,3 +53,7 @@ const candidateAssessmentSchema = new mongoose.Schema({
     type: String,
   },
 }, { timestamps: true });
+
+const CandidateAssessment = mongoose.model('CandidateAssessment', candidateAssessmentSchema);
+
+module.exports = CandidateAssessment;

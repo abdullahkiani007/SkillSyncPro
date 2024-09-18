@@ -31,5 +31,6 @@ router.post("/job/apply",passport.authenticate('jwt',{
 
 router.get("/companies", CompanyController.getCompanies);
 router.get("/assessment",jobseekerController.getAssessmentByJobId)
+router.post("/submitApplication",passport.authenticate('jwt',{session:false}), jobseekerController.submitJobApplication)
 
 module.exports = router;
