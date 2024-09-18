@@ -10,7 +10,7 @@ const ResumeBuilder = () => {
   }
 
   return (
-    <div className='bg-black py-10'>
+    <div className=' py-10'>
       <ResumeForm onSubmit={handleFormSubmit} />
       {formData && <Resume formData={formData} />}
     </div>
