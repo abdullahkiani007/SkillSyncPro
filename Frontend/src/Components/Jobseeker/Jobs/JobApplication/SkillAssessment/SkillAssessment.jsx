@@ -24,36 +24,38 @@ const SkillAssessment = () => {
   const [loading, setLoading] = useState(true);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [submittedCode, setSubmittedCode] = useState([]);
+  const [initialCode, setInitialCode] = useState(""); // State for initial code
+  const [userCode, setUserCode] = useState([]); // State for user code
   const { id } = useParams();
 
   // Prevent back navigation
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = ""; // This triggers the browser's "Are you sure you want to leave?" dialog.
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     event.preventDefault();
+  //     event.returnValue = ""; // This triggers the browser's "Are you sure you want to leave?" dialog.
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    const handlePopState = (event) => {
-      setAlertMessage("Navigation back is not allowed!");
-      setOpenAlert(true);
-      window.history.pushState(null, null, window.location.pathname);
-    };
+  // useEffect(() => {
+  //   const handlePopState = (event) => {
+  //     setAlertMessage("Navigation back is not allowed!");
+  //     setOpenAlert(true);
+  //     window.history.pushState(null, null, window.location.pathname);
+  //   };
 
-    window.history.pushState(null, null, window.location.pathname);
-    window.addEventListener("popstate", handlePopState);
+  //   window.history.pushState(null, null, window.location.pathname);
+  //   window.addEventListener("popstate", handlePopState);
 
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("popstate", handlePopState);
+  //   };
+  // }, []);
 
   // Prevent copy-paste
   useEffect(() => {
@@ -85,6 +87,7 @@ const SkillAssessment = () => {
       if (data.status === 200) {
         setAssessments(data.data.assessment);
         setLoading(false);
+        setInitialCode(data.data.assessment.problems[0].initialCode); // Set initial code for the first problem
       } else {
         console.log("Error fetching assessments");
       }
@@ -135,19 +138,23 @@ const SkillAssessment = () => {
   const handleCodeSubmit = async (code, timeSpent, keystrokes) => {
     const languageId = getLanguageId(currentProblem.language || "javascript");
     const token = await Judge0.submitCodeToJudge0(code, languageId, "hello");
+    let result;
 
     if (token) {
       let status = "queued";
       while (status === "queued" || status === "running") {
-        const result = await Judge0.checkSubmissionStatus(token);
+         result = await Judge0.checkSubmissionStatus(token);
+        console.log("Result: ", result);
         status = result.status.description;
 
-        if (status === "accepted") {
-          break;
+        if (status === "accepted" || true) {
+          // break;
+          continue
         } else if (
-          status === "rejected" ||
-          status === "time limit exceeded" ||
-          status === "runtime error"
+          // status === "rejected" ||
+          // status === "time limit exceeded" ||
+          // status === "runtime error"
+          false
         ) {
           setAlertMessage("Code rejected: " + result.status.description);
           setOpenAlert(true);
@@ -163,17 +170,42 @@ const SkillAssessment = () => {
       _id: assessments.problems[currentProblemIndex]._id,
     };
 
+
     setSubmittedCode([...submittedCode, newCode]);
 
-    if (currentProblemIndex < assessments.problems.length - 1) {
-      setCurrentProblemIndex(currentProblemIndex + 1);
-    } else {
-      handleSubmit();
+    const currentProblem = assessments.problems[currentProblemIndex];
 
       const data = {
         code: submittedCode,
         assesmentId: assessments._id,
+        answers: submittedCode.map((codeSubmission, index) => ({
+          problemId: codeSubmission._id,
+          code: codeSubmission.code,
+            actualOutput: result.stdout ? result.stdout.split('\n')[testIndex] : '',
+            passed: result.status.description === 'Accepted' && !result.stderr,
+          timeSpent: codeSubmission.timeSpent,
+          keystrokes: codeSubmission.keystrokes,
+        })),
+        result: {
+          error: result.stderr,
+          time: result.time,
+          stdout: result.stdout,
+          status: result.status.description,
+        },
       };
+
+      setUserCode((prev) => [...prev, data]);
+      
+    if (currentProblemIndex < assessments.problems.length - 1) {
+      setCurrentProblemIndex(currentProblemIndex + 1);
+      setInitialCode(assessments.problems[currentProblemIndex + 1].initialCode); // Update initial code for the next problem
+    } else {
+      
+
+
+      handleState("skillAssessment", data);
+      handleSubmit();
+
       // const token = localStorage.getItem("accessToken");
       // const response = await jobseeker.submitApplication(data, token);
       // if (response.status === 200) {
@@ -257,10 +289,14 @@ const SkillAssessment = () => {
         <Typography variant="body2">
           <strong>Output:</strong> {currentProblem.output}
         </Typography>
+        <p>
+          {currentProblem.initialCode}
+        </p>
       </div>
 
       <CodeEditor
-        initialCode={currentProblem.initialCode}
+        key={currentProblemIndex} // Add key to force re-render
+        initialCode={initialCode}
         onSubmit={handleCodeSubmit}
         language={currentProblem.language || "javascript"}
       />

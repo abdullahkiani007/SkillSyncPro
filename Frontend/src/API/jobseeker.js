@@ -153,6 +153,29 @@ class JobseekerController {
       };
     }
   }
+
+  async submitApplication(data, token) {
+    try {
+      const response = await fetch(this.jobSeekerUrl + "/submitApplication", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(data),
+      });
+
+      return {
+        data: await response.json(),
+        status: response.status,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        message: "Internal Server Error",
+      };
+    }
+  }
 }
 
 export default new JobseekerController();
