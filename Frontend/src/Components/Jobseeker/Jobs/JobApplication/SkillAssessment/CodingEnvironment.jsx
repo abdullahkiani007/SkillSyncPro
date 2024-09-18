@@ -54,10 +54,13 @@ const CodeEditor = ({ initialCode, language, onSubmit }) => {
     const timeSpent = Date.now() - startTime
 
     if (timeSpent > timeLimit || isPasting || isTabSwitched) {
-      setSnackbarMessage(
-        'Submission failed due to one or more of the following reasons:\n- Time limit exceeded\n- Pasting detected\n- Tab switching detected'
-      )
-      setOpenSnackbar(true)
+      // setSnackbarMessage(
+      //   'Submission failed due to one or more of the following reasons:\n- Time limit exceeded\n- Pasting detected\n- Tab switching detected'
+      // )
+      // setOpenSnackbar(true)
+      // remove this
+      onSubmit(code, timeSpent, keystrokes)
+
     } else {
       onSubmit(code, timeSpent, keystrokes)
     }
