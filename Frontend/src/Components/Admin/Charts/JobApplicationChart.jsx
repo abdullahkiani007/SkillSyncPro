@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
-import axios from "axios";
+import React, { useEffect, useState } from 'react'
+import { Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,83 +8,104 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import admin from "../../../API/admin";
+} from 'chart.js'
+import admin from '../../../API/admin'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const JobApplicationsChart = () => {
-  const [chartData, setChartData] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [chartData, setChartData] = useState({})
+  const [loading, setLoading] = useState(true)
 
   const fetchData = async () => {
     try {
-      const response = await admin.fetchJobApplications();
-      console.log("response in job applications chart api call", response.data);
-      const data = response.data.applications;
+      const response = await admin.fetchJobApplications()
+      const data = response.data.applications
 
-      const labels = data.map((entry) => entry.title);
-      const jobApplications = data.map((entry) => entry.applicationsCount);
+      const labels = data.map((entry) => entry.title)
+      const jobApplications = data.map((entry) => entry.applicationsCount)
 
       setChartData({
         labels,
         datasets: [
           {
-            label: "Applications per Job",
+            label: 'Applications per Job',
             data: jobApplications,
-            backgroundColor: "rgba(75,192,192,0.6)",
-            borderColor: "rgba(75,192,192,1)",
+            backgroundColor: 'rgba(54, 162, 235, 0.6)', // Light blue
+            borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
+            hoverBackgroundColor: 'rgba(54, 162, 235, 0.8)', // Darker blue on hover
           },
         ],
-      });
+      })
 
-      setLoading(false);
+      setLoading(false)
     } catch (error) {
-      console.error("Error fetching job applications data:", error);
+      console.error('Error fetching job applications data:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex items-center justify-center h-[300px]'>
+        <div className='w-10 h-10 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin'></div>
+      </div>
+    )
   }
 
   return (
-    <div className="chart-container bg-white p-4 shadow-md rounded-lg w-full h-[300px]">
-      <Bar
-        data={chartData}
-        options={{
-          responsive: true,
-          maintainAspectRatio: true,
-          scales: {
-            x: {
-              ticks: {
-                autoSkip: true,
-                maxTicksLimit: 10,
+    <div className='bg-gradient-to-br from-gray-100 to-gray-300 p-6 shadow-lg rounded-xl w-full h-auto max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl'>
+      <h2 className='text-center text-lg font-semibold text-gray-800 mb-4'>
+        Job Applications Overview
+      </h2>
+      <div className='flex items-center justify-center'>
+        <div className='w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px]'>
+          <Bar
+            data={chartData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: {
+                    color: 'rgba(54, 162, 235, 0.8)', // Light blue for legend text
+                  },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (tooltipItem) => {
+                      return `${tooltipItem.label}: ${tooltipItem.raw} Applications`
+                    },
+                  },
+                },
               },
-            },
-            y: {
-              beginAtZero: true,
-              ticks: {
-                stepSize: 1,
+              scales: {
+                x: {
+                  ticks: {
+                    color: '#4b5563', // Gray for x-axis labels
+                    autoSkip: true,
+                    maxTicksLimit: 5,
+                  },
+                },
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1,
+                    color: '#4b5563', // Gray for y-axis labels
+                  },
+                },
               },
-            },
-          },
-        }}
-      />
+            }}
+          />
+        </div>
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default JobApplicationsChart;
+export default JobApplicationsChart
