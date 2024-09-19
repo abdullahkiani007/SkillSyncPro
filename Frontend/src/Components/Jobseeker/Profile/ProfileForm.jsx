@@ -9,8 +9,17 @@ import { format } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 
 const ProfileForm = () => {
-  const [formData, setFormData] = useState({})
-  const [user, setUser] = useState({})
+  const [formData, setFormData] = useState({
+    education: [],
+    skills: [],
+  })
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    address: '',
+    profilePicture: '',
+  })
   const [img, setImg] = useState('')
   const navigate = useNavigate()
   const [edu, setEdu] = useState({
@@ -23,9 +32,10 @@ const ProfileForm = () => {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('profile'))
-    setUser(data.user)
-    delete data.user
-    setFormData(data)
+    if (data) {
+      setUser(data.user || {})
+      setFormData(data || { education: [], skills: [] })
+    }
   }, [])
 
   const handleChange = (e) => {
@@ -108,28 +118,25 @@ const ProfileForm = () => {
   ]
 
   const handleSubmit = async () => {
-    user.profilePicture =
-      img ||
-      user.profilePicture ||
-      'https://res.cloudinary.com/ddl8sa4zy/image/upload/v1722860252/placeholderImage_person_tvhrx5.jpg'
+    // Ensure profile picture has fallback if not uploaded
+    user.profilePicture = img || user.profilePicture || placeholderImage_person
     const token = localStorage.getItem('token')
 
     try {
-      let updatedData = {
+      const updatedData = {
         ...formData,
-        user,
+        user, // Ensure `address` and other user fields are included
       }
 
-      console.log(updatedData)
+      console.log('Submitting data:', updatedData)
       const response = await Controller.updateProfile(token, updatedData)
       if (response.status === 200) {
-        console.log(response)
         navigate('/jobseeker/profile')
       } else {
-        console.log(response)
+        console.log('Error:', response)
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -195,6 +202,7 @@ const ProfileForm = () => {
           sx={{ zIndex: 5 }}
         />
       </div>
+
       {/* Skills Dropdown */}
       <div className='mt-10 relative z-50 mb-6'>
         <h2 className='text-lg font-bold mb-2 text-teal-600'>Skills</h2>
