@@ -60,11 +60,11 @@ const ImageUpload = ({ setimg }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form >
         <input type='file' onChange={handleImageChange} />
         <button
           className='bg-secondary-dark text-white px-2 py-1'
-          type='submit'
+          onClick={handleSubmit}
         >
           Upload
         </button>

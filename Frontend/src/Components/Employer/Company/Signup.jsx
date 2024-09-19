@@ -68,9 +68,9 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
+    const token = localStorage.getItem("accessToken");
     e.preventDefault();
     if (option === "join") {
-      const token = localStorage.getItem("accessToken");
       try {
         const response = await employer.joinCompany(selectedCompany, token);
         if (response.status === 200) {
@@ -87,6 +87,19 @@ const Signup = () => {
       console.log("Joining company", selectedCompany);
     } else {
       console.log("Registering new company", newCompany);
+      try {
+        const response = await employer.registerCompany(newCompany, token);
+        if (response.status === 200) {
+          setNotification("You have successfully registered the company");
+          setShowNotification(true);
+        }
+      } catch (err) {
+        console.log(err.response.data.message);
+        setNotification(err.response.data.message);
+        setShowNotification(true);
+        console.error("Error registering company:", err);
+      }
+      
     }
   };
 
@@ -112,7 +125,6 @@ const Signup = () => {
           Company Form
         </Typography>
         <form
-          onSubmit={handleSubmit}
           className="w-full max-w-2xl flex flex-col space-y-6"
         >
           <FormControl component="fieldset" className="mb-8">
@@ -236,6 +248,7 @@ const Signup = () => {
             type="submit"
             variant="contained"
             className="mt-6 bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+            onClick={handleSubmit}
           >
             Submit
           </Button>
