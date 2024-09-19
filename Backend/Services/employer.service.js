@@ -5,6 +5,7 @@ const CompanyService = require('./company.service')
 const Employer = require('../Models/employer.model');
 const Assessment = require('../Models/companyAssessment.model')
 const Company = require('../Models/company.model');
+const Application = require('../Models/application.model')
 
 const EmployerServices = {
     async getJobs(id){
@@ -251,6 +252,52 @@ const EmployerServices = {
                 message: "Internal server error"
             }
         }
+    },
+
+    getAllCandidates: async (userId) => {
+        try{
+            const company = await CompanyService.getCompanybyUserId(userId);
+            
+            if (company.status === 200){
+                // get all jobs of the company
+                const companyJobs = await Job.find({company: company.data._id});
+
+                // CandidateName	jobTitle	Applied Date	address	Contact	Email ID	Stage
+                let candidates = [];
+                const applications = await Application.find({job: {$in: companyJobs.map(job => job._id)}}).populate('user').populate('job');
+
+
+                candidates = candidates.map(candidate => {
+                    return {
+                        candidateName: candidate.user.firstName + " " + candidate.user.lastName,
+                        jobTitle: candidate.job.title,
+                        appliedDate: candidate.createdAt,
+                        address: candidate.user.address,
+                        contact: candidate.user.contact,
+                        email: candidate.user.email,
+                        stage: candidate.status
+                    }
+                })
+
+                return {
+                    status: 200,
+                    candidates
+                }
+            }
+
+            return {
+                status: 404,
+                message: "Company not found"
+            }
+            
+        }catch(err){
+            console.log(err);
+            return {
+                status: 500,
+                message: "Internal server error"
+            }
+        }
+        
     }
 
 

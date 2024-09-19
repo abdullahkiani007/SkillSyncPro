@@ -21,30 +21,20 @@ const candidateAssessmentSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    testResults: [{
-      testCase: {
-        type: String,
-        required: true,
-      },
-      expectedOutput: {
-        type: String,
-        required: true,
-      },
-      actualOutput: {
-        type: String,
-        required: true,
-      },
-      passed: {
-        type: Boolean,
-        required: true,
-      },
-    }],
+    passed:{
+      type: Boolean,
+      required: true,
+    },
     timeSpent: {
       type: Number, // Time spent in milliseconds
     },
     keystrokes: {
-      type: Number, // Number of keystrokes made by the candidate
+      type: Number, // Number of keystrokes made by the candidate,
     },
+    error: {
+      type: String, // Error message
+    },
+
   }],
   score: {
     type: Number,

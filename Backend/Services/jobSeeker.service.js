@@ -114,19 +114,29 @@ const jobseekerService = {
           if (job.skillAssessment) {
             const candidateAssessment = await CandidateAssessmentModel.create({
               application: application._id,
-              companyAssessment: job.skillAssessment,
+              companyAssessment: data.skillAssessment.assessmentId,
               answers: data.skillAssessment.answers.map((codeSubmission, index) => ({
-                problemId: codeSubmission._id,
+                problemId: codeSubmission.problemId,
                 code: codeSubmission.code,
-                actualOutput: result.stdout ? result.stdout.split('\n')[testIndex] : '',
-                passed: result.status.description === 'Accepted' && !result.stderr,
+                actualOutput: codeSubmission.actualOutput,
+                passed: codeSubmission.passed,
                 timeSpent: codeSubmission.timeSpent,
                 keystrokes: codeSubmission.keystrokes,
-                timeSpent: codeSubmission.timeSpent,
-                keystrokes: codeSubmission.keystrokes,
+                error: codeSubmission.error,
               })),
             });
           }
+          
+          // Add the application to the job seeker's applications array
+          await jobSeeker.applications.push(application._id);
+          await jobSeeker.save();
+
+          // add jobseeker id to the job applications array
+          await job.applications.push(jobSeeker._id);
+          await job.save();
+
+
+
       
           // Return success response with the application details
           return {
