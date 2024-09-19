@@ -3,15 +3,15 @@ import CreatableSelect from 'react-select/creatable'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Controller from '../../../API/index'
+import ImageUpload from '../../Uploader/ImageUploader'
+import placeholderImage_person from '../../../assets/placeholderImage_person.jpg'
 import { format } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
-import placeholderImage_person from '../../../assets/placeholderImage_person.jpg'
 
 const ProfileForm = () => {
   const [formData, setFormData] = useState({})
   const [user, setUser] = useState({})
   const [img, setImg] = useState('')
-  const [selectedFile, setSelectedFile] = useState(null) // New state for image file selection
   const navigate = useNavigate()
   const [edu, setEdu] = useState({
     institution: '',
@@ -45,9 +45,7 @@ const ProfileForm = () => {
   }
 
   const handleSkillChange = (selectedOptions) => {
-    const skills = selectedOptions
-      ? selectedOptions.map((option) => option.value)
-      : []
+    const skills = selectedOptions.map((option) => option.value)
     setFormData((prevFormData) => ({
       ...prevFormData,
       skills,
@@ -109,15 +107,11 @@ const ProfileForm = () => {
     { value: 'SQL', label: 'SQL' },
   ]
 
-  const handleFileSelect = (event) => {
-    const file = event.target.files[0]
-    setSelectedFile(file)
-    const fileUrl = URL.createObjectURL(file) // This allows you to show the selected image.
-    setImg(fileUrl) // Set the image URL without previewing it before.
-  }
-
   const handleSubmit = async () => {
-    user.profilePicture = selectedFile || img || placeholderImage_person
+    user.profilePicture =
+      img ||
+      user.profilePicture ||
+      'https://res.cloudinary.com/ddl8sa4zy/image/upload/v1722860252/placeholderImage_person_tvhrx5.jpg'
     const token = localStorage.getItem('token')
 
     try {
@@ -142,153 +136,67 @@ const ProfileForm = () => {
   return (
     <div
       className='w-full bg-gradient-to-r from-teal-100 to-orange-100 p-6 rounded-lg shadow-lg'
-      style={{
-        maxWidth: '900px',
-        margin: 'auto',
-        transition: 'transform 0.3s ease-in-out',
-      }}
+      style={{ maxWidth: '900px', margin: 'auto' }}
     >
       <div className='flex items-center mb-6'>
         <img
-          src={img || placeholderImage_person} // Image preview is hidden unless user uploads
+          src={img || placeholderImage_person}
           alt='profile'
           className='w-24 h-24 rounded-full border-4 border-orange-500 object-cover'
         />
         <div className='ml-6'>
-          <input
-            type='file'
-            accept='image/*'
-            onChange={handleFileSelect}
-            style={{ display: 'none' }}
-            id='upload-button'
-          />
-          <label htmlFor='upload-button'>
-            <Button
-              variant='outlined'
-              color='primary'
-              component='span'
-              sx={{
-                mt: '1rem',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                },
-              }}
-            >
-              Select Profile Image
-            </Button>
-          </label>
+          <ImageUpload setimg={setImg} />
         </div>
       </div>
 
-      <TextField
-        label='First Name'
-        name='firstName'
-        variant='outlined'
-        value={user.firstName}
-        className='w-full'
-        onChange={handleUserChange}
-        sx={{
-          mt: '2rem',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          transition: 'transform 0.3s ease-in-out',
-          '&:hover': {
-            boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiOutlinedInput-root': {
-            '&:hover fieldset': {
-              borderColor: '#FF6347',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#FF6347',
-              boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-            },
-          },
-        }}
-      />
+      {/* User Details */}
 
-      <TextField
-        label='Last Name'
-        name='lastName'
-        variant='outlined'
-        value={user.lastName}
-        className='w-full'
-        onChange={handleUserChange}
-        sx={{
-          mt: '2rem',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          transition: 'transform 0.3s ease-in-out',
-          '&:hover': {
-            boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiOutlinedInput-root': {
-            '&:hover fieldset': {
-              borderColor: '#FF6347',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#FF6347',
-              boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-            },
-          },
-        }}
-      />
+      <div className='grid grid-cols-2 gap-4 mb-6'>
+        <TextField
+          label='First Name'
+          name='firstName'
+          variant='outlined'
+          value={user.firstName}
+          onChange={handleUserChange}
+          className='input-style'
+          sx={{ zIndex: 5 }}
+        />
 
-      <TextField
-        label='Phone'
-        name='phone'
-        variant='outlined'
-        value={user.phone}
-        className='w-full'
-        onChange={handleUserChange}
-        sx={{
-          mt: '2rem',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          transition: 'transform 0.3s ease-in-out',
-          '&:hover': {
-            boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiOutlinedInput-root': {
-            '&:hover fieldset': {
-              borderColor: '#FF6347',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#FF6347',
-              boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-            },
-          },
-        }}
-      />
+        <TextField
+          label='Last Name'
+          name='lastName'
+          variant='outlined'
+          value={user.lastName}
+          onChange={handleUserChange}
+          className='input-style'
+          sx={{ zIndex: 5 }}
+        />
+      </div>
 
-      <TextField
-        label='Address'
-        name='address'
-        variant='outlined'
-        value={user.address}
-        className='w-full'
-        onChange={handleUserChange}
-        sx={{
-          mt: '2rem',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          transition: 'transform 0.3s ease-in-out',
-          '&:hover': {
-            boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-          },
-          '& .MuiOutlinedInput-root': {
-            '&:hover fieldset': {
-              borderColor: '#FF6347',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#FF6347',
-              boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-            },
-          },
-        }}
-      />
+      {/* Phone and Address with spacing */}
+      <div className='grid grid-cols-2 gap-4 mb-6'>
+        <TextField
+          label='Phone'
+          name='phone'
+          variant='outlined'
+          value={user.phone}
+          className='w-full input-style mb-4'
+          onChange={handleUserChange}
+          sx={{ zIndex: 5 }}
+        />
 
-      <div className='mt-10'>
+        <TextField
+          label='Address'
+          name='address'
+          variant='outlined'
+          value={user.address}
+          className='w-full input-style mb-6'
+          onChange={handleUserChange}
+          sx={{ zIndex: 5 }}
+        />
+      </div>
+      {/* Skills Dropdown */}
+      <div className='mt-10 relative z-50 mb-6'>
         <h2 className='text-lg font-bold mb-2 text-teal-600'>Skills</h2>
         <CreatableSelect
           isMulti
@@ -301,17 +209,24 @@ const ProfileForm = () => {
             }))
           }
           onChange={handleSkillChange}
-          className='transition-transform transform hover:scale-105'
+          className='relative z-50'
+          styles={{
+            menu: (provided) => ({
+              ...provided,
+              zIndex: 50,
+            }),
+          }}
         />
       </div>
 
+      {/* Education Section */}
       <div className='mt-10'>
-        <h2 className='text-lg font-bold mb-2 text-teal-600'>Education</h2>
+        <h2 className='text-lg font-bold mb-4 text-teal-600'>Education</h2>
         {formData.education &&
           formData.education.map((edu, index) => (
             <div
               key={index}
-              className='mt-4 bg-white shadow-md rounded-lg px-4 py-3 mb-4 transition-transform transform hover:scale-105'
+              className='mt-4 bg-white shadow-md rounded-lg px-4 py-3 mb-6 transition-transform transform hover:scale-105'
               style={{ borderLeft: '4px solid #FF6347' }}
             >
               <div>
@@ -345,84 +260,37 @@ const ProfileForm = () => {
             </div>
           ))}
 
-        <div className='mb-4'>
+        {/* Add Education Fields */}
+        <div className='mb-4 grid grid-cols-2 gap-4'>
           <TextField
             label='Institution'
             name='institution'
             variant='outlined'
             value={edu.institution}
-            className='w-full'
             onChange={handleEduChange}
-            sx={{
-              mt: '1rem',
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              transition: 'transform 0.3s ease-in-out',
-              '&:hover': {
-                boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#FF6347',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#FF6347',
-                  boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-                },
-              },
-            }}
+            className='input-style'
+            sx={{ zIndex: 5 }}
           />
           <TextField
             label='Degree'
             name='degree'
             variant='outlined'
             value={edu.degree}
-            className='w-full'
             onChange={handleEduChange}
-            sx={{
-              mt: '1rem',
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              transition: 'transform 0.3s ease-in-out',
-              '&:hover': {
-                boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#FF6347',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#FF6347',
-                  boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-                },
-              },
-            }}
+            className='input-style'
+            sx={{ zIndex: 5 }}
           />
+        </div>
+
+        <div className='mb-6 grid grid-cols-2 gap-4'>
           <TextField
             label='Field of Study'
             name='fieldOfStudy'
             variant='outlined'
             value={edu.fieldOfStudy}
-            className='w-full'
             onChange={handleEduChange}
-            sx={{
-              mt: '1rem',
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              transition: 'transform 0.3s ease-in-out',
-              '&:hover': {
-                boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#FF6347',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#FF6347',
-                  boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-                },
-              },
-            }}
+            className='input-style'
+            sx={{ zIndex: 5 }}
           />
           <TextField
             label='Start Date'
@@ -430,27 +298,10 @@ const ProfileForm = () => {
             type='date'
             variant='outlined'
             value={edu.startDate}
-            className='w-full'
             InputLabelProps={{ shrink: true }}
             onChange={handleEduChange}
-            sx={{
-              mt: '1rem',
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              transition: 'transform 0.3s ease-in-out',
-              '&:hover': {
-                boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#FF6347',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#FF6347',
-                  boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-                },
-              },
-            }}
+            className='input-style'
+            sx={{ zIndex: 5 }}
           />
           <TextField
             label='End Date'
@@ -458,27 +309,10 @@ const ProfileForm = () => {
             type='date'
             variant='outlined'
             value={edu.endDate}
-            className='w-full'
             InputLabelProps={{ shrink: true }}
             onChange={handleEduChange}
-            sx={{
-              mt: '1rem',
-              backgroundColor: 'white',
-              borderRadius: '10px',
-              transition: 'transform 0.3s ease-in-out',
-              '&:hover': {
-                boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#FF6347',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#FF6347',
-                  boxShadow: '0px 6px 12px rgba(255, 99, 71, 0.3)',
-                },
-              },
-            }}
+            className='input-style'
+            sx={{ zIndex: 5 }}
           />
         </div>
 
