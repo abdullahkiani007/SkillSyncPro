@@ -14,12 +14,14 @@ import CodeEditor from "./CodingEnvironment"; // Adjust the path as needed
 import Loader from "../../../../Loader/Loader";
 import jobseeker from "../../../../../API/jobseeker";
 import Judge0 from "../../../../../API/Assessment";
+import { useNavigate } from "react-router-dom";
 
 const SkillAssessment = () => {
+  const navigate = useNavigate();
   const [openDisclaimer, setOpenDisclaimer] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const { goToNextStep, handleSubmit, handleState } = useOutletContext();
+  const { goToNextStep, handleState } = useOutletContext();
   const [assessments, setAssessments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
@@ -27,6 +29,8 @@ const SkillAssessment = () => {
   const [initialCode, setInitialCode] = useState(""); // State for initial code
   const [userCode, setUserCode] = useState([]); // State for user code
   const { id } = useParams();
+  const [submitApplication , setSubmitApplication] = useState(false);
+
 
   // Prevent back navigation
   // useEffect(() => {
@@ -86,8 +90,10 @@ const SkillAssessment = () => {
       const data = await jobseeker.getAssessmentById(id);
       if (data.status === 200) {
         setAssessments(data.data.assessment);
+        console.log("Assessments received" , data.data.assessment);
         setLoading(false);
         setInitialCode(data.data.assessment.problems[0].initialCode); // Set initial code for the first problem
+
       } else {
         console.log("Error fetching assessments");
       }
@@ -139,83 +145,101 @@ const SkillAssessment = () => {
     const languageId = getLanguageId(currentProblem.language || "javascript");
     const token = await Judge0.submitCodeToJudge0(code, languageId, "hello");
     let result;
-
+  
     if (token) {
       let status = "queued";
       while (status === "queued" || status === "running") {
-         result = await Judge0.checkSubmissionStatus(token);
-        console.log("Result: ", result);
+        result = await Judge0.checkSubmissionStatus(token);
         status = result.status.description;
-
+  
         if (status === "accepted" || true) {
           // break;
-          continue
-        } else if (
-          // status === "rejected" ||
-          // status === "time limit exceeded" ||
-          // status === "runtime error"
-          false
-        ) {
+          continue;
+        } else if (false) {
           setAlertMessage("Code rejected: " + result.status.description);
           setOpenAlert(true);
           break;
         }
       }
     }
-
+  
     const newCode = {
       code,
       timeSpent,
       keystrokes,
-      _id: assessments.problems[currentProblemIndex]._id,
+      _id: currentProblem._id, // Accessing currentProblem directly
     };
+  
+    setSubmittedCode((prev) => [...prev, newCode]);
+  
 
+    console.log("Result" , result);
+    const data = {
+        problemId: currentProblem._id,
+        code,
+        timeSpent,
+        keystrokes,
+        actualOutput: result.stdout ? result.stdout.split('\n')[index] : '',
+        passed: result.status.description === 'Accepted' && !result.stderr,
+        error: result.stderr,
+      // result: {
+      //   error: result.stderr,
+      //   time: result.time,
+      //   stdout: result.stdout,
+      //   status: result.status.description,
+      // },
+    };
+  
+    setUserCode((prev) => {
+      const updatedUserCode = [...prev, data];
 
-    setSubmittedCode([...submittedCode, newCode]);
+      if (currentProblemIndex < assessments.problems.length - 1) {
+        setCurrentProblemIndex(currentProblemIndex + 1);
+        setInitialCode(assessments.problems[currentProblemIndex + 1].initialCode); // Update initial code for the next problem
+      } else {
+        setSubmitApplication(true); // Trigger submit after all problems are done
+      }
 
-    const currentProblem = assessments.problems[currentProblemIndex];
-
-      const data = {
-        code: submittedCode,
-        assesmentId: assessments._id,
-        answers: submittedCode.map((codeSubmission, index) => ({
-          problemId: codeSubmission._id,
-          code: codeSubmission.code,
-            actualOutput: result.stdout ? result.stdout.split('\n')[testIndex] : '',
-            passed: result.status.description === 'Accepted' && !result.stderr,
-          timeSpent: codeSubmission.timeSpent,
-          keystrokes: codeSubmission.keystrokes,
-        })),
-        result: {
-          error: result.stderr,
-          time: result.time,
-          stdout: result.stdout,
-          status: result.status.description,
-        },
-      };
-
-      setUserCode((prev) => [...prev, data]);
+      return updatedUserCode;
+    });
       
-    if (currentProblemIndex < assessments.problems.length - 1) {
-      setCurrentProblemIndex(currentProblemIndex + 1);
-      setInitialCode(assessments.problems[currentProblemIndex + 1].initialCode); // Update initial code for the next problem
-    } else {
-      
+    // if (currentProblemIndex < assessments.problems.length - 1) {
+    //   setCurrentProblemIndex(currentProblemIndex + 1);
+    //   setInitialCode(assessments.problems[currentProblemIndex + 1].initialCode); // Update initial code for the next problem
+    // } else {
+    //   const assessmentData = {
+    //     assessmentId: assessments._id,
+    //     answers: userCode,
+    //   }
 
-
-      handleState("skillAssessment", data);
-      handleSubmit();
-
-      // const token = localStorage.getItem("accessToken");
-      // const response = await jobseeker.submitApplication(data, token);
-      // if (response.status === 200) {
-      //   goToNextStep();
-      // } else {
-      //   setAlertMessage("Failed to submit application. Please try again.");
-      //   setOpenAlert(true);
-      // }
-    }
+    //   console.log("Assessment Data" , assessmentData);
+    //   handleState("skillAssessment", data);
+    //   setSubmitApplication(true);
+    // }
   };
+  const handleFinalSubmit = () => {
+    const assessmentData = {
+      assessmentId: assessments._id,
+      answers: userCode,
+    };
+  
+    // Updating parent state after assessment completion
+    handleState("skillAssessment", assessmentData);
+  
+    
+    // Optionally navigate the user to a different page or show confirmation
+    // navigate("/jobseeker/dashboard");
+  };
+
+  useEffect(() => {
+    if (submitApplication) {
+      handleFinalSubmit();
+    }
+  }, [submitApplication]);  // This ensures state update happens after rendering
+  
+
+  
+  
 
   const handleCloseDisclaimer = () => {
     setOpenDisclaimer(false);
@@ -231,6 +255,40 @@ const SkillAssessment = () => {
 
   const currentProblem = assessments.problems[currentProblemIndex];
 
+   if (submitApplication) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full">
+          <h2 className="text-2xl font-bold text-center text-green-600 mb-4">
+            Application Submitted Successfully!
+          </h2>
+          <p className="text-center text-gray-700 mb-6">
+            Thank you for completing the skill assessment. Your application has been submitted.
+          </p>
+          <div className="text-left text-gray-700 mb-4">
+            <h3 className="text-lg font-semibold mb-2">Summary:</h3>
+            <ul className="list-disc list-inside">
+              <li>Job ID: {id}</li>
+              <li>User ID: 92934234</li>
+              <li>Status: Applied</li>
+              {/* Add more summary details as needed */}
+            </ul>
+          </div>
+          <button
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
+            onClick={() => {
+              setSubmitApplication(true)
+              // navigate("/jobseeker/dashboard");
+            }
+
+            }
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="skill-assessment-container p-5 bg-gray-900 text-white min-h-screen">
       <Dialog

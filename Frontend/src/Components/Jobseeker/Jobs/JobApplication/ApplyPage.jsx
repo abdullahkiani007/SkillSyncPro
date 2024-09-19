@@ -21,6 +21,7 @@ const ApplyPage = () => {
         [fieldName]: value,
       };
     });
+
   };
 
   useEffect(() => {
@@ -80,6 +81,14 @@ const ApplyPage = () => {
     }
   };
 
+  useEffect(()=>{
+    console.log("Application in useEffect", application);
+    if(application.skillAssessment){
+      handleSubmit();
+    }
+
+  },[application])
+
   // Define active and disabled styles
   const activeClassName =
     "text-blue-500 border-b-2 border-blue-500 cursor-pointer";
@@ -125,7 +134,7 @@ const ApplyPage = () => {
       </div>
 
       {/* Render the current step's content */}
-      <Outlet context={{ step, goToNextStep, handleState, handleSubmit }} />
+      <Outlet context={{ step, goToNextStep, handleState}} />
     </div>
   );
 };

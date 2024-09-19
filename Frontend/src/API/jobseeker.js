@@ -156,6 +156,7 @@ class JobseekerController {
 
   async submitApplication(data, token) {
     try {
+      console.log("Data going to backend", data);
       const response = await fetch(this.jobSeekerUrl + "/submitApplication", {
         method: "POST",
         headers: {

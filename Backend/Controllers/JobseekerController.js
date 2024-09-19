@@ -53,7 +53,7 @@ const JobseekerController = {
     },
 
     async submitJobApplication(req, res, next) {
-        console.log("Submit job application");
+        console.log("Submit job application" , req.body);
         try {
             const userId = req.user._id;
             const data = req.body;
