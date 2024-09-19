@@ -9,18 +9,18 @@ const companyService = {
         console.log(company)
         let newCompany;
         try{
-            newCompany = new Company(company);
-            await newCompany.save();
             
             // Add company to employer
             const employer = await Employer.findOne({user:company.createdBy});
             if (!employer) {
-              console.log(`No employer found with id: ${company.createdBy}`);
-              return {
-                "status": 404,
-                "message": "Employer not found"
-              };
+                console.log(`No employer found with id: ${company.createdBy}`);
+                return {
+                    "status": 404,
+                    "message": "Employer not found"
+                };
             }
+            newCompany = new Company(company);
+            await newCompany.save();
             employer.company = newCompany._id;
             await employer.save();
 
