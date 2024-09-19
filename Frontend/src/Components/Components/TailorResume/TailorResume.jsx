@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { CircularProgress, Alert, Fade } from '@mui/material'
+import { Button, TextField, CircularProgress } from '@mui/material'
 import { CloudUpload as CloudUploadIcon } from '@mui/icons-material'
+import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
 import resumeApi from '../../../API/resume'
 
@@ -10,7 +11,6 @@ const TailorResume = () => {
   const [loading, setLoading] = useState(false)
   const [tailoredResume, setTailoredResume] = useState('')
   const [similarityIndex, setSimilarityIndex] = useState('')
-  const [error, setError] = useState('')
 
   const handleFileChange = (event) => {
     setResumeFile(event.target.files[0])
@@ -23,7 +23,6 @@ const TailorResume = () => {
   const handleSubmit = async (event, calculateSimilarity = false) => {
     event.preventDefault()
     setLoading(true)
-    setError('')
 
     const formData = new FormData()
     formData.append('jobDescription', jobDescription)
@@ -35,115 +34,149 @@ const TailorResume = () => {
         ? (response = await resumeApi.checkSimilarity(formData))
         : (response = await resumeApi.tailorResume(formData))
 
+      console.log(response)
+
       if (calculateSimilarity) {
         setSimilarityIndex(response.data.similarity)
       } else {
         setTailoredResume(response.data.tailored_resume)
       }
     } catch (error) {
-      setError('Error processing request. Please try again.')
+      console.error('Error processing request:', error)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className='container mx-auto p-8 mt-16 max-w-5xl bg-gradient-to-br from-gray-800 via-gray-900 to-black shadow-lg rounded-lg transition-all duration-500'>
-      <h1 className='text-5xl text-center text-white font-extrabold mb-6 animate-pulse'>
+    <div className='container mx-auto p-8 mt-24 max-w-4xl bg-gradient-to-br from-gray-800 via-teal-700 to-gray-600 shadow-2xl rounded-3xl'>
+      <h1 className='text-5xl font-bold mb-6 text-center text-white'>
         Tailor Your Resume
       </h1>
-      <p className='text-center text-gray-400 mb-8 text-lg'>
+      <p className='text-center text-gray-300 mb-8 leading-relaxed text-lg'>
         Upload your job description and resume in PDF format to get a customized
         resume or calculate similarity.
       </p>
 
-      <form>
-        <div className='mb-8'>
-          <textarea
-            className='w-full bg-gray-800 text-white placeholder-gray-400 border border-gray-600 rounded-md p-4 h-48 focus:outline-none focus:ring-4 focus:ring-orange-500 transition-all duration-300'
-            placeholder='Paste the job description here...'
+      <form className='space-y-8'>
+        <div>
+          <TextField
+            label='Job Description'
+            multiline
+            rows={6}
+            variant='outlined'
+            fullWidth
             value={jobDescription}
             onChange={handleUpload}
+            placeholder='Paste the job description here...'
+            className='shadow-sm'
+            sx={{
+              backgroundColor: '#e0e0e0', // Light gray for text field
+              borderRadius: '12px', // Rounded corners
+            }}
           />
         </div>
 
-        <div className='flex items-center mb-8'>
+        <div className='flex items-center space-x-4'>
           <input
             accept='application/pdf'
+            className='hidden'
             id='resume-upload'
             type='file'
-            className='hidden'
             onChange={handleFileChange}
           />
           <label htmlFor='resume-upload'>
-            <button
-              type='button'
-              className='bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 hover:shadow-xl transition-transform transform hover:scale-105 duration-300 flex items-center'
+            <Button
+              variant='contained'
+              sx={{
+                backgroundColor: '#fffdd1', // Muted purple color
+                color: 'black',
+                borderRadius: '20px', // Rounded buttons
+                padding: '10px 20px',
+                fontSize: '1rem',
+                transition: 'all 0.3s ease-in-out',
+                '&:hover': {
+                  backgroundColor: '#fffdd1', // Lighter purple on hover
+                },
+              }}
+              component='span'
+              startIcon={<CloudUploadIcon />}
             >
-              <CloudUploadIcon className='mr-2' />
               Upload Resume (PDF)
-            </button>
+            </Button>
           </label>
-          {resumeFile && <p className='ml-4 text-white'>{resumeFile.name}</p>}
+          {resumeFile && <p className='text-gray-300'>{resumeFile.name}</p>}
         </div>
 
-        <div className='text-center space-x-6 mt-6'>
-          <button
+        <div className='text-center space-x-8 mt-12'>
+          <Button
             onClick={(e) => handleSubmit(e, false)}
-            className='w-48 bg-purple-600 text-white rounded-full px-6 py-3 shadow-lg hover:bg-purple-700 hover:shadow-2xl transition-transform transform hover:scale-105 duration-300'
+            variant='contained'
             disabled={loading}
+            sx={{
+              background: '#0c1337', // Orange gradient
+              color: 'white',
+              borderRadius: '20px', // Rounded buttons
+              padding: '10px 20px',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                background: '#1e3852', // Reverse gradient on hover
+              },
+            }}
           >
             {loading ? (
               <CircularProgress size={24} className='text-white' />
             ) : (
               'Tailor Resume'
             )}
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={(e) => handleSubmit(e, true)}
-            className='w-48 bg-purple-600 text-white rounded-full px-6 py-3 shadow-lg hover:bg-purple-700 hover:shadow-2xl transition-transform transform hover:scale-105 duration-300'
+            variant='contained'
             disabled={loading}
+            sx={{
+              background: '#0c1337', // Orange gradient
+              color: 'white',
+              borderRadius: '20px', // Rounded buttons
+              padding: '10px 20px',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                background: '#1e3852', // Reverse gradient on hover
+              },
+            }}
           >
             {loading ? (
               <CircularProgress size={24} className='text-white' />
             ) : (
               'Calculate Similarity'
             )}
-          </button>
+          </Button>
         </div>
       </form>
 
-      {error && (
-        <Fade in={!!error}>
-          <Alert severity='error' className='mt-6'>
-            {error}
-          </Alert>
-        </Fade>
-      )}
-
       {tailoredResume && (
-        <Fade in={!!tailoredResume}>
-          <div className='mt-12 p-6 bg-gray-800 rounded-lg shadow-2xl transition-transform transform hover:scale-105 hover:rotate-2 duration-500'>
-            <h2 className='text-2xl text-orange-400 font-bold mb-4'>
-              Tailored Resume
-            </h2>
-            <ReactMarkdown className='text-white'>
-              {tailoredResume}
-            </ReactMarkdown>
+        <div className='mt-12 p-6 rounded-lg bg-opacity-50 bg-gray-900 shadow-inner'>
+          <h2 className='text-2xl font-semibold text-gray-200 mb-4'>
+            Tailored Resume
+          </h2>
+          <div className='prose text-gray-300'>
+            <ReactMarkdown>{tailoredResume}</ReactMarkdown>
           </div>
-        </Fade>
+        </div>
       )}
 
       {similarityIndex && (
-        <Fade in={!!similarityIndex}>
-          <div className='mt-6 p-6 bg-gray-800 rounded-lg shadow-2xl transition-transform transform hover:scale-105 hover:-rotate-2 duration-500 text-center'>
-            <h2 className='text-2xl text-orange-400 font-bold mb-4'>
-              Similarity Index
-            </h2>
-            <p className='text-3xl text-orange-300'>{similarityIndex} / 100</p>
-          </div>
-        </Fade>
+        <div className='mt-6 p-6 rounded-lg bg-opacity-50 bg-gray-800 shadow-inner text-center'>
+          <h2 className='text-2xl font-semibold text-gray-200 mb-4'>
+            Similarity Index
+          </h2>
+          <p className='text-4xl text-teal-300 font-bold'>
+            {similarityIndex} / 100
+          </p>
+        </div>
       )}
     </div>
   )
