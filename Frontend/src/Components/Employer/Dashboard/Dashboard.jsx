@@ -4,7 +4,7 @@ import Loader from '../../Loader/Loader'
 import employerController from '../../../API/employer'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import JobPerformanceChart from './Charts/JobPerformanceChart'
-
+import JobPerformanceChart2 from './Charts/JobPerformancechart2'
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -99,8 +99,8 @@ const Dashboard = () => {
 
       {/* Job Performance Section */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>
-        <div className='bg-gray-100 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
-          <h2 className='text-3xl text-black font-semibold mb-4'>
+        <div className='bg-gray-700 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
+          <h2 className='text-3xl text-white font-semibold mb-4'>
             Job Performance
           </h2>
           <JobPerformanceChart />
@@ -109,7 +109,7 @@ const Dashboard = () => {
           <h2 className='text-3xl font-semibold mb-4 text-black'>
             Overall Analytics
           </h2>
-          <JobPerformanceChart />
+          <JobPerformanceChart2 />
         </div>
       </div>
     </div>
