@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, Typography, CardHeader } from "@mui/material";
 import {
   Description as DescriptionIcon,
@@ -10,6 +10,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { EffectCards } from "swiper/modules";
+import EmployerController from "../../../../API/employer";
+import Loader from "../../../../Components/Loader/Loader";
 
 // ApplicationSummaryCard Component
 const ApplicationSummaryCard = ({ title, count, color, Icon }) => (
@@ -47,33 +49,61 @@ const ApplicationSummaryCard = ({ title, count, color, Icon }) => (
 
 // ApplicationSummary Component
 const ApplicationSummary = () => {
-  const staticSummaryData = [
-    {
-      _id: "Applied",
-      count: 45,
-      color: "#821131",
-      Icon: DescriptionIcon,
-    },
-    {
-      _id: "Under Review",
-      count: 30,
-      color: "#399918",
-      Icon: SearchIcon,
-    },
-    {
-      _id: "Interview Scheduled",
-      count: 15,
-      color: "#0D7C66",
-      Icon: EventAvailableIcon,
-    },
-    {
-      _id: "Rejected",
-      count: 10,
-      color: "#021526",
-      Icon: CancelIcon,
-    },
-  ];
+  const [summaryData, setSummaryData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await EmployerController.getApplicationsGroupedByStatus(accessToken);
+      const data = response.data;
+
+      if (response.status === 200) {
+        const summaryDataArr = Object.entries(data).map(([key, value]) => {
+          let color = "";
+          let Icon = DescriptionIcon; // Default icon
+
+          switch (key) {
+            case "Applied":
+              color = "#821131";
+              Icon = DescriptionIcon;
+              break;
+            case "Under Review":
+              color = "#399918";
+              Icon = SearchIcon;
+              break;
+            case "Interview Scheduled":
+              color = "#0D7C66";
+              Icon = EventAvailableIcon;
+              break;
+            case "Rejected":
+              color = "#021526";
+              Icon = CancelIcon;
+              break;
+            default:
+              color = "#000000"; // Default color
+              break;
+          }
+          return {
+            _id: key,
+            count: value,
+            color,
+            Icon,
+          };
+        });
+
+        setSummaryData(summaryDataArr);
+        console.log("Application", summaryDataArr);
+        setLoading(false);
+      }
+    };
+
+    fetchSummaryData();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className=" ">
       {/* Carousel for smaller devices */}
@@ -89,33 +119,73 @@ const ApplicationSummary = () => {
           navigation
           style={{ height: "auto" }}
         >
-          {staticSummaryData.map((item) => (
-            <SwiperSlide
-              key={item._id}
-              className="flex items-center  justify-center rounded-lg text-white font-bold text-2xl"
-            >
-              <ApplicationSummaryCard
-                title={item._id}
-                count={item.count}
-                color={item.color}
-                Icon={item.Icon}
-              />
-            </SwiperSlide>
-          ))}
+          {summaryData.map((item) => {
+            let Icon;
+            switch (item._id) {
+              case "Applied":
+                Icon = DescriptionIcon;
+                break;
+              case "Under Review":
+                Icon = SearchIcon;
+                break;
+              case "Interview Scheduled":
+                Icon = EventAvailableIcon;
+                break;
+              case "Rejected":
+                Icon = CancelIcon;
+                break;
+              default:
+                Icon = DescriptionIcon;
+                break;
+            }
+            return (
+              <SwiperSlide
+                key={item._id}
+                className="flex items-center justify-center rounded-lg text-white font-bold text-2xl"
+              >
+                <ApplicationSummaryCard
+                  title={item._id}
+                  count={item.count}
+                  color={item.color}
+                  Icon={Icon}
+                />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
 
       {/* Static Cards for larger devices */}
-      <div className="hidden md:flex flex-wrap justify-center gap-4  ">
-        {staticSummaryData.map((item) => (
-          <ApplicationSummaryCard
-            key={item._id}
-            title={item._id}
-            count={item.count}
-            color={item.color}
-            Icon={item.Icon}
-          />
-        ))}
+      <div className="hidden md:flex flex-wrap justify-center gap-4">
+        {summaryData.map((item) => {
+          let Icon;
+          switch (item._id) {
+            case "Applied":
+              Icon = DescriptionIcon;
+              break;
+            case "Under Review":
+              Icon = SearchIcon;
+              break;
+            case "Interview Scheduled":
+              Icon = EventAvailableIcon;
+              break;
+            case "Rejected":
+              Icon = CancelIcon;
+              break;
+            default:
+              Icon = DescriptionIcon;
+              break;
+          }
+          return (
+            <ApplicationSummaryCard
+              key={item._id}
+              title={item._id}
+              count={item.count}
+              color={item.color}
+              Icon={Icon}
+            />
+          );
+        })}
       </div>
     </div>
   );

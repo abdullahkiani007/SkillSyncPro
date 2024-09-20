@@ -1,51 +1,83 @@
-import React, { useState } from "react";
-import { Stepper, Step, StepLabel, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Stepper, Step, StepLabel, Button, Tabs, Tab, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import DescriptionIcon from "@mui/icons-material/Description";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
+import EmployerController from "../../../../../API/employer";
+import { useParams } from "react-router-dom";
 
-// Static data simulating candidate data from backend
-const staticCandidateData = {
-  jobSeeker: {
-    user: {
-      firstName: "John",
-      lastName: "Doe",
-    },
-  },
-  application: {
-    job: {
-      title: "Frontend Developer",
-    },
-    status: "In-person Interview", // "Resume Screening", "Assignment", "Review & Background Check", "Accepted"
-    createdAt: "2024-08-20T12:34:56Z",
-    updatedAt: "2024-08-25T14:23:45Z",
-  },
-  candidateAssessment: {
-    companyAssessment: {
-      title: "Frontend Design Challenge",
-      description:
-        "Build a responsive landing page for a hypothetical product.",
-      note: "Please ensure your submission is mobile-friendly.",
-      attachments: "https://via.placeholder.com/600x400", // Placeholder image for attachments
-    },
-    status: "Completed", // "In Progress", "Not Started"
-  },
-};
+const Candidate = () => {
+  const { id } = useParams();
+  const applicationId = id;
 
-function Candidate() {
-  const [candidateData] = useState(staticCandidateData);
+  const [candidateData, setCandidateData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [tabIndex, setTabIndex] = useState(0); // For managing tabs
+  const [stage, setStage] = useState("");
+
+  // Fetch data from the backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await EmployerController.getApplication(applicationId, accessToken);
+        const data = response.data;
+        console.log("Candidate data: ", data.data);
+        setCandidateData(data.data);
+        setStage(data.data.stage); // Initialize the stage
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching candidate data:", error);
+      }
+    };
+
+    fetchData();
+  }, [applicationId]);
+
+  const handleStageChange = async (newStage) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      await EmployerController.updateApplicationStage(applicationId, newStage, accessToken);
+      setStage(newStage); // Update the local state
+    } catch (error) {
+      console.error("Error updating stage:", error);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!candidateData) {
+    return <div>No data found for this application.</div>;
+  }
+
+  const statusSteps = [
+    "Applied",
+    "Under Review",
+    "Interview Scheduled",
+    "Rejected",
+    "Accepted",
+  ];
+
+  const getStatusStepIndex = (status) => {
+    return statusSteps.indexOf(status);
+  };
+
+  // Handle tab change
+  const handleTabChange = (event, newValue) => {
+    setTabIndex(newValue);
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen px-8 py-12">
       {/* Header */}
       <div className="flex items-center mb-8 space-x-5">
-        {/* on click move to last route */}
-        <ArrowBack className="text-secondary-dark" fontSize="medium" 
-        onClick={() => window.history.back()}
+        <ArrowBack
+          className="text-secondary-dark"
+          fontSize="medium"
+          onClick={() => window.history.back()}
         />
         <h1 className="text-xl font-extrabold text-slate-800">
-          {candidateData.application.job.title}
+          {candidateData.jobTitle}
         </h1>
       </div>
 
@@ -53,67 +85,22 @@ function Candidate() {
       <div className="mb-8 space-y-2">
         <p className="text-lg text-slate-700">
           <span className="font-semibold">Candidate Name:</span>{" "}
-          {candidateData.jobSeeker.user.firstName}{" "}
-          {candidateData.jobSeeker.user.lastName}
+          {candidateData.candidateName}
         </p>
         <p className="text-lg text-slate-700">
           <span className="font-semibold">Current Status:</span>{" "}
-          {candidateData.application.status}
+          {stage}
         </p>
         <p className="text-lg text-slate-700">
           <span className="font-semibold">Applied Date:</span>{" "}
-          {new Date(candidateData.application.createdAt).toLocaleDateString()}
+          {new Date(candidateData.appliedDate).toLocaleDateString()}
         </p>
-        <p className="text-lg text-slate-700">
-          <span className="font-semibold">Latest Update:</span>{" "}
-          {new Date(candidateData.application.updatedAt).toLocaleDateString()}
-        </p>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex space-x-4 mb-8">
-        <Button
-          variant="contained"
-          color="primary"
-          className="py-2 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform text-white"
-        >
-          Review Application
-        </Button>
-        <Button
-          variant="contained"
-          className="py-2 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform text-gray-800 bg-gray-300 hover:bg-gray-400"
-        >
-          Job Description
-        </Button>
-      </div>
-
-      {/* Details Section */}
-      <div className="grid grid-cols-4 gap-4 mb-12">
-        {["Details", "Stage", "Documents", "Assignments"].map(
-          (detail, index) => (
-            <div
-              key={index}
-              className="bg-gray-200 px-4 py-3 rounded-full font-semibold text-slate-800 shadow-md text-center"
-            >
-              {detail}
-            </div>
-          )
-        )}
       </div>
 
       {/* Stages - MUI Stepper */}
       <div className="mb-12">
-        <Stepper
-          activeStep={candidateData.application.status === "Accepted" ? 4 : 3}
-          alternativeLabel
-        >
-          {[
-            "Resume Screening",
-            "In-person Interview",
-            "Assignment",
-            "Review & Background Check",
-            "Offer",
-          ].map((stage, index) => (
+        <Stepper activeStep={getStatusStepIndex(stage)} alternativeLabel>
+          {statusSteps.map((stage, index) => (
             <Step key={index}>
               <StepLabel>{stage}</StepLabel>
             </Step>
@@ -121,55 +108,131 @@ function Candidate() {
         </Stepper>
       </div>
 
-      {/* Design Challenge */}
-      {candidateData.candidateAssessment && (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">
-            {candidateData.candidateAssessment.companyAssessment.title}
-          </h2>
-          <p className="text-slate-700 mb-4">
-            {candidateData.candidateAssessment.companyAssessment.description}
-          </p>
-          <p className="text-slate-700 mb-6">
-            {candidateData.candidateAssessment.companyAssessment.note}
-          </p>
+      {/* Tabs */}
+      <Tabs value={tabIndex} onChange={handleTabChange} indicatorColor="primary">
+        <Tab label="Review Application" />
+        <Tab label="Job Description" />
+        <Tab label="Change Stage" />
+      </Tabs>
 
-          {/* Attachments */}
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">
-              Attachments:
-            </h3>
-            <div className="border border-slate-300 rounded-lg overflow-hidden shadow-md">
-              <img
-                src={
-                  candidateData.candidateAssessment.companyAssessment
-                    .attachments
-                }
-                alt="Design Challenge"
-                className="w-full"
-              />
-            </div>
-          </div>
-
-          {/* Challenge Status */}
-          <div className="mt-6">
-            <p className="text-lg text-slate-700">
-              Status:{" "}
-              <span
-                className={`font-bold text-${
-                  candidateData.candidateAssessment.status === "Completed"
-                    ? "green-500"
-                    : "red-500"
-                }`}
+      {/* Tab Panels */}
+      {tabIndex === 0 && (
+        <div>
+          {/* Resume */}
+          {candidateData.resume && (
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                Resume:
+              </h3>
+              <a
+                href={candidateData.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
               >
-                {candidateData.candidateAssessment.status}
-              </span>
-            </p>
-          </div>
+                Download/View Resume
+              </a>
+            </div>
+          )}
+
+          {/* Video Introduction */}
+          {candidateData.videoIntroduction && (
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                Video Introduction:
+              </h3>
+              <video
+                controls
+                className="w-96 rounded-lg shadow-lg"
+                src={candidateData.videoIntroduction}
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          )}
+
+          {/* Candidate Assessment */}
+          {candidateData.candidateAssessment && (
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold text-slate-800 mb-4">
+                Coding Assessment
+              </h2>
+
+              {candidateData.candidateAssessment.answers.map((answer, index) => (
+                <div key={index} className="mb-6">
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                    Problem: {answer.problemTitle}
+                  </h3>
+                  <p className="text-slate-700 mb-2">
+                    <span className="font-semibold">Code:</span>
+                  </p>
+                  <pre className="bg-gray-100 p-4 rounded-md overflow-auto">
+                    {answer.code}
+                  </pre>
+                  <p className="text-slate-700 mb-2">
+                    <span className="font-semibold">Passed:</span>{" "}
+                    {answer.passed ? "Yes" : "No"}
+                  </p>
+                  <p className="text-slate-700 mb-2">
+                    <span className="font-semibold">Time Spent:</span>{" "}
+                    {answer.timeSpent} ms
+                  </p>
+                  <p className="text-slate-700 mb-2">
+                    <span className="font-semibold">Keystrokes:</span>{" "}
+                    {answer.keystrokes}
+                  </p>
+                  {answer.error && (
+                    <p className="text-red-500 mb-2">
+                      <span className="font-semibold">Error:</span> {answer.error}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {tabIndex === 1 && (
+        <div>
+          {/* Job Description */}
+          <h3 className="text-xl font-semibold text-slate-800 mb-2">
+            Job Description:
+          </h3>
+          <p>{candidateData.jobDescription}</p>
+        </div>
+      )}
+
+      {tabIndex === 2 && (
+        <div>
+          <h3 className="text-xl font-semibold text-slate-800 mb-2">
+            Change Application Stage:
+          </h3>
+          <FormControl fullWidth variant="outlined" className="mb-4">
+            <InputLabel>Stage</InputLabel>
+            <Select
+              value={stage}
+              onChange={(e) => handleStageChange(e.target.value)}
+              label="Stage"
+            >
+              {statusSteps.map((step) => (
+                <MenuItem key={step} value={step}>
+                  {step}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleStageChange(stage)}
+          >
+            Update Stage
+          </Button>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default Candidate;
