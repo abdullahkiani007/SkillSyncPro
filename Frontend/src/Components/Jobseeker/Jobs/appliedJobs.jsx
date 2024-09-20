@@ -16,10 +16,10 @@ import jobseeker from "../../../API/jobseeker";
 import { useSelector } from "react-redux";
 
 const AppliedJobs = () => {
-  const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
+  const navigate = useNavigate()
+  const user = useSelector((state) => state.user)
 
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState([])
 
   useEffect(() => {
     const getAllJobs = async () => {
@@ -39,14 +39,14 @@ const AppliedJobs = () => {
           No Applied Jobs
         </Typography>
         <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/jobseeker/jobs")}
+          variant='contained'
+          color='primary'
+          onClick={() => navigate('/jobseeker/jobs')}
         >
           Consider Applying
         </Button>
       </div>
-    );
+    )
   }
 
   return (
@@ -91,7 +91,7 @@ const AppliedJobs = () => {
         </Table>
       </TableContainer>
     </Container>
-  );
-};
+  )
+}
 
-export default AppliedJobs;
+export default AppliedJobs
