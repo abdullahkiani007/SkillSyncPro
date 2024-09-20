@@ -274,6 +274,30 @@ const EmployerController = {
           })
     },
 
+    async getCandidatesByJobId(req,res,next){
+        console.log("GET emp/candidates/job received");
+        console.log(req.query)
+
+        const {jobId} = req.query;
+        const {_id} = req.user;
+
+        const response = await EmployerServices.getCandidatesByJobId(jobId);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          res.status(200).json({
+            "candidates":response.candidates
+          })
+
+    },
+
     async getApplication(req,res,next){
         console.log("GET emp/application received");
         const applicationId = req.query.id;

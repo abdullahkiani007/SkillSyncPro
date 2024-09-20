@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useParams , useOutletContext } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { IconButton } from "@mui/material";
 import Employer from "../../../API/employer";
+import Loader from "../../Loader/Loader";
+
 
 const JobDetails = () => {
+  const [loading, setLoading] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
+  const [candidatesList, setCandidatesList] = useState([]);
+
+
+
+
   const id = params.id;
   const [detail, setDetail] = useState([]);
 
@@ -34,11 +42,51 @@ const JobDetails = () => {
 
   useEffect(() => {
     const jobs = JSON.parse(localStorage.getItem("empJobs"));
-    setDetail(jobs.filter((item) => item._id == id)[0]);
-    console.log(detail);
+
+    const job = jobs.find((job) => job._id === id);
+    if (job === undefined) {
+      try{
+        async function fetchJob() {
+          const token = localStorage.getItem("accessToken");
+          const response = await Employer.getJobDetails(token, id);
+          console.log("job details", response.data);
+
+          setDetail(response.data);
+          setLoading(false);
+        }
+        fetchJob();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setDetail(job);
+    console.log("job details" , detail);
   }, []);
 
+  useEffect(() => {
+    async function fetchCandidates() {
+      const token = localStorage.getItem("accessToken");
+      try {
+        const response = await Employer.getCandidatesByJobId(token, id);
+        console.log(response);
+        console.log("candidates list", response.data);
+        setCandidatesList(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchCandidates();
+  },[])
+
+
+
   console.log("params received", params.id);
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="flex flex-col px-10 pt-10">
       <div className="flex justify-between">
@@ -103,7 +151,8 @@ const JobDetails = () => {
           Reports
         </Link>
       </nav>
-      <Outlet />
+      <Outlet context={{ candidatesList , detail }} />
+      
     </div>
   );
 };
