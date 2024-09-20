@@ -3,23 +3,13 @@ import { useStore } from 'react-redux'
 import Loader from '../../Loader/Loader'
 import employerController from '../../../API/employer'
 import { useNavigate, useOutletContext } from 'react-router-dom'
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-} from 'recharts'
-import JobPerformanceChart from "./Charts/JobPerformanceChart";
+
+import JobPerformanceChart from './Charts/JobPerformanceChart'
+
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [isVisible, setIsVisible] = useState(false) // Control visibility for transition
   const navigate = useNavigate()
   const { user } = useStore((state) => state.user).getState()
   const { admin, setAdmin } = useOutletContext()
@@ -32,7 +22,7 @@ const Dashboard = () => {
       try {
         const response = await employerController.getDashboard(token)
         if (response.status === 200) {
-          setAdmin(response.data.company.createdBy === user._id)
+          setAdmin(response.data.company.createdBy == user._id)
           setDashboardData(response.data)
           localStorage.setItem('company', JSON.stringify(response.data.company))
         } else {
@@ -43,13 +33,7 @@ const Dashboard = () => {
         console.error('Error fetching dashboard data in catch block:', error)
       }
       setLoading(false)
-
-      // Delay to allow the data to load, then trigger the visibility for transition
-      setTimeout(() => {
-        setIsVisible(true)
-      }, 100) // Adjust delay as needed
     }
-
     fetchData()
   }, [])
 
@@ -57,33 +41,16 @@ const Dashboard = () => {
     return <Loader />
   }
 
-  // Example data for charts
-  const data = [
-    { name: 'Jan', views: 4000, applications: 2400 },
-    { name: 'Feb', views: 3000, applications: 1398 },
-    { name: 'Mar', views: 2000, applications: 9800 },
-    { name: 'Apr', views: 2780, applications: 3908 },
-    { name: 'May', views: 1890, applications: 4800 },
-    { name: 'Jun', views: 2390, applications: 3800 },
-  ]
-
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-10 ${
-        isVisible ? 'transition-fade-in' : 'opacity-0'
-      }`}
-    >
-      <h1 className='text-4xl font-extrabold text-gray-900 mb-10 text-center'>
+    <div className='min-h-screen bg-gradient-to-r from-blue-50 to-blue-100 p-10'>
+      <h1 className='text-4xl font-extrabold text-gray-800 mb-10 text-center'>
         {admin ? 'Admin' : 'Employer'} Dashboard
       </h1>
-
       {dashboardData && (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {/* Company Info Card */}
           <div
-            className={`bg-gradient-to-r from-teal-400 to-teal-600 text-white p-8 rounded-2xl shadow-xl transition-transform transform ${
-              isVisible ? 'hover:scale-105' : 'scale-95'
-            } cursor-pointer hover:shadow-2xl transition-all duration-700`}
+            className='bg-gradient-to-r from-green-400 to-green-600 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
             onClick={() => navigate('../company-profile')}
           >
             <h2 className='text-3xl font-semibold mb-4'>Company Info</h2>
@@ -95,7 +62,7 @@ const Dashboard = () => {
               href={dashboardData.company.website}
               target='_blank'
               rel='noopener noreferrer'
-              className='text-white text-lg underline hover:text-teal-200'
+              className='text-white text-lg underline hover:text-green-200'
             >
               Visit Website
             </a>
@@ -103,9 +70,7 @@ const Dashboard = () => {
 
           {/* Jobs Posted Card */}
           <div
-            className={`bg-gradient-to-r from-indigo-400 to-indigo-600 text-white p-8 rounded-2xl shadow-xl transition-transform transform ${
-              isVisible ? 'hover:scale-105' : 'scale-95'
-            } cursor-pointer hover:shadow-2xl transition-all duration-700`}
+            className='bg-gradient-to-r from-indigo-500 to-indigo-700 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
             onClick={() => navigate('../job/job-listing')}
           >
             <h2 className='text-3xl font-semibold mb-4'>Jobs Posted</h2>
@@ -123,9 +88,7 @@ const Dashboard = () => {
 
           {/* Recent Applicants Card */}
           <div
-            className={`bg-gradient-to-r from-purple-400 to-purple-600 text-white p-8 rounded-2xl shadow-xl transition-transform transform ${
-              isVisible ? 'hover:scale-105' : 'scale-95'
-            } cursor-pointer hover:shadow-2xl transition-all duration-700`}
+            className='bg-gradient-to-r from-pink-500 to-pink-700 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
             onClick={() => navigate('../applicant-list')}
           >
             <h2 className='text-3xl font-semibold mb-4'>Recent Applicants</h2>
@@ -138,76 +101,17 @@ const Dashboard = () => {
 
       {/* Job Performance Section */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>
-        {/* Bar Chart - Job Performance with gray-900 background */}
-        <div
-          className={`bg-gray-900 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform ${
-            isVisible ? 'hover:scale-105' : 'scale-95'
-          } transition-all duration-700`}
-        >
-          <h2 className='text-3xl font-semibold mb-4'>Job Performance</h2>
-          <ResponsiveContainer width='100%' height={300}>
-            <BarChart
-              data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray='3 3' stroke='#ccc' />
-              <XAxis dataKey='name' stroke='#E2E8F0' />{' '}
-              {/* Light gray axis for contrast */}
-              <YAxis stroke='#E2E8F0' />
-              <Tooltip />
-              {/* Bars in lighter shades for contrast */}
-              <Bar
-                dataKey='views'
-                fill='#A0AEC0'
-                radius={[10, 10, 0, 0]}
-              />{' '}
-              {/* gray-400 */}
-              <Bar
-                dataKey='applications'
-                fill='#CBD5E0'
-                radius={[10, 10, 0, 0]}
-              />{' '}
-              {/* gray-200 */}
-            </BarChart>
-          </ResponsiveContainer>
+        <div className='bg-gray-100 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
+          <h2 className='text-3xl text-black font-semibold mb-4'>
+            Job Performance
+          </h2>
+          <JobPerformanceChart />
         </div>
-
-        {/* Line Chart - Overall Analytics with gray-700 background */}
-        <div
-          className={`bg-gray-700 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform ${
-            isVisible ? 'hover:scale-105' : 'scale-95'
-          } transition-all duration-700`}
-        >
-          <h2 className='text-3xl font-semibold mb-4'>Overall Analytics</h2>
-          <ResponsiveContainer width='100%' height={300}>
-            <LineChart
-              data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray='3 3' stroke='#E2E8F0' />{' '}
-              {/* Light gray grid for contrast */}
-              <XAxis dataKey='name' stroke='#E2E8F0' />
-              <YAxis stroke='#E2E8F0' />
-              <Tooltip />
-              {/* Lines in lighter shades for contrast */}
-              <Line
-                type='monotone'
-                dataKey='views'
-                stroke='#A0AEC0'
-                strokeWidth={3}
-                dot={{ r: 5 }}
-              />{' '}
-              {/* gray-400 */}
-              <Line
-                type='monotone'
-                dataKey='applications'
-                stroke='#CBD5E0'
-                strokeWidth={3}
-                dot={{ r: 5 }}
-              />{' '}
-              {/* gray-200 */}
-            </LineChart>
-          </ResponsiveContainer>
+        <div className='bg-gray-200 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
+          <h2 className='text-3xl font-semibold mb-4 text-black'>
+            Overall Analytics
+          </h2>
+          <JobPerformanceChart />
         </div>
 
         <div
