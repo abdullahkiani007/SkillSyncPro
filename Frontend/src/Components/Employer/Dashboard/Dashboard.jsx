@@ -14,6 +14,7 @@ import {
   LineChart,
   Line,
 } from 'recharts'
+import JobPerformanceChart from "./Charts/JobPerformanceChart";
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null)
@@ -207,6 +208,15 @@ const Dashboard = () => {
               {/* gray-200 */}
             </LineChart>
           </ResponsiveContainer>
+        </div>
+
+        <div
+          className={`bg-gray-700 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform ${
+            isVisible ? 'hover:scale-105' : 'scale-95'
+          } transition-all duration-700`}
+        >
+          <h2 className='text-3xl font-semibold mb-4'>Job Performance</h2>
+          <JobPerformanceChart />
         </div>
       </div>
     </div>
