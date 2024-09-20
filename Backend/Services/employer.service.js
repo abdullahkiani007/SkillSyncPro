@@ -411,6 +411,46 @@ const EmployerServices = {
     }
   },
 
+  getCandidatesByJobId: async (jobId) => {
+    try {
+      const applications = await Application.find({ job: jobId })
+      .populate({
+        path: "jobSeeker",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate("job");
+
+      if (applications) {
+        const candidates = applications.map((application) => {
+          return {
+            _id: application._id,
+            candidateName: application.jobSeeker.user.firstName + " " + application.jobSeeker.user.lastName,
+            jobTitle: application.job.title,
+            appliedDate: application.createdAt,
+            location: application.job.location,
+            contact: application.jobSeeker.user.phone,
+            email: application.jobSeeker.user.email,
+            stage: application.status,
+          };
+        });
+
+        return {
+          status: 200,
+          candidates,
+        };
+      }
+
+    }catch(err){
+      console.log(err);
+      return {
+        status: 500,
+        message: "Internal server error",
+      };
+    }
+  },
+
   getApplication: async (applicationId) => {
     try {
       const application = await Application.findById(applicationId)

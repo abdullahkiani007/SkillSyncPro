@@ -1,17 +1,19 @@
-import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import React, { useState , useEffect } from "react";
+import { useSearchParams , useParams  , useOutletContext} from "react-router-dom";
 import { FiMessageCircle } from "react-icons/fi";
 import { HiArchive } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import placeholderImage from "../../../../assets/placeholderImage_person.jpg"
+
 
 const CandidateCard = ({ name, appliedDate, avatar, status}) => {
   return (
     <div className="bg-white rounded-md shadow-md p-4 flex flex-col justify-between">
       <div className="flex items-center">
-        <img src={avatar} alt={name} className="w-10 h-10 rounded-full mr-4" />
+        <img src={avatar || placeholderImage} alt={name} className="w-10 h-10 rounded-full mr-4" />
         <div>
           <h3 className="text-lg font-bold">{name}</h3>
-          <p className="text-gray-500">{appliedDate}</p>
+          <p className="text-gray-500">{new Date(appliedDate).toLocaleDateString()}</p>
         </div>
       </div>
       <div className="flex items-center mt-4">
@@ -48,77 +50,21 @@ const CandidateCard = ({ name, appliedDate, avatar, status}) => {
 };
 
 const Candidates = () => {
+  const {candidatesList} = useOutletContext();
+
   const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams();
+  const [jobId, setJobId] = useState(params.id);
+
+  console.log("Candidates list : ", candidatesList);
+
+  useEffect(() => {
+    console.log("Fetching candidates for job id: ", jobId);
+  },[jobId])
+
+  
   const navigate = useNavigate();
-  const candidates_data = [
-    {
-      name: "Leonard Campbell",
-      appliedDate: "Applied today",
-      avatar: "https://picsum.photos/200/300",
-      status: "New Applied",
-    },
-    {
-      name: "Jordan Rogers",
-      appliedDate: "Applied 4 days ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "Screening",
-    },
-    {
-      name: "Timothy Erickson",
-      appliedDate: "Applied a week ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "Interview",
-    },
-    {
-      name: "Jose Abbott",
-      appliedDate: "Applied yesterday",
-      avatar: "https://picsum.photos/200/300",
-      status: "New Applied",
-    },
-    {
-      name: "Miguel Hill",
-      appliedDate: "Applied 5 days ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "Screening",
-    },
-    {
-      name: "Vernon Ferguson",
-      appliedDate: "Applied a week ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "Interview",
-    },
-    {
-      name: "Derrick Rowe",
-      appliedDate: "Applied 2 days ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "New Applied",
-    },
-    {
-      name: "Marvin Wilkins",
-      appliedDate: "Applied a week ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "Screening",
-    },
-    {
-      name: "William Williamson",
-      appliedDate: "Applied a week ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "Interview",
-    },
-    {
-      name: "Amelia Manda",
-      appliedDate: "Applied 2 days ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "New Applied",
-    },
-    {
-      name: "Cory Stevenson",
-      appliedDate: "Applied a week ago",
-      avatar: "https://picsum.photos/200/300",
-      status: "Screening",
-    },
-  ];
-  const [candidates, setCandidates] = useState(candidates_data);
+  const [candidates, setCandidates] = useState(candidatesList);
 
   const handleFilterChange = (e) => {
     const filterValue = e.target.value;
@@ -127,13 +73,13 @@ const Candidates = () => {
 
   const filteredCandidates = candidates.filter((candidate) => {
     const filter = searchParams.get("filter");
-    return !filter || candidate.status === filter;
+    return !filter || candidate.stage === filter;
   });
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Senior Product Designer</h2>
+        <h2 className="text-2xl font-bold">Candidates</h2>
         <div className="flex items-center">
           <button className="bg-blue-500 text-white rounded-md px-4 py-2 mr-2">
             Active
@@ -143,31 +89,32 @@ const Candidates = () => {
               className="bg-gray-200 hover:bg-gray-300 rounded-md px-3 py-1 mr-2"
               onChange={handleFilterChange}
             >
+              {/* 'Applied', 'Under Review', 'Interview Scheduled', 'Rejected', 'Accepted' */}
               <option value="">All</option>
-              <option value="New Applied">New Applied</option>
-              <option value="Screening">Screening</option>
-              <option value="Interview">Interview</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Interview Scheduled">Interview Scheduled</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Accepted">Accepted</option>
             </select>
           </div>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4">
         {filteredCandidates.map((candidate, index) => (
-          <li key={index}
+          <div key={index}
             onClick={() => {
-              alert("You clicked on a candidate");
-              navigate(`../dashboard/candidates/manage/${index}`)}}
+              navigate(`../dashboard/candidates/manage/${candidate._id}`)}}
   
           >
 
             <CandidateCard
               key={index}
-              name={candidate.name}
+              name={candidate.candidateName}
               appliedDate={candidate.appliedDate}
               avatar={candidate.avatar}
-              status={candidate.status}
+              status={candidate.stage}
             />
-          </li>
+          </div>
         ))}
       </div>
     </div>

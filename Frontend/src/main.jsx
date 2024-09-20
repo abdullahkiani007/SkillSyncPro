@@ -38,6 +38,7 @@ import AdminLoginPage from "./Components/Admin/AdminLogin.jsx";
 import ApplyPage from "./Components/Jobseeker/Jobs/JobApplication/ApplyPage.jsx";
 import ResumeBuilder from "./Components/Jobseeker/Resume/ResumeBuilder.jsx";
 import JobDetails from "./Components/Employer/Job/JobDetails.jsx";
+import JobDetailsSub from "./Components/Employer/Job/JobListing/JobDetails.jsx"
 import EmpSkillAssessment from "./Components/Employer/SkillAssessments/SkillAssessment.jsx";
 import EmpManageCompany from "./Components/Employer/Dashboard/ManageCompany.jsx";
 import JsSkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
@@ -239,7 +240,7 @@ const router = createBrowserRouter([
           },
           {
             path: "jobdetails",
-            element: <h1>Job details</h1>,
+            element: <JobDetailsSub/>,
           },
           {
             path: "notes",

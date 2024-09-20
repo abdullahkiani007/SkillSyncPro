@@ -13,6 +13,16 @@ const JobsController = {
         }
     },
 
+    async getJob(req, res) {
+        const {id} = req.query;
+        try {
+            const job = await Job.getJob(id);
+            return res.status(200).json({ job });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
     async getAppliedJobs(req, res) {
         const { id } = req.user;
         try {

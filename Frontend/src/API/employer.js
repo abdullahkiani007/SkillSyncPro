@@ -22,6 +22,24 @@ class EmployerController {
     }
   }
 
+  async getJobDetails(token, jobId) {
+    try {
+      const response = await this.apiClient.get(`job?id=${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+
+    } catch (error) {
+      console.error("Error fetching job details:", error);
+      throw error;
+    }
+  }
+
   async getJobs(token) {
     try {
       const response = await this.apiClient.get("jobs", {
@@ -372,6 +390,27 @@ class EmployerController {
     }
     catch (error) {
       console.error("Error fetching candidates:", error);
+      throw error;
+    }
+  }
+
+  async getCandidatesByJobId(token, jobId){
+    try {
+      console.log("Sending /get/candidates/job request");
+      const response = await this.apiClient.get(`candidates/job?jobId=${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return {
+        data: response.data.candidates,
+        status: response.status,
+      };
+
+    }
+    catch (error) {
+      console.error("Error fetching candidates by job id:", error);
       throw error;
     }
   }

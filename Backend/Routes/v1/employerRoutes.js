@@ -4,6 +4,7 @@ const EmployerRouter = express.Router()
 const passport = require('passport');
 const employerController = require('../../Controllers/EmployerController');
 const companyController = require('../../Controllers/CompanyController');
+const JobsController = require('../../Controllers/JobsController');
 
 
 
@@ -11,6 +12,7 @@ const companyController = require('../../Controllers/CompanyController');
 
 EmployerRouter.get("/jobs",passport.authenticate('jwt',{session:false}),employerController.getJobs)
 EmployerRouter.post("/job",passport.authenticate('jwt',{session:false}),employerController.postJob)
+EmployerRouter.get("/job",passport.authenticate('jwt',{session:false}),JobsController.getJob)
 EmployerRouter.put("/archiveJob",passport.authenticate('jwt',{session:false}),employerController.archiveJob)
 EmployerRouter.delete("/job",passport.authenticate('jwt',{session:false}),employerController.deleteJob)
 
@@ -40,6 +42,8 @@ EmployerRouter.delete("/assessment",passport.authenticate('jwt',{session:false})
 // job application routes
 EmployerRouter.get("/applicationsStatus",passport.authenticate('jwt',{session:false}),employerController.getApplicationsGrouptedByStatus)
 EmployerRouter.get("/candidates",passport.authenticate('jwt',{session:false}),employerController.getAllCandidates)
+EmployerRouter.get("/candidates/job",passport.authenticate('jwt',{session:false}),employerController.getCandidatesByJobId)
+
 EmployerRouter.get("/application",
     passport.authenticate('jwt',{session:false}),
     employerController.getApplication)
