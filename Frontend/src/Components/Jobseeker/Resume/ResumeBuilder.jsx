@@ -10,7 +10,7 @@ const ResumeBuilder = () => {
   }
 
   return (
-    <div className=' py-10'>
+    <div className=''>
       <ResumeForm onSubmit={handleFormSubmit} />
       {formData && <Resume formData={formData} />}
     </div>
