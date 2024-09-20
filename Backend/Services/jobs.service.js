@@ -68,19 +68,32 @@ const jobService = {
     getAppliedJobs: async (id) => {
         try {
             const jobseekerId = await JobseekerService.getJobSeeker(id);
-            const applications = await ApplicationModel.find({jobSeeker:jobseekerId._id}).populate('job');
-
-            const jobs = applications.map((application)=>{
-                return application.job;
+            const applications = await ApplicationModel.find({ jobSeeker: jobseekerId._id })
+                .populate('job');
+    
+            const jobs = applications.map((application) => {
+                return {
+                    jobId: application.job._id,
+                    title: application.job.title,
+                    company: application.job.company,
+                    location: application.job.location,
+                    description: application.job.description,
+                    status: application.status,
+                    appliedAt: application.createdAt,
+                    updatedAt: application.updatedAt,
+                    resume: application.resume,
+                    videoIntroduction: application.videoIntroduction
+                };
             });
+    
             return {
-                status:200,
+                status: 200,
                 jobs
             };
         } catch (error) {
-            return { status:500, "message":"Internal server error" };
+            return { status: 500, message: "Internal server error" };
         }
-    },
+    },    
 
     // 
     archiveJobEmployer: async(jobId , userId)=>{

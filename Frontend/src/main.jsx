@@ -63,6 +63,7 @@ import AdminManageJobSeekers from "./Components/Admin/UsersManagement/ManageJobS
 import ManageCompanies from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 
 import TailorResume from "./Components/Components/TailorResume/TailorResume.jsx";
+import AppliedJobDetails from "./Components/Jobseeker/Jobs/AppliedJobDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -123,6 +124,10 @@ const router = createBrowserRouter([
       {
         path: "profile/edit",
         element: <ProfileForm />,
+      },
+      {
+        path:"job-details",
+        element:<AppliedJobDetails/>
       },
       {
         path: "jobs",
@@ -229,6 +234,10 @@ const router = createBrowserRouter([
             element: <Candidates />,
           },
           {
+            path:"candidate/:id",
+            element:<ManageCandidate/>
+          },
+          {
             path: "jobdetails",
             element: <h1>Job details</h1>,
           },
@@ -241,6 +250,10 @@ const router = createBrowserRouter([
             element: <h1>Reports</h1>,
           },
         ],
+      },
+      {
+        path:"dashboard/candidates/manage/:id",
+        element:<ManageCandidate/>
       },
       {
         path: "job/job-post",

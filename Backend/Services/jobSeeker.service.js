@@ -132,7 +132,8 @@ const jobseekerService = {
           await jobSeeker.save();
 
           // add jobseeker id to the job applications array
-          await job.applications.push(jobSeeker._id);
+          await job.applications.push(application._id);
+          await job.applicants.push(jobSeeker._id);
           await job.save();
 
 

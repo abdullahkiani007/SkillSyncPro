@@ -40,7 +40,10 @@ function Candidate() {
     <div className="bg-gray-100 min-h-screen px-8 py-12">
       {/* Header */}
       <div className="flex items-center mb-8 space-x-5">
-        <ArrowBack className="text-secondary-dark" fontSize="medium" />
+        {/* on click move to last route */}
+        <ArrowBack className="text-secondary-dark" fontSize="medium" 
+        onClick={() => window.history.back()}
+        />
         <h1 className="text-xl font-extrabold text-slate-800">
           {candidateData.application.job.title}
         </h1>

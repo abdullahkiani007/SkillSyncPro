@@ -254,51 +254,121 @@ const EmployerServices = {
         }
     },
 
-    getAllCandidates: async (userId) => {
-        try{
+       async getApplicationsGroupedByStatus(userId) {
+        try {
             const company = await CompanyService.getCompanybyUserId(userId);
-            
-            if (company.status === 200){
-                // get all jobs of the company
-                const companyJobs = await Job.find({company: company.data._id});
-
-                // CandidateName	jobTitle	Applied Date	address	Contact	Email ID	Stage
-                let candidates = [];
-                const applications = await Application.find({job: {$in: companyJobs.map(job => job._id)}}).populate('user').populate('job');
-
-
-                candidates = candidates.map(candidate => {
+    
+            if (company.status === 200) {
+                // Get all jobs of the company
+                const companyJobs = await Job.find({ company: company.data._id });
+    
+                // Fetch all applications for the company's jobs
+                const applications = await Application.find({ job: { $in: companyJobs.map(job => job._id) } });
+    
+                if (!applications || applications.length === 0) {
                     return {
-                        candidateName: candidate.user.firstName + " " + candidate.user.lastName,
-                        jobTitle: candidate.job.title,
-                        appliedDate: candidate.createdAt,
-                        address: candidate.user.address,
-                        contact: candidate.user.contact,
-                        email: candidate.user.email,
-                        stage: candidate.status
+                        status: 404,
+                        message: "No applications found"
+                    };
+                }
+    
+                // Group applications by status and count them
+                const groupedApplications = applications.reduce((acc, application) => {
+                    const status = application.status;
+                    if (!acc[status]) {
+                        acc[status] = 0;
                     }
-                })
-
+                    acc[status]++;
+                    return acc;
+                }, {});
+    
                 return {
                     status: 200,
-                    candidates
-                }
+                    groupedApplications
+                };
             }
-
+    
             return {
                 status: 404,
                 message: "Company not found"
-            }
-            
-        }catch(err){
+            };
+    
+        } catch (err) {
             console.log(err);
             return {
                 status: 500,
                 message: "Internal server error"
-            }
+            };
         }
-        
+    },
+
+    getJobApplications: async ( jobId) => {
+        try{
+            const applications = await Application.find({job:jobId}).populate('JobSeeker').populate('job');
+            if (applications){
+                return {
+                    status:200,
+                    applications
+                }
+            }
+            return {
+                status:404,
+                message:"No applications found"
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                status:500,
+                message:"Internal server error"
+            }
+
+        }
+    },
+
+    getAllCandidates: async (userId) => {
+        try {
+            const company = await CompanyService.getCompanybyUserId(userId);
+    
+            if (company.status === 200) {
+                // Get all jobs of the company
+                const companyJobs = await Job.find({ company: company.data._id });
+    
+                // Fetch all applications for the company's jobs
+                const applications = await Application.find({ job: { $in: companyJobs.map(job => job._id) } }).populate('user').populate('job');
+    
+                // CandidateName	jobTitle	Applied Date	address	Contact	Email ID	Stage
+                const candidates = applications.map(application => {
+                    return {
+                        candidateName: application.user.firstName + " " + application.user.lastName,
+                        jobTitle: application.job.title,
+                        appliedDate: application.createdAt,
+                        address: application.user.address,
+                        contact: application.user.contact,
+                        email: application.user.email,
+                        stage: application.status
+                    };
+                });
+    
+                return {
+                    status: 200,
+                    candidates
+                };
+            }
+    
+            return {
+                status: 404,
+                message: "Company not found"
+            };
+    
+        } catch (err) {
+            console.log(err);
+            return {
+                status: 500,
+                message: "Internal server error"
+            };
+        }
     }
+    
 
 
 }
