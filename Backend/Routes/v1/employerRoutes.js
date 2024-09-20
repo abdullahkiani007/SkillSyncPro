@@ -35,4 +35,8 @@ EmployerRouter.get("/assessment",passport.authenticate('jwt',{session:false}),em
 EmployerRouter.put("/assessment",passport.authenticate('jwt',{session:false}),employerController.editAssessment)
 EmployerRouter.delete("/assessment",passport.authenticate('jwt',{session:false}),employerController.deleteAssessment)
 
+
+
+// job application routes
+EmployerRouter.get("/applicationsStatus",passport.authenticate('jwt',{session:false}),employerController.getApplicationsGrouptedByStatus)
 module.exports = EmployerRouter;

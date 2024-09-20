@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { FiMessageCircle } from "react-icons/fi";
+import { HiArchive } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
-const CandidateCard = ({ name, appliedDate, avatar, status, actions }) => {
+const CandidateCard = ({ name, appliedDate, avatar, status}) => {
   return (
     <div className="bg-white rounded-md shadow-md p-4 flex flex-col justify-between">
       <div className="flex items-center">
@@ -18,15 +21,26 @@ const CandidateCard = ({ name, appliedDate, avatar, status, actions }) => {
             {status}
           </span>
         </div>
-        <div className="flex items-center ml-auto">
-          {actions.map((action, index) => (
-            <button
-              key={index}
-              className="bg-gray-200 hover:bg-gray-300 rounded-md px-3 py-1 mr-2"
-            >
-              {action}
-            </button>
-          ))}
+                <div className="flex items-center ml-auto">
+          <button
+            className="bg-blue-500 text-white rounded-md px-2 py-1 mr-2 relative group"
+          >
+            <FiMessageCircle />
+            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              Send Message
+            </span>
+          </button>
+          <button
+            className="bg-gray-200 text-gray-500 rounded-md px-2 py-1 relative group"
+            onClick={() => {
+              // Add your onClick logic here
+            }}
+          >
+            <HiArchive />
+            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              Archive
+            </span>
+          </button>
         </div>
       </div>
     </div>
@@ -35,83 +49,73 @@ const CandidateCard = ({ name, appliedDate, avatar, status, actions }) => {
 
 const Candidates = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const candidates_data = [
     {
       name: "Leonard Campbell",
       appliedDate: "Applied today",
       avatar: "https://picsum.photos/200/300",
       status: "New Applied",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Jordan Rogers",
       appliedDate: "Applied 4 days ago",
       avatar: "https://picsum.photos/200/300",
       status: "Screening",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Timothy Erickson",
       appliedDate: "Applied a week ago",
       avatar: "https://picsum.photos/200/300",
       status: "Interview",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Jose Abbott",
       appliedDate: "Applied yesterday",
       avatar: "https://picsum.photos/200/300",
       status: "New Applied",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Miguel Hill",
       appliedDate: "Applied 5 days ago",
       avatar: "https://picsum.photos/200/300",
       status: "Screening",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Vernon Ferguson",
       appliedDate: "Applied a week ago",
       avatar: "https://picsum.photos/200/300",
       status: "Interview",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Derrick Rowe",
       appliedDate: "Applied 2 days ago",
       avatar: "https://picsum.photos/200/300",
       status: "New Applied",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Marvin Wilkins",
       appliedDate: "Applied a week ago",
       avatar: "https://picsum.photos/200/300",
       status: "Screening",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "William Williamson",
       appliedDate: "Applied a week ago",
       avatar: "https://picsum.photos/200/300",
       status: "Interview",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Amelia Manda",
       appliedDate: "Applied 2 days ago",
       avatar: "https://picsum.photos/200/300",
       status: "New Applied",
-      actions: ["Conversation", "Archive", "Reject"],
     },
     {
       name: "Cory Stevenson",
       appliedDate: "Applied a week ago",
       avatar: "https://picsum.photos/200/300",
       status: "Screening",
-      actions: ["Conversation", "Archive", "Reject"],
     },
   ];
   const [candidates, setCandidates] = useState(candidates_data);
@@ -149,14 +153,21 @@ const Candidates = () => {
       </div>
       <div className="grid grid-cols-3 gap-4">
         {filteredCandidates.map((candidate, index) => (
-          <CandidateCard
-            key={index}
-            name={candidate.name}
-            appliedDate={candidate.appliedDate}
-            avatar={candidate.avatar}
-            status={candidate.status}
-            actions={candidate.actions}
-          />
+          <li key={index}
+            onClick={() => {
+              alert("You clicked on a candidate");
+              navigate(`../dashboard/candidates/manage/${index}`)}}
+  
+          >
+
+            <CandidateCard
+              key={index}
+              name={candidate.name}
+              appliedDate={candidate.appliedDate}
+              avatar={candidate.avatar}
+              status={candidate.status}
+            />
+          </li>
         ))}
       </div>
     </div>

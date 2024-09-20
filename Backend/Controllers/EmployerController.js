@@ -228,7 +228,32 @@ const EmployerController = {
           res.status(200).json({
             "message":"Job deleted"
           })
-    }
+    },
+
+
+    // Job Application related functions will be added here
+
+    async getApplicationsGrouptedByStatus(req,res,next){
+        console.log("GET emp/applications received");
+        const {_id} = req.user;
+
+        const response = await EmployerServices.getApplicationsGroupedByStatus(_id);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          console.log(response)
+          res.status(200).json({
+            "data":response.groupedApplications
+          })
+    },
+
 
 
 

@@ -43,6 +43,8 @@ function DropdownProfile({
   });
 
   const handleSignOut =()=>{
+    // clear every thing in local storage
+    localStorage.clear()
     dispatch(logout())
   }
 
