@@ -1,110 +1,101 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { disablePageScroll, enablePageScroll } from "scroll-lock";
-import { HashLink as Link } from "react-router-hash-link";
+import { useLocation, useNavigate } from 'react-router-dom'
+import { disablePageScroll, enablePageScroll } from 'scroll-lock'
+import { HashLink as Link } from 'react-router-hash-link'
 
-import { skillSync } from "../../assets";
-import { navigation } from "../../constants";
-import Button from "./Button";
-import MenuSvg from "../../assets/svg/MenuSvg";
-import { HamburgerMenu } from "./design/Header";
-import { useState, useEffect } from "react";
+import { skillSync } from '../../assets'
+import { navigation } from '../../constants'
+import Button from './Button'
+import MenuSvg from '../../assets/svg/MenuSvg'
+import { useState, useEffect } from 'react'
 
 const Header = () => {
-  const pathname = useLocation();
-  const navigate = useNavigate();
-  const [openNavigation, setOpenNavigation] = useState(false);
+  const pathname = useLocation()
+  const navigate = useNavigate()
+  const [openNavigation, setOpenNavigation] = useState(false)
 
+  // Function to toggle the navigation menu
   const toggleNavigation = () => {
     if (openNavigation) {
-      setOpenNavigation(false);
-      enablePageScroll();
+      setOpenNavigation(false)
+      enablePageScroll()
     } else {
-      setOpenNavigation(true);
-      disablePageScroll();
+      setOpenNavigation(true)
+      disablePageScroll()
     }
-  };
-  // Key combination listener for admin login
+  }
+
+  // Admin login shortcut with key combination (Ctrl + Shift + A)
   useEffect(() => {
     const handleKeyDown = (event) => {
-      // Check for Ctrl + Shift + A (or any other key combination you prefer)
-      if (event.ctrlKey && event.shiftKey && event.key === "A") {
-        navigate("/login/admin"); // Redirect to the admin login page
+      if (event.ctrlKey && event.shiftKey && event.key === 'A') {
+        navigate('/login/admin')
       }
-    };
+    }
 
-    // Add event listener
-    window.addEventListener("keydown", handleKeyDown);
-
-    // Clean up the event listener on component unmount
+    window.addEventListener('keydown', handleKeyDown)
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [navigate]);
-  const handleClick = () => {
-    if (!openNavigation) return;
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [navigate])
 
-    enablePageScroll();
-    setOpenNavigation(false);
-  };
+  // Close navigation when a link is clicked
+  const handleClick = () => {
+    if (!openNavigation) return
+
+    enablePageScroll()
+    setOpenNavigation(false)
+  }
 
   return (
-    <div
-      className={`fixed top-0 left-0 w-full z-50  border-b border-n-6 lg:bg-n-8/90 lg:backdrop-blur-sm ${
-        openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all border-b border-gray-200 lg:bg-opacity-90 lg:backdrop-blur-sm ${
+        // ? 'bg-gradient-to-r from-orange-500 via-red-500 to-purple-500' // Option 1: Vibrant Sunset
+        'bg-gradient-to-r from-blue-400 via-cyan-500 to-blue-700' // Option 2: Cool Blue
+        // :// ? "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500" // Option 3: Warm Glow
+        //   'bg-gradient-to-r from-orange-500 via-red-500 to-purple-500/90' // Adjust transparency for closed state
       }`}
     >
-      <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4">
-        <Link to={"/#hero"} className="block w-[12rem] xl:mr-8">
-          <img src={skillSync} width={190} height={40} alt="SkillSync" />
+      <div className='flex items-center justify-between px-5 py-4 lg:px-8'>
+        {/* Logo */}
+        <Link to={'/#hero'} className='block w-48 lg:w-[12rem]'>
+          <img src={skillSync} width={190} height={40} alt='SkillSync' />
         </Link>
 
+        {/* Navigation */}
         <nav
           className={`${
-            openNavigation ? "flex" : "hidden"
-          } fixed top-[5rem] left-0 right-0 bottom-0 bg-n-8 lg:static lg:flex lg:mx-auto lg:bg-transparent`}
+            openNavigation ? 'flex' : 'hidden'
+          } fixed inset-0 top-16  to-purple-500 lg:relative lg:flex lg:top-0 lg:bg-transparent lg:w-auto lg:mx-auto transition-all`}
         >
-          <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
+          <div className='flex flex-col lg:flex-row items-center justify-center w-full lg:w-auto'>
             {navigation.map((item) => (
               <Link
                 key={item.id}
                 to={item.url}
                 onClick={handleClick}
-                className={`block relative  text-2xl uppercase text-n-1 transition-colors hover:text-color-1 ${
-                  item.onlyMobile ? "lg:hidden" : ""
-                } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
-                  item.url === pathname.hash
-                    ? "z-2 lg:text-n-1"
-                    : "lg:text-n-1/50"
-                } lg:leading-5 lg:hover:text-n-1 xl:px-12`}
+                className={`block text-center text-lg lg:text-lg uppercase font-semibold text-white transition-colors duration-300 hover:text-yellow-500 px-4 py-6 lg:py-0 lg:px-6 ${
+                  item.onlyMobile ? 'lg:hidden' : ''
+                } ${
+                  item.url === pathname.hash ? 'text-yellow-500' : 'text-white'
+                }`}
               >
                 {item.title}
               </Link>
             ))}
           </div>
-
-          <HamburgerMenu />
         </nav>
 
-        {/* <a
-          href="#signup"
-          className="button hidden mr-8 text-n-1/50 transition-colors hover:text-n-1 lg:block"
-        >
-          New account
-        </a>
-        <Button className="hidden lg:flex" href="#login">
-          Sign in
-        </Button> */}
-
+        {/* Mobile Hamburger Menu */}
         <Button
-          className="ml-auto lg:hidden"
-          px="px-3"
+          className='ml-auto lg:hidden'
+          px='px-3'
           onClick={toggleNavigation}
         >
           <MenuSvg openNavigation={openNavigation} />
         </Button>
       </div>
-    </div>
-  );
-};
+    </header>
+  )
+}
 
-export default Header;
+export default Header
