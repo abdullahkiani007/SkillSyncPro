@@ -136,6 +136,8 @@ const jobseekerService = {
           await job.applicants.push(jobSeeker._id);
           await job.save();
 
+          application.status = "Under Review";
+          await application.save();
 
 
       
