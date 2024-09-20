@@ -6,39 +6,43 @@ import { skillSync } from '../../assets'
 import { navigation } from '../../constants'
 import Button from './Button'
 import MenuSvg from '../../assets/svg/MenuSvg'
+import { HamburgerMenu } from './design/Header'
 import { useState, useEffect } from 'react'
 
 const Header = () => {
-  const pathname = useLocation()
-  const navigate = useNavigate()
-  const [openNavigation, setOpenNavigation] = useState(false)
+  const pathname = useLocation() // Get current path (hash and route info)
+  const navigate = useNavigate() // For programmatic navigation
+  const [openNavigation, setOpenNavigation] = useState(false) // State for toggling the mobile navigation menu
 
-  // Function to toggle the navigation menu
+  // Toggle the mobile navigation and lock/unlock page scroll
   const toggleNavigation = () => {
     if (openNavigation) {
       setOpenNavigation(false)
-      enablePageScroll()
+      enablePageScroll() // Enable scrolling when the menu is closed
     } else {
       setOpenNavigation(true)
-      disablePageScroll()
+      disablePageScroll() // Disable scrolling when the menu is open
     }
   }
 
-  // Admin login shortcut with key combination (Ctrl + Shift + A)
+  // Key combination listener for admin login (Ctrl + Shift + A)
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
-        navigate('/login/admin')
+        navigate('/login/admin') // Redirect to the admin login page
       }
     }
 
+    // Add the keydown event listener
     window.addEventListener('keydown', handleKeyDown)
+
+    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [navigate])
 
-  // Close navigation when a link is clicked
+  // Handle click on navigation link (close menu and enable scroll)
   const handleClick = () => {
     if (!openNavigation) return
 
@@ -47,45 +51,46 @@ const Header = () => {
   }
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all border-b border-gray-200 lg:bg-opacity-90 lg:backdrop-blur-sm ${
-        // ? 'bg-gradient-to-r from-orange-500 via-red-500 to-purple-500' // Option 1: Vibrant Sunset
-        'bg-gradient-to-r from-blue-400 via-cyan-500 to-blue-700' // Option 2: Cool Blue
-        // :// ? "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500" // Option 3: Warm Glow
-        //   'bg-gradient-to-r from-orange-500 via-red-500 to-purple-500/90' // Adjust transparency for closed state
+    <div
+      className={`fixed top-0 left-0 w-full z-50 border-b border-n-6 lg:bg-n-8/90 lg:backdrop-blur-sm ${
+        openNavigation ? 'bg-n-8' : 'bg-n-8/90 backdrop-blur-sm'
       }`}
     >
-      <div className='flex items-center justify-between px-5 py-4 lg:px-8'>
+      <div className='flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4'>
         {/* Logo */}
-        <Link to={'/#hero'} className='block w-48 lg:w-[12rem]'>
+        <Link to={'/#hero'} className='block w-[12rem] xl:mr-8'>
           <img src={skillSync} width={190} height={40} alt='SkillSync' />
         </Link>
 
-        {/* Navigation */}
+        {/* Navigation Menu */}
         <nav
           className={`${
             openNavigation ? 'flex' : 'hidden'
-          } fixed inset-0 top-16  to-purple-500 lg:relative lg:flex lg:top-0 lg:bg-transparent lg:w-auto lg:mx-auto transition-all`}
+          } fixed top-[5rem] left-0 right-0 bottom-0 bg-n-8 lg:static lg:flex lg:mx-auto lg:bg-transparent`}
         >
-          <div className='flex flex-col lg:flex-row items-center justify-center w-full lg:w-auto'>
+          <div className='relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row'>
             {navigation.map((item) => (
               <Link
                 key={item.id}
                 to={item.url}
                 onClick={handleClick}
-                className={`block text-center text-lg lg:text-lg uppercase font-semibold text-white transition-colors duration-300 hover:text-yellow-500 px-4 py-6 lg:py-0 lg:px-6 ${
+                className={`block relative  text-2xl uppercase text-n-1 transition-colors hover:text-color-1 ${
                   item.onlyMobile ? 'lg:hidden' : ''
-                } ${
-                  item.url === pathname.hash ? 'text-yellow-500' : 'text-white'
-                }`}
+                } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
+                  item.url === pathname.hash
+                    ? 'z-2 lg:text-n-1'
+                    : 'lg:text-n-1/50'
+                } lg:leading-5 lg:hover:text-n-1 xl:px-12`}
               >
                 {item.title}
               </Link>
             ))}
           </div>
+
+          <HamburgerMenu />
         </nav>
 
-        {/* Mobile Hamburger Menu */}
+        {/* Button to Toggle Mobile Navigation */}
         <Button
           className='ml-auto lg:hidden'
           px='px-3'
@@ -94,7 +99,7 @@ const Header = () => {
           <MenuSvg openNavigation={openNavigation} />
         </Button>
       </div>
-    </header>
+    </div>
   )
 }
 
