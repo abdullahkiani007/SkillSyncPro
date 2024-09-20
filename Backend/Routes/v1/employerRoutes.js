@@ -8,6 +8,7 @@ const companyController = require('../../Controllers/CompanyController');
 
 
 
+
 EmployerRouter.get("/jobs",passport.authenticate('jwt',{session:false}),employerController.getJobs)
 EmployerRouter.post("/job",passport.authenticate('jwt',{session:false}),employerController.postJob)
 EmployerRouter.put("/archiveJob",passport.authenticate('jwt',{session:false}),employerController.archiveJob)
@@ -24,11 +25,26 @@ EmployerRouter.put("/company",passport.authenticate('jwt',{session:false}),compa
 EmployerRouter.get("/companies/names",companyController.getCompanyNames)
 EmployerRouter.post("/company/join",passport.authenticate('jwt',{session:false}),companyController.joinCompany)
 EmployerRouter.put("/company/employee/authorize",passport.authenticate('jwt',{session:false}),companyController.authorizeEmployee)
+EmployerRouter.delete("/company/employee/revoke",passport.authenticate('jwt',{session:false}),companyController.revokeEmployee)
+EmployerRouter.delete("/company/employee/JoinRequest",passport.authenticate('jwt',{session:false}),companyController.deleteJoinRequest)
+
 
 EmployerRouter.post("/assessment",passport.authenticate('jwt',{session:false}),employerController.createAssessment)
 EmployerRouter.get("/assessments",passport.authenticate('jwt',{session:false}),companyController.getAssessment)
 EmployerRouter.get("/assessment",passport.authenticate('jwt',{session:false}),employerController.getAssessmentById)
 EmployerRouter.put("/assessment",passport.authenticate('jwt',{session:false}),employerController.editAssessment)
 EmployerRouter.delete("/assessment",passport.authenticate('jwt',{session:false}),employerController.deleteAssessment)
+
+
+
+// job application routes
+EmployerRouter.get("/applicationsStatus",passport.authenticate('jwt',{session:false}),employerController.getApplicationsGrouptedByStatus)
+EmployerRouter.get("/candidates",passport.authenticate('jwt',{session:false}),employerController.getAllCandidates)
+EmployerRouter.get("/application",
+    passport.authenticate('jwt',{session:false}),
+    employerController.getApplication)
+// EmployerRouter.put("/application",passport.authenticate('jwt',{session:false}),employerController.updateApplication)
+EmployerRouter.put("/application/stage",passport.authenticate('jwt',{session:false}),employerController.updateApplicationStage)
+
 
 module.exports = EmployerRouter;

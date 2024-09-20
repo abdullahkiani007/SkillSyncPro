@@ -2,24 +2,25 @@ const Company = require('../Models/company.model');
 const Employer = require('../Models/employer.model');
 const CompanyAssessment = require("../Models/companyAssessment.model")
 const EmployerDTO = require('../DTO/employerDTO');
+const ApplicationModel = require('../Models/application.model')
 
 const companyService = {
     async register(company){
         console.log(company)
         let newCompany;
         try{
-            newCompany = new Company(company);
-            await newCompany.save();
             
             // Add company to employer
             const employer = await Employer.findOne({user:company.createdBy});
             if (!employer) {
-              console.log(`No employer found with id: ${company.createdBy}`);
-              return {
-                "status": 404,
-                "message": "Employer not found"
-              };
+                console.log(`No employer found with id: ${company.createdBy}`);
+                return {
+                    "status": 404,
+                    "message": "Employer not found"
+                };
             }
+            newCompany = new Company(company);
+            await newCompany.save();
             employer.company = newCompany._id;
             await employer.save();
 
@@ -246,23 +247,20 @@ const companyService = {
         }
     },
     async authorizeEmployee(employeeId, adminId, companyId) {
-        console.log("Authorize employer function called");
-        console.log("Employee id", employeeId);
+        console.log("Authorize employer function calledddddd");
+        console.log("Employee id", employeeId, "Admin id", adminId, "Company id", companyId);
         try {
             const company = await Company.findById(companyId);
             if (!company) {
+                console.log("Company not found");
                 return {
                     status: 404,
                     message: "Company not found"
                 };
             }
-    
+
             if (company.createdBy == adminId) {
-                // Remove employee from unauth list and add to employee
-                company.unAuthEmployees = company.unAuthEmployees.filter(id => id.toString() !== employeeId);
-                company.employees.push(employeeId);
-                await company.save();
-    
+                
                 // Add company field to employee collection
                 const employee = await Employer.findOne({ _id: employeeId });
                 if (!employee) {
@@ -271,9 +269,21 @@ const companyService = {
                         message: "Employee not found"
                     };
                 }
+                if (employee.company) {
+                    return {
+                        status: 403,
+                        message: "Employee has already joined a company"
+                    };
+                }
+    
+                // Remove employee from unauth list and add to employee
+                company.unAuthEmployees = company.unAuthEmployees.filter(id => id.toString() !== employeeId);
+                company.employees.push(employeeId);
+                await company.save();
     
                 employee.company = companyId;
                 await employee.save();
+                console.log("Employee authorized");
     
                 return {
                     status: 200,
@@ -298,6 +308,93 @@ const companyService = {
         }
     },
 
+    async revokeEmployee(employeeId, adminId, companyId) {
+        console.log("Revoke employer function called");
+        console.log("Employee id", employeeId);
+        try {
+            const company = await Company.findById(companyId);
+            if (!company) {
+                return {
+                    status: 404,
+                    message: "Company not found"
+                };
+            }
+    
+            if (company.createdBy == adminId) {
+                // Remove employee from auth list and add to unauth
+                company.employees = company.employees.filter(id => id.toString() !== employeeId);
+                company.unAuthEmployees.push(employeeId);
+                await company.save();
+    
+                // Remove company field from employee collection
+                const employee = await Employer.findOne({ _id: employeeId });
+                if (!employee) {
+                    return {
+                        status: 404,
+                        message: "Employee not found"
+                    };
+                }
+    
+                employee.company = null;
+                await employee.save();
+    
+                return {
+                    status: 200,
+                    message: "Employee Revoked"
+                };
+            } else {
+                console.log("Unauthorized action");
+                console.log("Company created by", company.createdBy);
+                console.log("Admin id", adminId);
+                return {
+                    status: 403,
+                    message: "Unauthorized action"
+                };
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                status: 500,
+                message: "Internal Server Error",
+                error: error.message
+            };
+        }
+    },
+
+    async deleteJoinRequest(companyId,adminId,employeeId){
+        try{
+            const company = await Company.findById(companyId);
+            if (!company){
+                return {
+                    "status":404,
+                    "message":"Company not found"
+                }
+            }
+            if (company.createdBy.toString() !== adminId){
+                return {
+                    "status":403,
+                    "message":"Unauthorized action"
+                }
+            }
+            company.unAuthEmployees = company.unAuthEmployees.filter((id)=>{
+                return id.toString() !== employeeId;
+            });
+            await company.save();
+            return {
+                "status":200,
+                "data":company
+            }
+        }catch(err){
+            console.log(err);
+            return {
+                "status":500,
+                "message":"Internal server error"
+            }
+        }
+    }
+
+    ,
+
     async getAssessment(companyId){
         try{
             const assessment = await CompanyAssessment.find({company:companyId});
@@ -321,6 +418,32 @@ const companyService = {
             }
         }
     },
+    async getApplicationSummaryForCompany(companyId){
+        try {
+          const company = await Company.findById(companyId).populate('jobs');
+          
+          if (!company) {
+            throw new Error('Company not found');
+          }
+      
+          const jobIds = company.jobs.map(job => job._id);
+      
+          const summary = await ApplicationModel.aggregate([
+            { $match: { job: { $in: jobIds } } },
+            {
+              $group: {
+                _id: "$status",
+                count: { $sum: 1 }
+              }
+            }
+          ]);
+      
+          return summary;
+        } catch (error) {
+          console.error("Error fetching application summary for company:", error);
+          throw error;
+        }
+      },      
 
     
 }

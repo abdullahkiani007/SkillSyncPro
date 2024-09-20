@@ -7,7 +7,7 @@ const ResumeUpload = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
-  const { goToNextStep } = useOutletContext();
+  const { goToNextStep, handleState } = useOutletContext();
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -39,6 +39,12 @@ const ResumeUpload = () => {
           "Content-Type": file.type,
         },
       });
+
+      // Update application state with resume URL
+      handleState(
+        "resume",
+        `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/Resume/${file.name}`
+      );
 
       alert("File uploaded successfully");
       goToNextStep();

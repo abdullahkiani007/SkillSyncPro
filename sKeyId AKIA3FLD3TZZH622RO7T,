@@ -1,0 +1,333 @@
+[33mcommit e27bd48ba70299de0dc5392acf6c97fd8be2e573[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Merge: d4ca913 64205b7
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun Aug 25 12:19:31 2024 +0500
+
+    fixed changes
+
+[33mcommit d4ca9139a4a4c01068ed26a654f2f6d2a0da10d1[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun Aug 25 01:57:06 2024 +0500
+
+    fixed joblisting
+
+[33mcommit 2449c75bcb80f438d857779a23543efb00eb6560[m
+Merge: 384c4c3 b0cf17b
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun Aug 25 01:45:15 2024 +0500
+
+    Merge branch 'main' of https://github.com/abdullahkiani007/SkillSyncPro
+
+[33mcommit 64205b742cf610ae6335f937af28ff7c6b8746fc[m
+Merge: d4b43ac c920beb
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Sun Aug 25 01:36:01 2024 +0500
+
+    Merge pull request #7 from abdullahkiani007/round2
+    
+    Merge pull request #6 from abdullahkiani007/main
+
+[33mcommit b0cf17b749b0a194263294a28d2b05eb967da465[m
+Merge: 10b3fa4 d1c6720
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Sun Aug 25 01:36:01 2024 +0500
+
+    Merge pull request #7 from abdullahkiani007/round2
+    
+    Merge pull request #6 from abdullahkiani007/main
+
+[33mcommit c920beb77a94f0e35af16e85ccc629e25ecf29ea[m
+Merge: ea82a32 d4b43ac
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Sun Aug 25 01:35:17 2024 +0500
+
+    Merge pull request #6 from abdullahkiani007/main
+    
+    merge main
+
+[33mcommit d1c6720d0243c126e959a823641c292d196bd336[m
+Merge: 7b80937 10b3fa4
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Sun Aug 25 01:35:17 2024 +0500
+
+    Merge pull request #6 from abdullahkiani007/main
+    
+    merge main
+
+[33mcommit 384c4c319478577154d062a78374541a40d0080d[m[33m ([m[1;32mround2[m[33m)[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun Aug 25 01:32:03 2024 +0500
+
+    modified gitignore
+
+[33mcommit 50b8cff2f33f7ec6ced6801eba55c81e4b214a78[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun Aug 25 01:27:44 2024 +0500
+
+    storing files in s3
+
+[33mcommit d4b43ac0893ca112d139b202f19e6bee453984ff[m
+Merge: 0406840 ea82a32
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Thu Aug 22 01:19:55 2024 +0500
+
+    Merge pull request #5 from abdullahkiani007/round2
+    
+    Round2
+
+[33mcommit 10b3fa4598dd59a2a706ce8b159439c7b8386f47[m
+Merge: 9166a97 7b80937
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Thu Aug 22 01:19:55 2024 +0500
+
+    Merge pull request #5 from abdullahkiani007/round2
+    
+    Round2
+
+[33mcommit ea82a32731ec3559ce4a9d9ad6aeb89c379731b7[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Thu Aug 22 01:18:15 2024 +0500
+
+    added more charts
+
+[33mcommit 7b80937c8b05767e4d1dda512adc2a7382fef0f9[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Thu Aug 22 01:18:15 2024 +0500
+
+    added more charts
+
+[33mcommit 2ee51ea648de0cdb1c5ab04a49035ec141a44f1b[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Wed Aug 21 22:38:11 2024 +0500
+
+    modified admin
+
+[33mcommit 7416e38095bb3bcbb4ebc7280712948d7fc7762c[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Wed Aug 21 22:38:11 2024 +0500
+
+    modified admin
+
+[33mcommit d163c55bb7d1f48ea18c66a2e69a48d89825b8eb[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Tue Aug 20 00:00:14 2024 +0500
+
+    refresh token
+
+[33mcommit 352be2ae74e17e45fabd9a228625a4a8efc55abf[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Tue Aug 20 00:00:14 2024 +0500
+
+    refresh token
+
+[33mcommit 0406840797dcd658e2a5a11037125ff1857f5f27[m
+Merge: ac26184 7204a2a
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Mon Aug 19 14:54:27 2024 +0500
+
+    Merge pull request #4 from abdullahkiani007/round2
+    
+    skill assessment
+
+[33mcommit 9166a97d285287ea221a29400ff811d03149f065[m
+Merge: 0d0a5d8 b49ac27
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Mon Aug 19 14:54:27 2024 +0500
+
+    Merge pull request #4 from abdullahkiani007/round2
+    
+    skill assessment
+
+[33mcommit 7204a2a339999d9632cbd9ce84265597063f3e10[m
+Merge: 6b477ee 8bba9bd
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Mon Aug 19 10:53:01 2024 +0100
+
+    Merge branch 'round2' of https://github.com/abdullahkiani007/SkillSyncPro into round2
+
+[33mcommit b49ac27a64c2b73e9a005aa16d9271b173dfb144[m
+Merge: 92f021e 5a85be5
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Mon Aug 19 10:53:01 2024 +0100
+
+    Merge branch 'round2' of https://github.com/abdullahkiani007/SkillSyncPro into round2
+
+[33mcommit 6b477ee5a1fc4d4964f5e79ac8850301cf2cb81e[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Mon Aug 19 10:49:59 2024 +0100
+
+    created skill assessment
+
+[33mcommit 92f021eefb4d309b84639bbc028951a93d7a56dc[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Mon Aug 19 10:49:59 2024 +0100
+
+    created skill assessment
+
+[33mcommit 8bba9bd52051a96f6b8c4087b8145256f1d6eb6c[m
+Merge: da84836 ac26184
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Mon Aug 19 14:49:03 2024 +0500
+
+    Merge pull request #3 from abdullahkiani007/main
+    
+    merge round 2 to main
+
+[33mcommit 5a85be503fb695e16d318e205258ec57f427f21c[m
+Merge: 09bda21 0d0a5d8
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Mon Aug 19 14:49:03 2024 +0500
+
+    Merge pull request #3 from abdullahkiani007/main
+    
+    merge round 2 to main
+
+[33mcommit da848369df291f5db465405356f3d60a9b0453b9[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Fri Aug 16 19:52:06 2024 +0100
+
+    added skill assessment
+
+[33mcommit 09bda212f803d94acc5310b8c637d6e2f7248aae[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Fri Aug 16 19:52:06 2024 +0100
+
+    added skill assessment
+
+[33mcommit 6fe75f88c235c15c6fd315a77583d863149d97c2[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Sun Aug 4 05:45:18 2024 +0100
+
+    modified job interface
+
+[33mcommit ac261842e0a77b3ca63c17227e31532a0838c166[m
+Merge: 1fd8b26 e665c8e
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Thu Aug 1 11:39:51 2024 +0500
+
+    Merge pull request #2 from abdullahkiani007/round2
+    
+    gui fix
+
+[33mcommit 0d0a5d833baf868b571797643b218cde35aaeac8[m
+Merge: 581c8d3 e665c8e
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Thu Aug 1 11:39:51 2024 +0500
+
+    Merge pull request #2 from abdullahkiani007/round2
+    
+    gui fix
+
+[33mcommit e665c8e6de789bee08430b4a74538e14f6be7429[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Thu Aug 1 07:36:43 2024 +0100
+
+    gui fix
+
+[33mcommit 1fd8b26e42330307b63cda3a0928f96de2e2de07[m
+Merge: dc5c616 306731b
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Thu Aug 1 11:34:29 2024 +0500
+
+    Merge pull request #1 from abdullahkiani007/round2
+    
+    merge to main
+
+[33mcommit 581c8d36f54c44f818f17caef0142c6419ded911[m
+Merge: dc5c616 306731b
+Author: Abdullah Kiani <79154971+abdullahkiani007@users.noreply.github.com>
+Date:   Thu Aug 1 11:34:29 2024 +0500
+
+    Merge pull request #1 from abdullahkiani007/round2
+    
+    merge to main
+
+[33mcommit 306731b2d5733d353ca32e5ccf3ea232b7566530[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Thu Jul 4 19:32:12 2024 +0100
+
+    job listing
+
+[33mcommit 4b1ee9b9bd72fdfa0b09cd6713dff4be9b0ffb4f[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun May 19 13:46:21 2024 +0500
+
+    job service
+
+[33mcommit a3e0a3282b7145059fb8d4181cdc378823534836[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun May 19 13:45:34 2024 +0500
+
+    apply job
+
+[33mcommit 0ffe242f89f7bee3fdb5559338930325b7ceff01[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sat May 18 20:37:11 2024 +0500
+
+    added routes
+
+[33mcommit 12c869c338a5efce37b67c1e2b171144cde859ab[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sat May 18 20:34:21 2024 +0500
+
+    implemented dashboards
+
+[33mcommit dc5c6163fceddf6f11639ee585e96d31a26cf840[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Mon May 13 23:48:17 2024 +0500
+
+    auth modified
+
+[33mcommit d5bc4d978aaa1efc93ad74a78ab03fe2782a819c[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun May 12 23:39:15 2024 +0500
+
+    connected backend
+
+[33mcommit 4fbaf94e2f4c4ac06c0c2998b3141a47d59f02d4[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun May 12 23:38:36 2024 +0500
+
+    implemented jwt
+
+[33mcommit 2c6de6c645018f8b46cb80d6b9c63404a13acaed[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun May 12 14:33:32 2024 +0500
+
+    setup redux
+
+[33mcommit 15d1e867bd0ef8a961e63475808d2e468922fd9d[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Sun May 12 14:33:06 2024 +0500
+
+    setup login signup
+
+[33mcommit f04950f2c158d4b04a23409a2ac19fc179b47205[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Tue May 7 23:23:53 2024 +0500
+
+    'favicon'
+
+[33mcommit 65dff595fbe497076111a39cb5e60c691358ee90[m
+Author: Abdul Wahab <abdul.wahab@codistan.org>
+Date:   Mon May 6 23:31:54 2024 +0500
+
+    benefits section
+
+[33mcommit c10deda7c64d7c3d65b5c3919b93fc25b71f8a23[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Sun May 5 09:45:22 2024 +0100
+
+    implemented backdrop
+
+[33mcommit e5bae4009a2a88f15786c146fdd6bdb52537da41[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Sat May 4 14:22:32 2024 +0100
+
+    landind page
+
+[33mcommit 7226752a4c531d666dd62402be4439d229195bc3[m
+Author: abdullahkiani007 <abdullahkiani931@gmail.com>
+Date:   Fri Apr 26 11:10:55 2024 +0100
+
+    first commit

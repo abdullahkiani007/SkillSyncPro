@@ -111,15 +111,12 @@ class JobseekerController {
   async getAssessmentById(id) {
     console.log("ID", id);
     try {
-      const response = await fetch(
-        `${this.jobSeekerUrl}/assessment.?id=${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${this.jobSeekerUrl}/assessment?id=${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       return {
         data: await response.json(),
@@ -137,6 +134,30 @@ class JobseekerController {
     console.log("Data", data);
     try {
       const response = await fetch(this.jobSeekerUrl + "/application", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify(data),
+      });
+
+      return {
+        data: await response.json(),
+        status: response.status,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        message: "Internal Server Error",
+      };
+    }
+  }
+
+  async submitApplication(data, token) {
+    try {
+      console.log("Data going to backend", data);
+      const response = await fetch(this.jobSeekerUrl + "/submitApplication", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

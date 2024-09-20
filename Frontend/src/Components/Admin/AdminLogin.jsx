@@ -1,79 +1,145 @@
-// AdminLoginPage.js
-import React, { useState } from 'react';
-import { Container, Paper, TextField, Button, Typography } from '@mui/material';
-import auth from '../../API';
-import { login } from '../../redux/userSlice';
-import { useDispatch, } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
+import React, { useState } from 'react'
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+} from '@mui/material'
+import auth from '../../API'
+import { login } from '../../redux/userSlice'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const AdminLoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const handleLogin =async (e) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
-    try{
-    const response = await auth.login({ email, password, role: 'admin' });
-    console.log(response);
-    if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        console.log(response.data);
-
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    setError('')
+    try {
+      const response = await auth.login({ email, password, role: 'admin' })
+      if (response.status === 200) {
+        localStorage.setItem('token', response.data.token)
         dispatch(
           login({
             _id: response.data.user.id,
             firstName: response.data.user.firstName,
-            lastName:response.data.user.lastName,
+            lastName: response.data.user.lastName,
             email: response.data.user.email,
             auth: true,
             role: response.data.user.role,
           })
-        );
-        navigate(`/admin/dashboard`);
+        )
+        navigate(`/admin/dashboard`)
       }
-    }catch(error){
-        console.log(error);
-        }
-
-  };
+    } catch (error) {
+      setError('Invalid email or password. Please try again.')
+    }
+  }
 
   return (
-    <Container maxWidth="xs" className="mt-48 ">
-      <Paper elevation={3} className="p-4">
-        <Typography variant="h5" component="h2" className="mb-20 text-center">
+    <Container
+      maxWidth='xs'
+      style={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+      }}
+    >
+      <Paper
+        elevation={6}
+        style={{
+          padding: '40px 30px',
+          borderRadius: '12px',
+          boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(10px)',
+        }}
+      >
+        <Typography
+          variant='h4'
+          component='h2'
+          style={{
+            fontWeight: 'bold',
+            marginBottom: '30px',
+            color: '#FF5722',
+            textAlign: 'center',
+          }}
+        >
           Admin Login
         </Typography>
-        <form onSubmit={handleLogin} className='pt-10'>
+
+        {error && (
+          <Alert severity='error' style={{ marginBottom: '20px' }}>
+            {error}
+          </Alert>
+        )}
+
+        <form onSubmit={handleLogin}>
           <TextField
-            label="Email"
-            variant="outlined"
+            label='Email'
+            variant='outlined'
             fullWidth
-            className="mb-4"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={{
+              marginBottom: '25px',
+              borderRadius: '8px',
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+            }}
+            InputProps={{ style: { borderRadius: '8px' } }}
           />
           <TextField
-            label="Password"
-            variant="outlined"
+            label='Password'
+            variant='outlined'
             fullWidth
-            type="password"
-            className="mb-4"
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            style={{
+              marginBottom: '35px',
+              borderRadius: '8px',
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
+            }}
+            InputProps={{ style: { borderRadius: '8px' } }}
           />
-          <Button variant="contained" color="primary" type="submit" fullWidth>
+          <Button
+            variant='contained'
+            type='submit'
+            fullWidth
+            style={{
+              backgroundColor: '#FF5722',
+              color: '#fff',
+              padding: '12px 0',
+              fontWeight: 'bold',
+              fontSize: '16px',
+              borderRadius: '8px',
+              transition: 'background-color 0.3s',
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = '#E64A19')
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = '#FF5722')
+            }
+          >
             Login
           </Button>
         </form>
       </Paper>
     </Container>
-  );
-};
+  )
+}
 
-export default AdminLoginPage;
+export default AdminLoginPage

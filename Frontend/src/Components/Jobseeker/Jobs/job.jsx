@@ -57,7 +57,7 @@ const Job = () => {
       console.log("id -->", id);
       const jobItem = jobs.filter((job) => job._id.trim() === id.trim());
       setJob(jobItem[0]);
-      console.log("job state", jobItem[0]);
+      console.log("job state", job);
       setLoading(false);
     }
   }, []);
@@ -179,7 +179,7 @@ const Job = () => {
               <h2 className="text-gray-500 text-sm">Apply Before</h2>
               <p className="mt-0.5 mb-5">{job.deadLine}</p>
               <h2 className="text-gray-500 text-sm">Posted on</h2>
-              <p className="mt-0.5 mb-5">{job.createdAt.toString()}</p>
+              <p className="mt-0.5 mb-5">{jobDetails.postedOn}</p>
               <h2 className="text-gray-500 text-sm">Job type</h2>
               <p className="mt-0.5 mb-5">{job.employmentType}</p>
               <h2 className="text-gray-500 text-sm">Experience level</h2>

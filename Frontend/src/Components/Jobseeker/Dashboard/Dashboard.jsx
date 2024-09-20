@@ -1,115 +1,111 @@
-import React , {useState, useEffect}from 'react';
-import userController from '../../../API/index';
-import { useSelector } from 'react-redux';''
+import React, { useState, useEffect } from 'react'
+import userController from '../../../API/index'
+import { useSelector } from 'react-redux'
+import JobManagementCard from './JobManagementCard'
+import ProfileToolsCard from './ProfileToolsCard'
+import NotificationsPanel from './NotificationsPanel'
+import JobSuggestions from './JobSuggestions'
+import SkillsEndorsement from './SkillsEndorsement'
+import JobApplicationAnalytics from './JobApplicationAnalytics'
+import { ClipLoader } from 'react-spinners'
+
 const Dashboard = () => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user)
+  const [userData, setUserData] = useState(user)
+  const [loading, setLoading] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
 
-  const [userData, setUserData] = useState(user);
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
-
-    // Fetch user data
     const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-
+      const token = localStorage.getItem('token')
       try {
-        const response = await userController.getProfile(token);
-        if (response.status ===200){
-          // setUserData(response.data.response.user);
-          console.log(response.data.response);
+        const response = await userController.getProfile(token)
+        if (response.status === 200) {
+          setUserData(response.data.response.user)
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data:', error)
       }
-    };
-    fetchUserData();
+      setLoading(false)
+    }
+    fetchUserData()
 
-  },[]);
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <div className="h-screen w-full p-10 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-10">Dashboard</h1>
-      
-      {/* Profile Overview */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Profile Overview</h2>
-        <div className="flex flex-row">
-          <img src="https://via.placeholder.com/100" alt="Profile" className="w-24 h-24 rounded-full mr-5" />
-          <div>
-            <p><strong>Name:</strong> {userData.firstName ||"-"} {userData.lastName ||"-"}</p>
-            <p><strong>Email:</strong> {userData.email || "-"}</p>
-            <p><strong>Phone:</strong> {userData.phone || "-"}</p>
+    <div
+      className='min-h-screen w-full p-8'
+      style={{
+        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+      }}
+    >
+      <h1 className='text-4xl font-bold text-black font-poppins mb-12'>
+        {userData && userData.firstName
+          ? `Welcome Back! ${userData.firstName}`
+          : 'Welcome to Your Dashboard'}
+      </h1>
+
+      {loading ? (
+        <div className='flex justify-center items-center h-full'>
+          <ClipLoader size={60} color={'#000'} loading={loading} />
+        </div>
+      ) : (
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+          {/* Left Side: Job Management and Chart */}
+          <div
+            className={`lg:col-span-2 transform transition-transform duration-700 ${
+              isLoaded
+                ? 'translate-x-0 opacity-100'
+                : '-translate-x-full opacity-0'
+            }`}
+          >
+            <JobSuggestions
+              className={`transform transition-all duration-700 ${
+                isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+              }`}
+            />
+            <div className='text-white p-6 rounded-xl mb-8'>
+              <JobManagementCard />
+            </div>
+
+            <JobApplicationAnalytics
+              className={`transform transition-all duration-700 ${
+                isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+              }`}
+            />
+          </div>
+
+          {/* Right Side: Notifications and Profile Tools */}
+          <div
+            className={`lg:col-span-1 transform transition-transform duration-700 ${
+              isLoaded
+                ? 'translate-x-0 opacity-100'
+                : 'translate-x-full opacity-0'
+            }`}
+          >
+            <div className='bg-white text-black rounded-xl shadow-lg mb-8 border border-black w-full'>
+              <NotificationsPanel />
+            </div>
+
+            <div className='bg-white text-black rounded-xl shadow-lg border border-black mb-8'>
+              <ProfileToolsCard />
+            </div>
+
+            <SkillsEndorsement
+              className={`transform transition-all duration-700 ${
+                isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+              }`}
+            />
           </div>
         </div>
-      </div>
-
-      {/* Job Search */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Job Search</h2>
-        <input
-          type="text"
-          placeholder="Search for jobs..."
-          className="w-full p-2 border border-gray-300 rounded-lg"
-        />
-      </div>
-
-      {/* Saved Jobs */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Saved Jobs</h2>
-        <ul>
-          <li className="mb-2">Software Engineer at Google</li>
-          <li className="mb-2">Frontend Developer at Facebook</li>
-        </ul>
-      </div>
-
-      {/* Application Status */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Application Status</h2>
-        <ul>
-          <li className="mb-2">Google - Pending</li>
-          <li className="mb-2">Facebook - Interview Scheduled</li>
-        </ul>
-      </div>
-
-      {/* Resume Management */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Resume Management</h2>
-        <button className="p-2 bg-blue-500 text-white rounded-lg">Upload Resume</button>
-      </div>
-
-      {/* Skills Assessment */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Skills Assessment</h2>
-        <button className="p-2 bg-green-500 text-white rounded-lg">Take Assessment</button>
-      </div>
-
-      {/* Networking */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Networking</h2>
-        <p>Connect with other professionals in your industry.</p>
-      </div>
-
-      {/* Career Resources */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Career Resources</h2>
-        <ul>
-          <li className="mb-2">How to Write a Great Resume</li>
-          <li className="mb-2">Top 10 Interview Tips</li>
-        </ul>
-      </div>
-
-      {/* Notifications */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Notifications</h2>
-        <p>No new notifications.</p>
-      </div>
-
-      {/* Settings */}
-      <div className="bg-white p-5 rounded-lg shadow mb-10">
-        <h2 className="text-xl font-semibold mb-3">Settings</h2>
-        <button className="p-2 bg-gray-500 text-white rounded-lg">Account Settings</button>
-      </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

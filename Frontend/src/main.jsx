@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import { useContext, createContext } from "react";
+import { SocketProvider } from "./Context/SocketContext";
 import Login from "./Components/Login/index.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -18,6 +20,8 @@ import AppliedJobs from "./Components/Jobseeker/Jobs/appliedJobs.jsx";
 import ResumeUpload from "./Components/Jobseeker/Jobs/JobApplication/ResumeUpload.jsx";
 import Job from "./Components/Jobseeker/Jobs/job.jsx";
 import Loader from "./Components/Loader/Loader.jsx";
+
+import MessageComponent from "./Components/Components/Message.jsx";
 
 // Employer Routes
 import EmployerRoute from "./Components/Employer/EmployerRoute.jsx";
@@ -38,6 +42,8 @@ import EmpSkillAssessment from "./Components/Employer/SkillAssessments/SkillAsse
 import EmpManageCompany from "./Components/Employer/Dashboard/ManageCompany.jsx";
 import JsSkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
 import ManageEmployees from "./Components/Employer/Dashboard/ManageEmployees.jsx";
+import EmpCandidatesList from "./Components/Employer/Dashboard/ManageCandidates/CandidatesList.jsx";
+import ManageCandidate from "./Components/Employer/Dashboard/ManageCandidates/ManageCandidate/Candidate.jsx";
 
 import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
 import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
@@ -55,6 +61,10 @@ import "@mantine/core/styles.css";
 import AdminManageEmployees from "./Components/Admin/UsersManagement/ManageEmployees.jsx";
 import AdminManageJobSeekers from "./Components/Admin/UsersManagement/ManageJobSeekers.jsx";
 import ManageCompanies from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
+
+import TailorResume from "./Components/Components/TailorResume/TailorResume.jsx";
+import AppliedJobDetails from "./Components/Jobseeker/Jobs/AppliedJobDetails.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -64,6 +74,11 @@ const router = createBrowserRouter([
         path: "/",
         element: <App />,
       },
+      {
+        path:"/tailor-resume",
+        element:<TailorResume/>
+      }
+      ,
       {
         path: "/login/jobseeker",
         element: <Login role={"jobseeker"} />,
@@ -109,6 +124,10 @@ const router = createBrowserRouter([
       {
         path: "profile/edit",
         element: <ProfileForm />,
+      },
+      {
+        path:"job-details",
+        element:<AppliedJobDetails/>
       },
       {
         path: "jobs",
@@ -167,6 +186,10 @@ const router = createBrowserRouter([
         element: <EmpProfileForm />,
       },
       {
+        path: "messages/",
+        element: <MessageComponent />,
+      },
+      {
         path: "dashboard",
         element: <EmpDashboard />,
       },
@@ -181,6 +204,14 @@ const router = createBrowserRouter([
       {
         path: "dashboard/company/manage",
         element: <EmpManageCompany />,
+      },
+      {
+        path: "dashboard/candidates/manage",
+        element: <EmpCandidatesList />,
+      },
+      {
+        path: "dashboard/candidates/manage/:id",
+        element: <ManageCandidate />,
       },
       {
         path: "company-profile",
@@ -203,6 +234,10 @@ const router = createBrowserRouter([
             element: <Candidates />,
           },
           {
+            path:"candidate/:id",
+            element:<ManageCandidate/>
+          },
+          {
             path: "jobdetails",
             element: <h1>Job details</h1>,
           },
@@ -215,6 +250,10 @@ const router = createBrowserRouter([
             element: <h1>Reports</h1>,
           },
         ],
+      },
+      {
+        path:"dashboard/candidates/manage/:id",
+        element:<ManageCandidate/>
       },
       {
         path: "job/job-post",
@@ -271,7 +310,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <MantineProvider>
-          <RouterProvider router={router} />
+          <SocketProvider>
+            <RouterProvider router={router} />
+          </SocketProvider>
         </MantineProvider>
       </PersistGate>
     </Provider>

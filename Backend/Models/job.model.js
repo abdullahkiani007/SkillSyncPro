@@ -54,6 +54,22 @@ const jobSchema = new mongoose.Schema({
       ref: 'JobSeeker',
     }
   ],
+  hired: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'JobSeeker',
+  },
+  rejected: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'JobSeeker',
+    }
+  ],
+  applications: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Application',
+    }
+  ],
 }, { timestamps: true });
 
 const JobModel = mongoose.models.Job || mongoose.model('Job', jobSchema);

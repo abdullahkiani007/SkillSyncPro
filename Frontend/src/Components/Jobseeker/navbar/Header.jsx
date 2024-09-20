@@ -18,7 +18,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
           <div className="flex">
             {/* Hamburger button */}
             <button
-              className="text-slate-500 hover:text-slate-600 lg:hidden"
+              className="text-slate-500 hover:text-slate-600 "
               aria-controls="sidebar"
               aria-expanded={sidebarOpen}
               onClick={(e) => {

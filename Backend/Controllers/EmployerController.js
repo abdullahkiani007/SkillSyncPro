@@ -228,7 +228,96 @@ const EmployerController = {
           res.status(200).json({
             "message":"Job deleted"
           })
-    }
+    },
+
+
+    // Job Application related functions will be added here
+
+    async getApplicationsGrouptedByStatus(req,res,next){
+        console.log("GET emp/applications received");
+        const {_id} = req.user;
+
+        const response = await EmployerServices.getApplicationsGroupedByStatus(_id);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          console.log(response)
+          res.status(200).json({
+            "data":response.groupedApplications
+          })
+    },
+
+    async getAllCandidates(req,res,next){
+        console.log("GET emp/candidates received");
+        const {_id} = req.user;
+
+        const response = await EmployerServices.getAllCandidates(_id);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          res.status(200).json({
+            "candidates":response.candidates
+          })
+    },
+
+    async getApplication(req,res,next){
+        console.log("GET emp/application received");
+        const applicationId = req.query.id;
+        const {_id} = req.user;
+
+        const response = await EmployerServices.getApplication(applicationId);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          res.status(200).json({
+            "data":response.application
+          })
+    },
+
+    async updateApplicationStage(req,res,next){
+        console.log("PUT emp/application received");
+        const applicationId = req.query.id;
+        const {_id} = req.user;
+        const {stage}= req.body;
+
+        const response = await EmployerServices.updateApplicationStage(applicationId,stage);
+        if(response.status === 500){
+            return res.status(500).json({
+              "message" : response.message
+            })
+          }
+          else if (response.status == 404){
+            return res.status(404).json({
+                "message":response.message
+            })
+          }
+          res.status(200).json({
+            "data":response.application
+          })
+    },
+
+
 
 
 

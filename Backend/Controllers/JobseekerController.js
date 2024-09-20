@@ -50,6 +50,28 @@ const JobseekerController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async submitJobApplication(req, res, next) {
+        console.log("Submit job application" , req.body);
+        try {
+            const userId = req.user._id;
+            const data = req.body;
+    
+            const response = await jobseekerService.submitJobApplication(userId, data);
+    
+            if (response.status === 200) {
+                return res.status(200).json({
+                    application: response.application
+                });
+            }
+    
+            return res.status(response.status).json({
+                message: response.message
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

@@ -21,6 +21,20 @@ const candidateAssessmentSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    passed:{
+      type: Boolean,
+      required: true,
+    },
+    timeSpent: {
+      type: Number, // Time spent in milliseconds
+    },
+    keystrokes: {
+      type: Number, // Number of keystrokes made by the candidate,
+    },
+    error: {
+      type: String, // Error message
+    },
+
   }],
   score: {
     type: Number,
@@ -30,4 +44,6 @@ const candidateAssessmentSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-module.exports = mongoose.model('CandidateAssessment', candidateAssessmentSchema);
+const CandidateAssessment = mongoose.model('CandidateAssessment', candidateAssessmentSchema);
+
+module.exports = CandidateAssessment;

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Outlet, useParams, useNavigate } from "react-router-dom";
 import jobSeeker from "../../../../API/jobseeker";
 import { useDispatch, useSelector } from "react-redux";
+
+
 const ApplyPage = () => {
   const { id } = useParams();
   const user = useSelector((state) => state.user);
@@ -10,6 +12,17 @@ const ApplyPage = () => {
 
   // Step tracking state
   const [step, setStep] = useState(1);
+
+  const handleState = (fieldName, value) => {
+    console.log(fieldName, value);
+    setApplication((prev) => {
+      return {
+        ...prev,
+        [fieldName]: value,
+      };
+    });
+
+  };
 
   useEffect(() => {
     console.log("Fetching assessments");
@@ -52,6 +65,30 @@ const ApplyPage = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    console.log("Application", application);
+    const token = localStorage.getItem("accessToken");
+    try{
+      const response = await jobSeeker.submitApplication(application, token);
+      console.log(response);
+      if (response.status === 200) {
+        navigate("/jobseeker/dashboard");
+      } else {
+        console.log("Failed to submit application. Please try again.");
+      }
+    }catch(err){
+      console.log(err);
+    }
+  };
+
+  useEffect(()=>{
+    console.log("Application in useEffect", application);
+    if(application.skillAssessment){
+      handleSubmit();
+    }
+
+  },[application])
+
   // Define active and disabled styles
   const activeClassName =
     "text-blue-500 border-b-2 border-blue-500 cursor-pointer";
@@ -72,7 +109,7 @@ const ApplyPage = () => {
           className={({ isActive }) =>
             isActive ? activeClassName : defaultClassName
           }
-          style={step >= 1 ? {} : { pointerEvents: "none" }}
+          style={{ pointerEvents: "none" }}
         >
           Resume
         </NavLink>
@@ -81,7 +118,7 @@ const ApplyPage = () => {
           className={({ isActive }) =>
             isActive ? activeClassName : defaultClassName
           }
-          style={step >= 2 ? {} : { pointerEvents: "none" }}
+          style={{ pointerEvents: "none" }}
         >
           Interview
         </NavLink>
@@ -90,14 +127,14 @@ const ApplyPage = () => {
           className={({ isActive }) =>
             isActive ? activeClassName : defaultClassName
           }
-          style={step >= 3 ? {} : { pointerEvents: "none" }}
+          style={{ pointerEvents: "none" }}
         >
           Skills
         </NavLink>
       </div>
 
       {/* Render the current step's content */}
-      <Outlet context={{ step, goToNextStep, setApplication, application }} />
+      <Outlet context={{ step, goToNextStep, handleState}} />
     </div>
   );
 };

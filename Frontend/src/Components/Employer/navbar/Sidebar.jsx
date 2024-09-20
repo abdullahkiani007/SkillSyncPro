@@ -70,7 +70,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, isAdmin }) {
       <div
         id="sidebar"
         ref={sidebar}
-        className={`sticky flex flex-col z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-screen overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
+        className={`sticky flex flex-col z-40 left-0 top-0  h-screen overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-64"
         }`}
         style={{
@@ -82,7 +82,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, isAdmin }) {
           {/* Close button */}
           <button
             ref={trigger}
-            className="lg:hidden text-slate-500 hover:text-slate-400"
+            className=" text-slate-500 hover:text-slate-400"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-controls="sidebar"
             aria-expanded={sidebarOpen}
@@ -262,6 +262,22 @@ function Sidebar({ sidebarOpen, setSidebarOpen, isAdmin }) {
                               </NavLink>
                             </li>
                           )}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="./dashboard/candidates/manage"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-indigo-500"
+                                  : "text-slate-400 hover:text-slate-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Candidates
+                              </span>
+                            </NavLink>
+                          </li>
                         </ul>
                       </div>
                     </React.Fragment>
@@ -590,7 +606,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, isAdmin }) {
               >
                 <NavLink
                   end
-                  to="messages"
+                  to="./messages"
                   className={`block text-slate-200 truncate transition duration-150 ${
                     pathname.includes("messages")
                       ? "hover:text-slate-200"
