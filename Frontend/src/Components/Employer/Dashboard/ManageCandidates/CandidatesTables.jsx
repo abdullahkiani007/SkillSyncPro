@@ -59,7 +59,7 @@ function CandidateTable({ candidates }) {
                   Candidate
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
-                  Department
+                  Job Title
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
                   Applied Date
@@ -90,15 +90,15 @@ function CandidateTable({ candidates }) {
                   key={index}
                   className="hover:bg-blue-50"
                   onClick={() =>
-                    navigate(`/employer/dashboard/candidates/manage/${index}`)
+                    navigate(`/employer/dashboard/candidates/manage/${candidate._id}`)
                   }
                 >
-                  <TableCell>{candidate.candidate}</TableCell>
-                  <TableCell>{candidate.department}</TableCell>
-                  <TableCell>{candidate.appliedDate}</TableCell>
+                  <TableCell>{candidate.candidateName}</TableCell>
+                  <TableCell>{candidate.jobTitle}</TableCell>
+                  <TableCell>{new Date(candidate.appliedDate).toLocaleDateString()}</TableCell>
                   <TableCell>{candidate.location}</TableCell>
                   <TableCell>{candidate.contact}</TableCell>
-                  <TableCell>{candidate.emailId}</TableCell>
+                  <TableCell>{candidate.email}</TableCell>
                   <TableCell>
                     <p
                       className={`border w-fit px-2 py-1 rounded ${

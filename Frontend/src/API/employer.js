@@ -332,6 +332,92 @@ class EmployerController {
       console.log("Error deleting job ", error);
     }
   }
+
+  async getApplicationsGroupedByStatus(token){
+    try {
+      console.log("Sending /get/applications/grouped request");
+      const response = await this.apiClient.get("applicationsStatus", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return {
+        data: response.data.data,
+        status: response.status,
+      };
+
+    }
+    catch (error) {
+      console.error("Error fetching applications grouped by status:", error);
+      throw error;
+    }
+
+  }
+
+  async getAllCandidates(token){
+    try {
+      console.log("Sending /get/candidates request");
+      const response = await this.apiClient.get("candidates", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return {
+        data: response.data.candidates,
+        status: response.status,
+      };
+
+    }
+    catch (error) {
+      console.error("Error fetching candidates:", error);
+      throw error;
+    }
+  }
+
+  async getApplication(applicationId, token) {
+    try {
+      const response = await this.apiClient.get(`application?id=${applicationId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching application:", error);
+      throw error;
+    }
+  }
+
+  async updateApplicationStage(applicationId, newStage, token) {
+    console.log("Updating application stage to:", newStage);
+    console.log("Application ID:", applicationId);
+    console.log("Token:", token);
+    
+    try {
+      const response = await this.apiClient.put(
+        `application/stage?id=${applicationId}`,
+        { stage: newStage },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error updating application stage:", error);
+      throw error;
+    }
+  }
+
 }
 
 export default new EmployerController();
