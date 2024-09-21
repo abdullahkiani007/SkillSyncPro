@@ -24,6 +24,20 @@ const jobService = {
         }
     },
 
+    getJobDescription : async(id)=>{
+        try{
+            const job = await JobModel.findById(id);
+            return {
+                "description": job.description,
+                "requirements": job.requirements
+            };
+
+        }catch(err){
+            return { status:500, "message":"Internal server error" };
+
+        }
+    },
+
     getJob: async (id) => {
         try {
             const job = await JobModel.findById(id).populate('company');

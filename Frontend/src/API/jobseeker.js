@@ -1,3 +1,5 @@
+import { TrySharp } from "@mui/icons-material";
+
 class JobseekerController {
   constructor() {
     (this.jobUrl = "http://localhost:3000/api/v1/jobs"),
@@ -17,6 +19,25 @@ class JobseekerController {
       };
     } catch (error) {
       return { status: 500, message: "Internal server error" };
+    }
+  }
+
+  async getJobDescription(id){
+    try{
+      const response = await fetch(`${this.jobUrl}/description?id=${id}` , {
+        method: "GET",
+        headers:{
+          "Content-Type": "application/json"
+        }
+      });
+
+      return {
+        data : await response.json(),
+        status: response.status
+      }
+
+    }catch(err){
+      return { status: 500 , message : "Internal server error"}
     }
   }
 
@@ -128,6 +149,30 @@ class JobseekerController {
         message: "Internal Server Error",
       };
     }
+  }
+
+  async startApplication(jobId, token) {
+    try {
+      const response = await fetch(this.jobSeekerUrl + "/startApplication", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({ jobId }),
+      });
+
+      return {
+        data: await response.json(),
+        status: response.status,
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        message: "Internal Server Error",
+      };
+    }
+
   }
 
   async submitApplication(data, token) {

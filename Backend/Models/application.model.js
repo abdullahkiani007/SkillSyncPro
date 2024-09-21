@@ -18,11 +18,11 @@ const applicationSchema = new mongoose.Schema({
   },
   resume: {
     type: String,
-    required: true,
+    default: '',
   },
   videoIntroduction:{
     type:String,
-    require:true
+    default: ''
   },
   interview: {
     type: mongoose.Schema.Types.ObjectId,
@@ -33,6 +33,8 @@ const applicationSchema = new mongoose.Schema({
     ref: 'CandidateAssessment',
   },
 }, { timestamps: true });
+
+applicationSchema.index({ jobSeeker: 1, job: 1 }, { unique: true });
 
 const ApplicationModel = mongoose.models.Application || mongoose.model('Application', applicationSchema)
 module.exports = ApplicationModel;

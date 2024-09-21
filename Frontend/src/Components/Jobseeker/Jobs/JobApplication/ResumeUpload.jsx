@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import UserController from "../../../../API/index";
+import resume from "../../../../API/resume";
 import { useOutletContext } from "react-router-dom";
 
 const ResumeUpload = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
-  const { goToNextStep, handleState } = useOutletContext();
+  const { goToNextStep, handleState, jobDescription } = useOutletContext();
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -41,13 +42,30 @@ const ResumeUpload = () => {
       });
 
       // Update application state with resume URL
+
+      alert("File uploaded successfully");
+      goToNextStep();
+
+      console.log("After go to next step in resume")
+      const formData = new FormData();
+      formData.append("jobDescription", jobDescription);
+      formData.append("resume", file);
       handleState(
         "resume",
         `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/Resume/${file.name}`
       );
 
-      alert("File uploaded successfully");
-      goToNextStep();
+      try {
+        const similarityScore = await resume.checkSimilarity(formData);
+        if (similarityScore) {
+          handleState("similarityScore", similarityScore.data.similarity);
+        }
+
+        console.log("Similarity Score : ", similarityScore);
+        console.log("Job description ", jobDescription)
+      } catch (err) {
+        console.log(err);
+      }
     } catch (err) {
       console.error("Upload error:", err);
       setError("Failed to upload file");
@@ -55,6 +73,8 @@ const ResumeUpload = () => {
       setUploading(false);
     }
   };
+
+  // handleSubmitResume()
 
   return (
     <div className="mt-10 flex flex-col items-center justify-center">

@@ -3,32 +3,47 @@ import { NavLink, Outlet, useParams, useNavigate } from "react-router-dom";
 import jobSeeker from "../../../../API/jobseeker";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const ApplyPage = () => {
   const { id } = useParams();
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const [jobDescription , setJobDescription] = useState("")
   const [application, setApplication] = useState({});
 
   // Step tracking state
   const [step, setStep] = useState(1);
 
+  const handleStartApplication = async () => {
+    try {
+      const accessToken = localStorage  .getItem("accessToken");
+      const response = await jobSeeker.startApplication(id, accessToken);
+      console.log("Start application response:", response.data.application);
+      if (response.status === 200) {
+        setApplication({application_id : response.data.application._id , job:id});
+        localStorage.setItem("application_id", JSON.stringify(response.data.application._id));
+      }
+    } catch (err) {
+      console.error("Start application error:", err);
+    }
+  };
+
   const handleState = (fieldName, value) => {
     console.log(fieldName, value);
-    setApplication((prev) => {
-      return {
-        ...prev,
-        [fieldName]: value,
-      };
-    });
-
+    setApplication((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
   };
+
+
+  useEffect(() => {
+    console.log("Starting application");
+    handleStartApplication();
+  }, []); // Empty dependency array ensures this runs only once
 
   useEffect(() => {
     console.log("Fetching assessments");
     const getAssessments = async () => {
-      const company = JSON.parse(localStorage.getItem("company"));
-
       const data = await jobSeeker.getAssessmentById(id);
       console.log(data);
       if (data.status === 200) {
@@ -41,19 +56,27 @@ const ApplyPage = () => {
         console.log("Error fetching assessments");
       }
     };
+    const getJobDetails = async() =>{
+      try{
+        const response = await jobSeeker.getJobDescription(id);
+        const jobDescription = response.data.job.description + " " + response.data.job.requirements
+        setJobDescription(jobDescription)
+      }catch(err){
+        console.log(err)
+      }
+    }
+    getJobDetails()
     getAssessments();
 
-    setApplication((prev) => {
-      return {
-        ...prev,
-        job: id,
-        user: user._id,
-        status: "Applied",
-      };
-    });
+    setApplication((prev) => ({
+      ...prev,
+      job: id,
+      user: user._id,
+      status: "Applied",
+    }));
 
     console.log("Application", application);
-  }, []);
+  }, [id, user._id]); // Add dependencies to ensure this runs only when id or user._id changes
 
   // Handler to move to the next step
   const goToNextStep = () => {
@@ -68,7 +91,7 @@ const ApplyPage = () => {
   const handleSubmit = async () => {
     console.log("Application", application);
     const token = localStorage.getItem("accessToken");
-    try{
+    try {
       const response = await jobSeeker.submitApplication(application, token);
       console.log(response);
       if (response.status === 200) {
@@ -76,18 +99,17 @@ const ApplyPage = () => {
       } else {
         console.log("Failed to submit application. Please try again.");
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("Application in useEffect", application);
-    if(application.skillAssessment){
+    if (application.skillAssessment) {
       handleSubmit();
     }
-
-  },[application])
+  }, [application]); // Add application as a dependency to ensure this runs only when application changes
 
   // Define active and disabled styles
   const activeClassName =
@@ -134,7 +156,7 @@ const ApplyPage = () => {
       </div>
 
       {/* Render the current step's content */}
-      <Outlet context={{ step, goToNextStep, handleState}} />
+      <Outlet context={{ step, goToNextStep, handleState , jobDescription}} />
     </div>
   );
 };

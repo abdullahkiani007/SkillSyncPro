@@ -52,6 +52,28 @@ const JobseekerController = {
         }
     },
 
+    async startJobApplication(req, res, next) {
+        console.log("Start job application");
+        try {
+            const userId = req.user._id;
+            const jobId = req.body.jobId;
+    
+            const response = await jobseekerService.startJobApplication(userId, jobId);
+    
+            if (response.status === 200) {
+                return res.status(200).json({
+                    application: response.application
+                });
+            }
+    
+            return res.status(response.status).json({
+                message: response.message
+            });
+        } catch (error) {
+            next(error);
+        }
+    },
+
     async submitJobApplication(req, res, next) {
         console.log("Submit job application" , req.body);
         try {
