@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import employer from '../../../API/employer'
-import { FaEye, FaArchive, FaTrashAlt, FaInbox } from 'react-icons/fa'
+import {
+  FaEye,
+  FaInbox,
+  FaTrashAlt,
+  FaUserShield,
+  FaUserAltSlash,
+} from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 const ManageEmployees = ({ companyId }) => {
   const [employees, setEmployees] = useState([])
   const [unAuthEmployees, setUnAuthEmployees] = useState([])
-  const [activeTab, setActiveTab] = useState('authorized') // State to manage the active tab
+  const [activeTab, setActiveTab] = useState('authorized')
   const [selectedEmployee, setSelectedEmployee] = useState(null)
   const [showDetails, setShowDetails] = useState(false)
 
@@ -15,12 +21,9 @@ const ManageEmployees = ({ companyId }) => {
   const handleViewDetails = async (employeeId) => {
     let employee
     try {
-      console.log('Viewing details for employee', employeeId)
-      employee = employees.find((emp) => emp.id === employeeId)
-      if (!employee) {
-        employee = unAuthEmployees.find((emp) => emp.id === employeeId)
-      }
-      console.log(employee)
+      employee =
+        employees.find((emp) => emp.id === employeeId) ||
+        unAuthEmployees.find((emp) => emp.id === employeeId)
       employee = {
         ...employee,
         user: {
@@ -46,7 +49,6 @@ const ManageEmployees = ({ companyId }) => {
         const company = JSON.parse(localStorage.getItem('company'))
         const token = localStorage.getItem('accessToken')
         const response = await employer.getEmployees(token, company._id)
-        console.log(response)
         setEmployees(response.data.employees.authEmployees)
         setUnAuthEmployees(response.data.employees.unAuthEmployees)
       } catch (error) {
@@ -58,12 +60,9 @@ const ManageEmployees = ({ companyId }) => {
   }, [companyId])
 
   const handleAuthorize = async (employeeId) => {
-    console.log(unAuthEmployees)
-    console.log('Authorizing employee', employeeId)
     try {
       const company = JSON.parse(localStorage.getItem('company'))
       const token = localStorage.getItem('accessToken')
-      console.log(company._id)
       await employer.authorizeEmployee(token, company._id, employeeId)
       setUnAuthEmployees(unAuthEmployees.filter((emp) => emp.id !== employeeId))
       setEmployees([...employees, { id: employeeId }])
@@ -73,11 +72,9 @@ const ManageEmployees = ({ companyId }) => {
   }
 
   const handleRemove = async (employeeId) => {
-    console.log('Removing employee', employeeId)
     try {
       const company = JSON.parse(localStorage.getItem('company'))
       const token = localStorage.getItem('accessToken')
-      console.log(company._id)
       await employer.revokeEmployee(token, company._id, employeeId)
       setEmployees(employees.filter((emp) => emp.id !== employeeId))
     } catch (error) {
@@ -86,70 +83,74 @@ const ManageEmployees = ({ companyId }) => {
   }
 
   const handleDeleteRequest = async (employeeId) => {
-    console.log('Deleting employee', employeeId)
     try {
       const company = JSON.parse(localStorage.getItem('company'))
       const token = localStorage.getItem('accessToken')
       await employer.deleteEmployee(token, company._id, employeeId)
-      setUnAuthEmployees(employees.filter((emp) => emp.id !== employeeId))
+      setUnAuthEmployees(unAuthEmployees.filter((emp) => emp.id !== employeeId))
     } catch (error) {
       console.error('Failed to delete employee', error)
     }
   }
+
   return (
-    <div className='bg-white p-6 rounded-md shadow-md'>
-      <h2 className='text-2xl font-bold mb-4'>Manage Employees</h2>
+    <div className='bg-white p-8 rounded-lg shadow-md animate-fade-in-up'>
+      <h2 className='text-3xl font-semibold mb-6 text-secondary-dark animate-slide-in-right'>
+        Manage Employees
+      </h2>
 
       {/* Tab Navigation */}
-      <div className='mb-4'>
+      <div className='flex mb-6'>
         <button
-          className={`px-4 py-2 font-semibold rounded-l-md ${
+          className={`px-6 py-3 text-lg font-semibold rounded-l-md transition-colors duration-300 ${
             activeTab === 'authorized'
-              ? 'bg-blue-500 text-white'
+              ? 'bg-primary text-white'
               : 'bg-gray-200 text-gray-600'
-          }`}
+          } hover:bg-primary hover:text-white transform hover:scale-105 transition-transform`}
           onClick={() => setActiveTab('authorized')}
         >
+          <FaUserShield className='inline-block mr-2' />
           Authorized Employees
         </button>
         <button
-          className={`px-4 py-2 font-semibold rounded-r-md ${
+          className={`px-6 py-3 text-lg font-semibold rounded-r-md transition-colors duration-300 ${
             activeTab === 'unauthorized'
-              ? 'bg-blue-500 text-white'
+              ? 'bg-primary text-white'
               : 'bg-gray-200 text-gray-600'
-          }`}
+          } hover:bg-primary hover:text-white transform hover:scale-105 transition-transform`}
           onClick={() => setActiveTab('unauthorized')}
         >
+          <FaUserAltSlash className='inline-block mr-2' />
           Unauthorized Employees
         </button>
       </div>
 
       {/* Tab Content */}
       {activeTab === 'authorized' ? (
-        <div className='overflow-x-auto'>
+        <div className='overflow-x-auto animate-slide-in-left'>
           <table className='min-w-full bg-white shadow-md rounded-lg overflow-hidden'>
-            <thead className='bg-gradient-to-r from-slate-600 to-slate-800 text-white'>
+            <thead className='bg-gradient-to-r from-primary to-secondary-dark text-white'>
               <tr>
-                <th className='py-3 px-4 text-left'>Name</th>
-                <th className='py-3 px-4 text-left'>Email</th>
-                <th className='py-3 px-4 text-left'>Role</th>
-                <th className='py-3 px-4 text-right'>Actions</th>
+                <th className='py-3 px-6 text-left'>Name</th>
+                <th className='py-3 px-6 text-left'>Email</th>
+                <th className='py-3 px-6 text-left'>Role</th>
+                <th className='py-3 px-6 text-right'>Actions</th>
               </tr>
             </thead>
-            <tbody className='text-slate-700'>
+            <tbody className='text-gray-800'>
               {employees.map((employee) => (
                 <tr
                   key={employee.id}
-                  className='border-b hover:bg-slate-100 transition-colors'
+                  className='border-b hover:bg-gray-100 transition-colors animate-fade-in'
                 >
-                  <td className='py-4 px-4'>{`${employee.user.firstName} ${employee.user.lastName}`}</td>
-                  <td className='py-4 px-4'>{employee.user.email}</td>
-                  <td className='py-4 px-4'>{employee.role}</td>
-                  <td className='py-4 px-4 '>
+                  <td className='py-4 px-6'>{`${employee.user.firstName} ${employee.user.lastName}`}</td>
+                  <td className='py-4 px-6'>{employee.user.email}</td>
+                  <td className='py-4 px-6'>{employee.role}</td>
+                  <td className='py-4 px-6'>
                     <div className='flex items-center justify-end space-x-4'>
                       <button
                         onClick={() => handleViewDetails(employee.id)}
-                        className='text-blue-500 hover:text-blue-700 transition-colors'
+                        className='text-primary hover:text-primary-dark transform hover:scale-110 transition-transform'
                         title='View Details'
                       >
                         <FaEye className='w-5 h-5' />
@@ -158,15 +159,15 @@ const ManageEmployees = ({ companyId }) => {
                         onClick={() =>
                           navigate(`../messages/?id=${employee.user.id}`)
                         }
-                        className='text-teal-500 hover:text-teal-700 transition-colors'
+                        className='text-green-500 hover:text-green-700 transform hover:scale-110 transition-transform'
                         title='Message Employee'
                       >
                         <FaInbox className='w-5 h-5' />
                       </button>
                       <button
-                        onClick={() => handleDeleteEmployee(employee.id)}
-                        className='text-red-500 hover:text-red-700 transition-colors'
-                        title='Delete Employee'
+                        onClick={() => handleRemove(employee.id)}
+                        className='text-red-500 hover:text-red-700 transform hover:scale-110 transition-transform'
+                        title='Remove Employee'
                       >
                         <FaTrashAlt className='w-5 h-5' />
                       </button>
@@ -178,17 +179,17 @@ const ManageEmployees = ({ companyId }) => {
           </table>
         </div>
       ) : (
-        <div>
+        <div className='animate-slide-in-right'>
           {unAuthEmployees.length > 0 ? (
             <ul>
               {unAuthEmployees.map((employee) => (
                 <li
                   key={employee.id}
-                  className='flex justify-between items-center border-b py-2'
+                  className='flex justify-between items-center border-b py-4 animate-fade-in-up'
                 >
                   <div>
                     <p
-                      className='font-semibold'
+                      className='font-semibold text-lg cursor-pointer text-primary'
                       onClick={() => handleViewDetails(employee.id)}
                     >
                       {employee.user.firstName} {employee.user.lastName}
@@ -197,7 +198,7 @@ const ManageEmployees = ({ companyId }) => {
                   </div>
                   <button
                     onClick={() => handleAuthorize(employee.id)}
-                    className='text-green-500 hover:underline'
+                    className='text-green-500 hover:underline transform hover:scale-110 transition-transform'
                   >
                     Authorize
                   </button>
@@ -209,12 +210,11 @@ const ManageEmployees = ({ companyId }) => {
           )}
         </div>
       )}
+
       {showDetails && selectedEmployee && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center'>
-          <div className='bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-screen overflow-y-auto'>
-            <h3 className='text-2xl font-semibold text-slate-800 mb-4'>
-              {`${selectedEmployee.user.firstName} ${selectedEmployee.user.lastName}`}
-            </h3>
+        <div className='fixed inset-0 bg-gray-700 bg-opacity-75 flex justify-center items-center animate-fade-in'>
+          <div className='bg-white p-8 rounded-lg shadow-lg w-full max-w-xl max-h-screen overflow-y-auto'>
+            <h3 className='text-2xl font-bold mb-4 text-secondary-dark'>{`${selectedEmployee.user.firstName} ${selectedEmployee.user.lastName}`}</h3>
             <p className='mb-4'>
               <strong>Email:</strong> {selectedEmployee.user.email}
             </p>
@@ -223,17 +223,12 @@ const ManageEmployees = ({ companyId }) => {
               <p>{selectedEmployee.role}</p>
             </div>
             <div className='mb-4'>
-              <strong>Created At</strong>
+              <strong>Created At:</strong>
               <p>{selectedEmployee.user.createdAt}</p>
             </div>
-            {/* <div className="mb-4">
-              <strong>Company:</strong>
-              <p>{selectedEmployee.company.name}</p>
-            </div> */}
-            {/* Add other sections if needed */}
             <button
               onClick={handleCloseDetails}
-              className='mt-4 py-2 px-4 bg-slate-500 text-white rounded hover:bg-slate-600 transition-colors'
+              className='py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark transition-colors'
             >
               Close
             </button>
