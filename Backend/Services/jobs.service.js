@@ -23,6 +23,17 @@ const jobService = {
             return { status:500, "message":"Internal server error" };
         }
     },
+
+    getJob: async (id) => {
+        try {
+            const job = await JobModel.findById(id).populate('company');
+            return {
+                job
+            };
+        } catch (error) {
+            return { status:500, "message":"Internal server error" };
+        }
+    },
     addJob: async (jobId , userId, resume, coverLetter)=> {
         try{
             const jobseeker = await JobseekerService.getJobSeeker(userId);
