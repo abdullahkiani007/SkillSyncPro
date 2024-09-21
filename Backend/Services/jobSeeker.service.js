@@ -5,6 +5,9 @@ const updateUserService = require('../Services/user.service');
 const JobModel = require('../Models/job.model');
 const ApplicationModel = require('../Models/application.model');
 const CandidateAssessmentModel = require('../Models/candidateAssessment.model');
+const ApplicationResultModel = require('../Models/applicationResult.model')
+
+const axios = require('axios');
 
 const companyAssessmentModel = require('../Models/companyAssessment.model');
 
@@ -77,6 +80,73 @@ const jobseekerService = {
             }
         }
     },
+
+    startJobApplication : async (userId, jobId) => {
+        console.log("JobSeeker service startJobApplication", userId, jobId);
+
+        try {
+            // Find the job by id
+            const job = await JobModel.findOne({ _id: jobId });
+
+            // Find the job seeker by userId
+            const jobSeeker = await jobSeekerModel.findOne({ user: userId });
+
+            // Ensure both the job and job seeker exist
+            if (!job) {
+                return {
+                    status: 404,
+                    message: "Job not found"
+                };
+            }
+            if (!jobSeeker) {
+                return {
+                    status: 404,
+                    message: "Job seeker not found"
+                };
+            }
+
+            const existingApplication = await ApplicationModel.findOne({
+                job: job._id,
+                jobSeeker: jobSeeker._id
+            });
+
+            if (existingApplication) {
+                return {
+                    status: 200,
+                    application: existingApplication
+                };
+            }
+
+            // Create the application
+            const application = await ApplicationModel.create({
+                job: job._id,
+                jobSeeker: jobSeeker._id
+            });
+
+            const applicationReport = await ApplicationResultModel.create({
+                application: application._id
+            });
+
+
+            return {
+                status: 200,
+                application,
+                applicationReport
+            };
+
+            
+          } catch (err) {
+            console.error(err);
+            return {
+              status: 500,
+              message: "Internal server error",
+            };
+          }
+
+           
+    }
+
+    ,
     submitJobApplication: async ( userId, data) => {
         const id = data.job
         console.log("JobSeeker service submitJobApplication", id, data);
@@ -101,14 +171,14 @@ const jobseekerService = {
               message: "Job seeker not found",
             };
           }
+
+          const application = await ApplicationModel.findOne({_id: data.application_id});
       
           // Create the application
-          const application = await ApplicationModel.create({
-            job: job._id,
-            jobSeeker: jobSeeker._id,
-            resume: data.resume,
-            videoIntroduction: data.videoIntroduction,
-          });
+          application.resume = data.resume;
+          application.videoIntroduction = data.videoIntroduction;
+          await application.save();
+        
       
           // If the job has a skill assessment, create the CandidateAssessment
           if (job.skillAssessment) {
@@ -125,6 +195,10 @@ const jobseekerService = {
                 error: codeSubmission.error,
               })),
             });
+
+            application.skillAssessment = candidateAssessment._id;
+            await application.save();
+
           }
           
           // Add the application to the job seeker's applications array
@@ -135,11 +209,6 @@ const jobseekerService = {
           await job.applications.push(application._id);
           await job.applicants.push(jobSeeker._id);
           await job.save();
-
-          application.status = "Under Review";
-          await application.save();
-
-
       
           // Return success response with the application details
           return {

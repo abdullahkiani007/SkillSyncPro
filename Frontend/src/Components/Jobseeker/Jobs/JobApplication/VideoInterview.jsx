@@ -1,9 +1,11 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useOutletContext } from "react-router-dom";
+import { useReactMediaRecorder } from "react-media-recorder";
 import Webcam from "react-webcam";
 import axios from "axios";
 import Loader from "../../../../Components/Loader/Loader";
 import UserController from "../../../../API/index";
+import {WaveFile} from "wavefile"; // Import the default export
 
 const questions = [
   "So please tell me about yourself.",
@@ -14,91 +16,52 @@ const questions = [
 ];
 
 const VideoInterview = () => {
-  const { step, goToNextStep, handleState } = useOutletContext();
-
+  const { goToNextStep, handleState } = useOutletContext();
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [recordedVideoChunks, setRecordedVideoChunks] = useState([]);
-  const [recordedAudioChunks, setRecordedAudioChunks] = useState([]);
-  const [recording, setRecording] = useState(false);
+  const [application_id, setApplication_id] = useState(localStorage.getItem("application_id"));
   const [isProcessing, setIsProcessing] = useState(false);
-  const [timer, setTimer] = useState(0); // Timer state
-  const webcamRef = useRef(null);
-  const videoRecorderRef = useRef(null);
-  const audioRecorderRef = useRef(null);
+  const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
 
-  // Start the recording
-  const handleStartCaptureClick = useCallback(() => {
-    if (webcamRef.current && webcamRef.current.stream) {
-      setRecording(true);
-      setTimer(0); // Reset the timer
-      timerRef.current = setInterval(() => setTimer((prev) => prev + 1), 1000); // Start the timer
+  // Video recording using react-media-recorder
+  const {
+    startRecording: startVideoRecording,
+    stopRecording: stopVideoRecording,
+    mediaBlobUrl: videoBlobUrl,
+    clearBlobUrl: clearVideoBlobUrl,
+  } = useReactMediaRecorder({ video: true, mimeType: "video/webm" });
 
-      // Start video recording
-      videoRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-        mimeType: "video/webm;codecs=vp8,opus",
-      });
+  // Audio recording using react-media-recorder
+  const {
+    startRecording: startAudioRecording,
+    stopRecording: stopAudioRecording,
+    mediaBlobUrl: audioBlobUrl,
+    clearBlobUrl: clearAudioBlobUrl,
+  } = useReactMediaRecorder({ audio: true, mimeType: "audio/webm" });
 
-      videoRecorderRef.current.addEventListener(
-        "dataavailable",
-        handleVideoDataAvailable
-      );
-      videoRecorderRef.current.start();
+  // Convert WebM to WAV
+  const convertToWav = async (blob) => {
+    const arrayBuffer = await blob.arrayBuffer();
+    const wav = new WaveFile();
+    wav.fromScratch(1, 48000, "16", new Uint8Array(arrayBuffer));
+    const wavBuffer = wav.toBuffer();
+    return new Blob([wavBuffer], { type: "audio/wav"})
+  };
 
-      // Start audio recording
-      navigator.mediaDevices.getUserMedia({ audio: true }).then((audioStream) => {
-        audioRecorderRef.current = new MediaRecorder(audioStream, {
-          mimeType: "audio/webm",
-        });
+  // Start recording both audio and video with timer
+  const handleStartCaptureClick = () => {
+    startVideoRecording();
+    startAudioRecording();
+    setTimer(0);
+    timerRef.current = setInterval(() => setTimer((prev) => prev + 1), 1000);
+  };
 
-        audioRecorderRef.current.addEventListener(
-          "dataavailable",
-          handleAudioDataAvailable
-        );
-        audioRecorderRef.current.start();
-      });
-    } else {
-      console.error("Webcam stream is not available.");
-    }
-  }, [webcamRef, setRecording, setTimer]);
-
-  // Collect the video data available from media recorder
-  const handleVideoDataAvailable = useCallback(
-    ({ data }) => {
-      if (data.size > 0) {
-        setRecordedVideoChunks((prev) => prev.concat(data));
-      }
-    },
-    [setRecordedVideoChunks]
-  );
-
-  // Collect the audio data available from media recorder
-  const handleAudioDataAvailable = useCallback(
-    ({ data }) => {
-      if (data.size > 0) {
-        setRecordedAudioChunks((prev) => prev.concat(data));
-      }
-    },
-    [setRecordedAudioChunks]
-  );
-
-  // Stop the recording
-  const handleStopCaptureClick = useCallback(() => {
-    if (videoRecorderRef.current) {
-      videoRecorderRef.current.stop();
-    } else {
-      console.error("Video MediaRecorder is not initialized.");
-    }
-
-    if (audioRecorderRef.current) {
-      audioRecorderRef.current.stop();
-    } else {
-      console.error("Audio MediaRecorder is not initialized.");
-    }
-
-    clearInterval(timerRef.current); // Stop the timer
-    setRecording(false);
-  }, [videoRecorderRef, audioRecorderRef]);
+  // Stop recording both audio and video and clear timer
+  const handleStopCaptureClick = () => {
+    stopVideoRecording();
+    stopAudioRecording();
+    clearInterval(timerRef.current);
+  };
 
   // Move to the next question
   const handleNextQuestion = () => {
@@ -108,63 +71,58 @@ const VideoInterview = () => {
       alert(
         "You have answered all the questions. You can now submit your interview."
       );
-      handleStopCaptureClick(); // Automatically stop recording after the last question
+      
+      handleStopCaptureClick();
     }
   };
 
-  // Download the entire recording
-  const handleDownload = useCallback(() => {
-    if (recordedVideoChunks.length) {
-      const videoBlob = new Blob(recordedVideoChunks, { type: "video/webm" });
-      const videoUrl = URL.createObjectURL(videoBlob);
-      const a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = videoUrl;
-      a.download = "interview_video.webm";
-      a.click();
-      window.URL.revokeObjectURL(videoUrl);
+  // Download the recorded video and audio separately
+  const handleDownload = async () => {
+    if (videoBlobUrl) {
+      const videoLink = document.createElement("a");
+      videoLink.href = videoBlobUrl;
+      videoLink.download = "interview_video.webm";
+      videoLink.click();
+      clearVideoBlobUrl(); // Clear the video blob URL after download
     }
 
-    if (recordedAudioChunks.length) {
-      const audioBlob = new Blob(recordedAudioChunks, { type: "audio/webm" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = audioUrl;
-      a.download = "interview_audio.webm";
-      a.click();
-      window.URL.revokeObjectURL(audioUrl);
+    if (audioBlobUrl) {
+      const audioResponse = await fetch(audioBlobUrl);
+      const audioBlob = await audioResponse.blob();
+      const wavBlob = await convertToWav(audioBlob); // Convert to WAV
+      const audioLink = document.createElement("a");
+      audioLink.href = URL.createObjectURL(wavBlob);
+      audioLink.download = "interview_audio.wav";
+      audioLink.click();
+      clearAudioBlobUrl(); // Clear the audio blob URL after download
     }
-  }, [recordedVideoChunks, recordedAudioChunks]);
+  };
 
-    // Submit the video interview
+  // Submit the video and audio interview separately
   const handleSubmit = async () => {
     console.log("Submitting interview to backend...");
     setIsProcessing(true);
-  
-    if (recordedVideoChunks.length && recordedAudioChunks.length) {
-      console.log("Uploading video and audio...");
-      const videoBlob = new Blob(recordedVideoChunks, { type: "video/webm" });
-      const audioBlob = new Blob(recordedAudioChunks, { type: "audio/webm" });
-  
-      const formDataAudio = new FormData();
-      const formDataVideo = new FormData();
 
+    console.log("Audio blob url ", audioBlobUrl , "VideoBlob url", videoBlobUrl)
+
+    if (videoBlobUrl && audioBlobUrl) {
+      try{
+      const videoResponse = await fetch(videoBlobUrl);
+      const videoBlob = await videoResponse.blob();
+
+      const audioResponse = await fetch(audioBlobUrl);
+      const audioBlob = await audioResponse.blob();
+      const wavBlob = await convertToWav(audioBlob); // Convert to WAV
+      
+      const formDataVideo = new FormData();
       formDataVideo.append("video", videoBlob, "interview_video.webm");
-      formDataAudio.append("audio", audioBlob, "interview_audio.webm");
-      // Update application state with interview video URL
-      handleState(
-        "videoIntroduction",
-        `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/interview.mp4`
-      );
-      goToNextStep();
-  
-      try {
+
+      const formDataAudio = new FormData();
+      formDataAudio.append("audio", wavBlob, "interview_audio.wav");
+      formDataAudio.append("application_id", application_id);
         // Upload audio to FastAPI server
-        let audioResponse = await axios.post(
-          "http://localhost:8000/transcribe_audio_test/", // Your FastAPI endpoint
+        let audioUploadResponse = await axios.post(
+          "http://localhost:8000/predict_score/", // FastAPI endpoint for audio upload and scoring
           formDataAudio,
           {
             headers: {
@@ -172,28 +130,38 @@ const VideoInterview = () => {
             },
           }
         );
-        console.log("Audio upload successful:", audioResponse.data);
-  
+        console.log("Audio upload successful:", audioUploadResponse.data);
+
         // Call the backend to get the pre-signed URL for video
-        let videoResponse = await UserController.generatePresignedUrl(
+        let videoUploadResponse = await UserController.generatePresignedUrl(
           "interviews",
           "interview.mp4",
           "video/mp4"
         );
-        const { url } = videoResponse;
-  
+        const { url } = videoUploadResponse;
+
         console.log("Pre-signed URL received:", url);
-  
+        // Update application state with interview video URL
+        handleState(
+          "videoIntroduction",
+          "https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/interview.mp4"
+        );
+
+        // move to the next step of skill Assessment
+        goToNextStep();
+        setIsProcessing(false);
+
+
         // Upload the video to S3 using the pre-signed URL
         await axios.put(url.data, videoBlob, {
           headers: {
             "Content-Type": "video/mp4",
           },
         });
-  
-  
+
+        
+
         alert("Interview uploaded successfully!");
-        setIsProcessing(false);
       } catch (error) {
         console.error("Error uploading interview:", error);
         alert("Failed to upload interview.");
@@ -202,23 +170,22 @@ const VideoInterview = () => {
     }
   };
 
-  // Re-record the video (reset everything)
-  const handleRedo = () => {
-    setRecordedVideoChunks([]);
-    setRecordedAudioChunks([]);
-    setCurrentQuestion(0);
-    setRecording(false);
-    setTimer(0);
-    clearInterval(timerRef.current);
-  };
-
   // Automatically stop recording after 3 minutes
   useEffect(() => {
     if (timer >= 180) {
       handleStopCaptureClick();
       alert("Recording stopped after reaching the 3-minute limit.");
     }
-  }, [timer, handleStopCaptureClick]);
+  }, [timer]);
+
+  // Re-record the interview (Reset everything)
+  const handleRedo = () => {
+    clearVideoBlobUrl(); // Clear the recorded video blob URL
+    clearAudioBlobUrl(); // Clear the recorded audio blob URL
+    setCurrentQuestion(0); // Reset to the first question
+    setTimer(0); // Reset the timer
+    clearInterval(timerRef.current); // Stop any ongoing timers
+  };
 
   return (
     <div className="mt-10 flex flex-col items-center justify-center">
@@ -234,46 +201,38 @@ const VideoInterview = () => {
           {questions[currentQuestion]}
         </h2>
 
-        {/* Display timer */}
+        {/* Timer display */}
         <div className="text-center text-gray-500 mb-4">
           Timer: {Math.floor(timer / 60)}:{("0" + (timer % 60)).slice(-2)}
         </div>
 
         <div className="flex flex-col items-center">
-          <Webcam
-            audio={true}
-            ref={webcamRef}
-            videoConstraints={{ facingMode: "user" }}
-            className="w-full h-64 rounded-md"
-          />
+          {/* Webcam component */}
+          <Webcam className="w-full h-64 rounded-md" />
           <div className="mt-4 flex space-x-4">
-            {recording ? (
-              <button
-                onClick={handleStopCaptureClick}
-                className="bg-red-600 hover:bg-red-700 text-white font-semibold p-3 rounded-md transition duration-300 ease-in-out"
-              >
-                Stop Recording
-              </button>
-            ) : (
-              <button
-                onClick={handleStartCaptureClick}
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold p-3 rounded-md transition duration-300 ease-in-out"
-              >
-                Start Recording
-              </button>
-            )}
+            <button
+              onClick={handleStartCaptureClick}
+              className="bg-green-600 hover:bg-green-700 text-white font-semibold p-3 rounded-md"
+            >
+              Start Recording
+            </button>
+            <button
+              onClick={handleStopCaptureClick}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold p-3 rounded-md"
+            >
+              Stop Recording
+            </button>
             <button
               onClick={handleNextQuestion}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-md transition duration-300 ease-in-out"
-              disabled={!recording && currentQuestion < questions.length - 1} // Disable "Next Question" if not recording
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-md"
             >
               Next Question
             </button>
             <button
               onClick={handleDownload}
-              className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold p-3 rounded-md transition duration-300 ease-in-out"
+              className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold p-3 rounded-md"
             >
-              Download Video
+              Download Video & Audio
             </button>
             <button
               onClick={handleRedo}
@@ -287,7 +246,7 @@ const VideoInterview = () => {
           {currentQuestion === questions.length - 1 && (
             <button
               onClick={handleSubmit}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold p-3 rounded-md mt-6 transition duration-300 ease-in-out"
+              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold p-3 rounded-md mt-6"
             >
               Submit Interview
             </button>

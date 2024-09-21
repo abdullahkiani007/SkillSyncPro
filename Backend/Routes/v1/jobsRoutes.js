@@ -4,6 +4,7 @@ const jobsController = require('../../Controllers/JobsController');
 
 // Route to get all jobs
 router.get('/', jobsController.getJobs);
+router.get('/description',jobsController.getJobDescription);
 
 
 // Route to track a job view by a user
