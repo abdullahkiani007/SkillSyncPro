@@ -50,9 +50,7 @@ const ManageCompany = () => {
         <form onSubmit={handleSubmit}>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             <div className='flex flex-col'>
-              <label className='font-semibold text-primary'>
-                Company Name
-              </label>
+              <label className='font-semibold text-primary'>Company Name</label>
               <input
                 type='text'
                 name='name'
