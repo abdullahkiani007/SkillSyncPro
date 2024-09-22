@@ -4,15 +4,18 @@ import { NavLink } from "react-router-dom";
 import AssessmentCard from "./AssessmentCard";
 import employer from "../../../API/employer";
 import Loader from "../../Loader/Loader";
+import ViewAssessment from "./ViewAssessment";
+import EditAssessment from "./EditAssessment";
 
 const ManageAssessments = () => {
   const [loading, setLoading] = useState(true);
   const [assessments, setAssessments] = useState(null);
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const getAssessments = async () => {
       const company = JSON.parse(localStorage.getItem("company"));
-
       const data = await employer.getAssessments(
         localStorage.getItem("token"),
         company._id
@@ -28,12 +31,34 @@ const ManageAssessments = () => {
     getAssessments();
   }, []);
 
-  const onView = (assessment) => {
-    console.log("View assessment", assessment);
+  const handleView = (assessment) => {
+    setSelectedAssessment(assessment);
+    setIsEditing(false);
   };
 
-  const onEdit = (assessment) => {
-    console.log("Edit assessment", assessment);
+  const handleEdit = (assessment) => {
+    setSelectedAssessment(assessment);
+    setIsEditing(true);
+  };
+
+  const handleSave =async (updatedAssessment) => {
+    console.log("Saving updated assessment:", updatedAssessment);
+    
+    try{
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await employer.updateAssessment(accessToken, updatedAssessment._id , updatedAssessment)
+      console.log(response)
+    }catch(err){
+      console.log("err ", err)
+    }
+    setIsEditing(false);
+    setSelectedAssessment(null); // Reset to show the list again
+  };
+
+  const handleCancel = () => {
+    setSelectedAssessment(null); // Reset selected assessment
+    setIsEditing(false); // Ensure editing is turned off
   };
 
   const onDelete = async (assessment) => {
@@ -48,6 +73,9 @@ const ManageAssessments = () => {
           (a) => a._id !== assessment._id
         );
         setAssessments(updatedAssessments);
+        if (selectedAssessment && selectedAssessment._id === assessment._id) {
+          setSelectedAssessment(null); // Deselect if the deleted assessment was selected
+        }
       } else {
         console.log("Error deleting assessment");
       }
@@ -59,6 +87,7 @@ const ManageAssessments = () => {
   if (loading) {
     return <Loader />;
   }
+
   return (
     <div className="py-2 px-10">
       <nav className="flex justify-between mb-10">
@@ -77,22 +106,51 @@ const ManageAssessments = () => {
           </Button>
         </NavLink>
       </nav>
-
-      {assessments ? (
-        assessments.map((assessment) => (
-          <AssessmentCard
-            key={assessment.id}
-            assessment={assessment}
-            onView={onView}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        ))
-      ) : (
-        <Typography variant="body1" color="textSecondary">
-          No assessments found
-        </Typography>
-      )}
+      <div>
+        {selectedAssessment ? (
+          isEditing ? (
+            <>
+              <EditAssessment
+                assessment={selectedAssessment}
+                onSave={handleSave}
+              />
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleCancel}
+                sx={{ marginTop: 2 }}
+              >
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <>
+              <ViewAssessment assessment={selectedAssessment} />
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleCancel}
+                sx={{ marginTop: 2 }}
+              >
+                Back to List
+              </Button>
+            </>
+          )
+        ) : (
+          assessments.map((assessment) => (
+            <AssessmentCard
+              key={assessment._id}
+              assessment={assessment}
+              onView={() => handleView(assessment)}
+              onEdit={() => handleEdit(assessment)}
+              onDelete={() => onDelete(assessment)}
+            />
+          ))
+        )}
+        {!selectedAssessment && assessments.length === 0 && (
+          <Typography>No assessments available</Typography>
+        )}
+      </div>
     </div>
   );
 };

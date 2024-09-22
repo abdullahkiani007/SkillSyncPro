@@ -177,6 +177,8 @@ const jobseekerService = {
           // Create the application
           application.resume = data.resume;
           application.videoIntroduction = data.videoIntroduction;
+          application.similarityScore  = data.similarityScore
+          
           await application.save();
         
       
