@@ -58,13 +58,13 @@ const JobListing = () => {
   }
 
   return (
-    <div className='container mx-auto p-4'>
+    <div className='min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark mx-auto p-4'>
       {/* Category Filter */}
       <div className='flex justify-center mb-8'>
         <button
           className={`px-6 py-3 mr-2 rounded-lg font-semibold transition-all duration-200 ${
             selectedCategory === 'active'
-              ? 'bg-blue-600 text-white shadow-lg'
+              ? 'bg-primary text-white shadow-lg'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
           onClick={() => handleCategoryChange('active')}
@@ -77,7 +77,7 @@ const JobListing = () => {
         <button
           className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
             selectedCategory === 'archived'
-              ? 'bg-blue-600 text-white shadow-lg'
+              ? 'bg-primary text-white shadow-lg'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
           onClick={() => handleCategoryChange('archived')}
