@@ -74,13 +74,13 @@ const Header = () => {
                 key={item.id}
                 to={item.url}
                 onClick={handleClick}
-                className={`block relative  text-2xl uppercase text-n-1 transition-colors hover:text-color-1 ${
+                className={`block relative uppercase text-n-1 transition-colors hover:text-color-1 ${
                   item.onlyMobile ? 'lg:hidden' : ''
-                } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold ${
+                } px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-[14px] lg:font-semibold ${
                   item.url === pathname.hash
                     ? 'z-2 lg:text-n-1'
-                    : 'lg:text-n-1/50'
-                } lg:leading-5 lg:hover:text-n-1 xl:px-12`}
+                    : 'lg:text-gray-50'
+                } lg:leading-5 lg:hover:text-primary xl:px-12`}
               >
                 {item.title}
               </Link>

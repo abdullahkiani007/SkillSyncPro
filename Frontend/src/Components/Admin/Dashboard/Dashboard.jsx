@@ -10,8 +10,8 @@ import JobPostingsByLocationMapChart from '../Charts/JobPostingByLocationMapChar
 
 const AdminDashboard = () => {
   return (
-    <div className='p-6  min-h-screen'>
-      <h1 className='text-3xl font-bold text-gray-900 mb-6'>Admin Dashboard</h1>
+    <div className='p-6 bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen'>
+      <h1 className='text-3xl font-bold text-white mb-6'>Admin Dashboard</h1>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>
         {/* Job postings card */}
         <div className='bg-white p-4 shadow-lg rounded-lg'>
