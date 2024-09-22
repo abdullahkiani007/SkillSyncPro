@@ -42,13 +42,13 @@ const Dashboard = () => {
   return (
     <div className='min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark p-10'>
       <h1 className='text-4xl font-extrabold text-white mb-10 text-center'>
-        {admin ? 'Admin' : 'Employer'} Dashboard
+        {admin ? 'Company Admin' : 'Employer'} Dashboard
       </h1>
       {dashboardData && (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {/* Company Info Card */}
           <div
-            className='bg-gradient-to-r from-primary to-primary-light text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
+            className='bg-primary text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
             onClick={() => navigate('../company-profile')}
           >
             <h2 className='text-3xl font-semibold mb-4'>Company Info</h2>
@@ -68,7 +68,7 @@ const Dashboard = () => {
 
           {/* Jobs Posted Card */}
           <div
-            className='bg-gradient-to-r from-indigo-700 to-secondary-light text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
+            className='bg-indigo-700 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
             onClick={() => navigate('../job/job-listing')}
           >
             <h2 className='text-3xl font-semibold mb-4'>Jobs Posted</h2>
@@ -86,7 +86,7 @@ const Dashboard = () => {
 
           {/* Recent Applicants Card */}
           <div
-            className='bg-gradient-to-r from-blue-400 to-pink-300 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
+            className='bg-blue-400 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
             onClick={() => navigate('../applicant-list')}
           >
             <h2 className='text-3xl font-semibold mb-4'>Recent Applicants</h2>
@@ -99,14 +99,14 @@ const Dashboard = () => {
 
       {/* Job Performance Section */}
       <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>
-        <div className='bg-gray-100 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
-          <h2 className='text-3xl text-black font-semibold mb-4'>
+        <div className='bg-gray-400 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
+          <h2 className='text-3xl text-white font-semibold mb-4'>
             Job Performance
           </h2>
           <JobPerformanceChart />
         </div>
-        <div className='bg-gray-200 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
-          <h2 className='text-3xl font-semibold mb-4 text-black'>
+        <div className='bg-gray-400 text-white p-8 rounded-xl shadow-xl hover:shadow-2xl'>
+          <h2 className='text-3xl text-white font-semibold mb-4 '>
             Overall Analytics
           </h2>
           <JobPerformanceChart2 />

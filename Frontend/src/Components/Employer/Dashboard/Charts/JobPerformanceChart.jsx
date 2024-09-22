@@ -78,7 +78,7 @@ const JobPerformanceChart = () => {
 
   return (
     <div
-      className='bg-gradient-to-r from-secondary-light to-primary-light '
+      className='bg-secondary-light '
       style={{
         padding: '20px',
         borderRadius: '10px',

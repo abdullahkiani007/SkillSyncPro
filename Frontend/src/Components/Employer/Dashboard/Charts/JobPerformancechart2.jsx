@@ -72,14 +72,21 @@ const JobPerformanceChart2 = () => {
 
   return (
     <div
-      className='bg-gradient-to-r from-primary-light to-secondary-dark'
+      className='bg-secondary-light'
       style={{
         padding: '20px',
         borderRadius: '10px',
       }}
     >
       <div>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '20px',
+          }}
+          dateAdapter={AdapterDayjs}
+        >
           <DatePicker
             className='text-xs w-40 p-0 m-0'
             label='From Date'
