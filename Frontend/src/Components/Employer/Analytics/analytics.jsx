@@ -37,7 +37,7 @@ const EmployerAnalytics = () => {
       sx={{
         minHeight: '100vh', // Full height container
         p: 4,
-        background: 'linear-gradient(135deg, #2D4059, #2D4059)', // Gradient background
+        // Gradient background
         backgroundSize: 'cover', // Ensure the gradient covers the entire container
       }}
     >
@@ -47,7 +47,7 @@ const EmployerAnalytics = () => {
         sx={{
           fontWeight: 'bold',
           mb: 4,
-          color: '#f5f5f5', // Light text color
+          color: '#000', // Light text color
           textAlign: 'center',
         }}
       >
@@ -71,7 +71,7 @@ const EmployerAnalytics = () => {
             }}
           >
             <CardContent>
-              <Typography variant='h6' sx={{ mb: 2, color: '#FFF' }}>
+              <Typography variant='h6' sx={{ mb: 2, color: '#fff' }}>
                 Job Posting Performance
               </Typography>
               <ResponsiveContainer width='100%' height={300}>
@@ -98,6 +98,7 @@ const EmployerAnalytics = () => {
             sx={{
               borderRadius: 3,
               boxShadow: 3,
+
               background: 'linear-gradient(135deg, #E14411, #FFD460)', // Dark card color
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
@@ -117,7 +118,7 @@ const EmployerAnalytics = () => {
                   <XAxis dataKey='name' stroke='#fff' />
                   <YAxis stroke='#fff' />
                   <Tooltip />
-                  <Bar dataKey='value' fill=' #fff' radius={[10, 10, 0, 0]} />
+                  <Bar dataKey='value' fill='#D7C3F1' radius={[10, 10, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

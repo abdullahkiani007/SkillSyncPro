@@ -1,18 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Container,
-  InputLabel,
-  Typography,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField,
-  Button,
-  MenuItem,
-  Select,
-} from '@mui/material'
 
 const Signup = () => {
   const [option, setOption] = useState('join')
@@ -68,116 +54,130 @@ const Signup = () => {
   }
 
   return (
-    <Container maxWidth='md' className='mt-20 p-20 bg-gray-100'>
-      <Typography variant='h4' component='h1' className='font-bold mb-8'>
+    <div className='max-w-[800px] w-full  mx-auto my-10  p-8 bg-primary rounded-lg'>
+      <h1 className='font-bold mb-4 text-white text-center text-4xl'>
         Employer Signup
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <FormControl component='fieldset'>
-          <FormLabel component='legend'>Choose an option</FormLabel>
-          <RadioGroup row value={option} onChange={handleOptionChange}>
-            <FormControlLabel
-              value='join'
-              control={<Radio />}
-              label='Join a Company'
-            />
-            <FormControlLabel
-              value='register'
-              control={<Radio />}
-              label='Register a Company'
-            />
-          </RadioGroup>
-        </FormControl>
+      </h1>
+      <form onSubmit={handleSubmit} className='p-8'>
+        <fieldset>
+          <legend className=' text-2xl text-white mb-4'>
+            Choose an option
+          </legend>
+          <div className='flex space-x-4 mb-4 justify-center'>
+            <label className='flex items-center text-xl text-white'>
+              <input
+                type='radio'
+                value='join'
+                checked={option === 'join'}
+                onChange={handleOptionChange}
+                className='mr-3 text-black bg-black'
+              />
+              Join a Company
+            </label>
+            <label className='flex  text-xl text-white items-center'>
+              <input
+                type='radio'
+                value='register'
+                checked={option === 'register'}
+                onChange={handleOptionChange}
+                className='mr-2'
+              />
+              Register a Company
+            </label>
+          </div>
+        </fieldset>
 
         {option === 'join' ? (
-          <FormControl fullWidth margin='normal'>
-            <InputLabel>Select Company</InputLabel>
-            <Select value={selectedCompany} onChange={handleCompanyChange}>
+          <div className='mb-4'>
+            <label className='block mb-2 text-white'>Select Company</label>
+            <select
+              value={selectedCompany}
+              onChange={handleCompanyChange}
+              className='w-full p-2 border rounded'
+            >
               {companies.map((company) => (
-                <MenuItem key={company._id} value={company._id}>
+                <option key={company._id} value={company._id}>
                   {company.name}
-                </MenuItem>
+                </option>
               ))}
-            </Select>
-          </FormControl>
+            </select>
+          </div>
         ) : (
           <>
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Company Name'
+            <input
+              type='text'
               name='name'
               value={newCompany.name}
               onChange={handleNewCompanyChange}
+              placeholder='Company Name'
+              className='w-full p-2 border rounded mb-4'
             />
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Description'
+            <input
+              type='text'
               name='description'
               value={newCompany.description}
               onChange={handleNewCompanyChange}
+              placeholder='Description'
+              className='w-full p-2 border rounded mb-4'
             />
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Industry'
+            <input
+              type='text'
               name='industry'
               value={newCompany.industry}
               onChange={handleNewCompanyChange}
+              placeholder='Industry'
+              className='w-full p-2 border rounded mb-4'
             />
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Website'
+            <input
+              type='text'
               name='website'
               value={newCompany.website}
               onChange={handleNewCompanyChange}
+              placeholder='Website'
+              className='w-full p-2 border rounded mb-4'
             />
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Logo URL'
+            <input
+              type='text'
               name='logo'
               value={newCompany.logo}
               onChange={handleNewCompanyChange}
+              placeholder='Logo URL'
+              className='w-full p-2 border rounded mb-4'
             />
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Address'
+            <input
+              type='text'
               name='address'
               value={newCompany.address}
               onChange={handleNewCompanyChange}
+              placeholder='Address'
+              className='w-full p-2 border rounded mb-4'
             />
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Contact Email'
+            <input
+              type='email'
               name='contactEmail'
               value={newCompany.contactEmail}
               onChange={handleNewCompanyChange}
+              placeholder='Contact Email'
+              className='w-full p-2 border rounded mb-4'
             />
-            <TextField
-              fullWidth
-              margin='normal'
-              label='Contact Phone'
+            <input
+              type='text'
               name='contactPhone'
               value={newCompany.contactPhone}
               onChange={handleNewCompanyChange}
+              placeholder='Contact Phone'
+              className='w-full p-2 border rounded mb-4'
             />
           </>
         )}
-        <Button
+        <button
           type='submit'
-          variant='contained'
-          color='primary'
-          className='mt-4'
+          className='w-full bg-black text-white p-2 rounded mt-4'
         >
           Submit
-        </Button>
+        </button>
       </form>
-    </Container>
+    </div>
   )
 }
 
