@@ -7,13 +7,13 @@ const JobDetails = () => {
 
   return (
     <div className='w-4/5 p-8 bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen flex justify-center items-start transition-all duration-500 ease-in-out'>
-      <div className='bg-gradient-to-r  from-secondary-light to-secondary-dark shadow-2xl hover:shadow-3xl transition-shadow duration-300 rounded-lg w-full max-w-4xl p-8 transform hover:scale-105 transition-transform duration-300'>
+      <div className='bg-black m-auto shadow-2xl hover:shadow-3xl duration-300s rounded-lg w-full max-w-4xl p-8 transform hover:scale-105 transition-transform duration-300s'>
         {/* Header */}
         <div className='mb-6'>
-          <h1 className='text-4xl font-extrabold text-black mb-4 tracking-wide animate-fade-in-down'>
+          <h1 className='text-4xl font-extrabold text-white mb-4 tracking-wide animate-fade-in-down'>
             {jobDetails?.title}
           </h1>
-          <p className='text-black text-lg'>
+          <p className='text-white text-lg'>
             {jobDetails?.location} | {jobDetails?.employmentType} |{' '}
             {jobDetails?.salaryRange}
           </p>
@@ -21,30 +21,30 @@ const JobDetails = () => {
 
         {/* Job Description */}
         <section className='mb-8'>
-          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+          <h2 className='text-2xl font-semibold text-white mb-3 border-b pb-2 border-secondary'>
             Job Description
           </h2>
-          <p className='text-black text-lg leading-relaxed animate-fade-in'>
+          <p className='text-white text-lg leading-relaxed p-4 animate-fade-in'>
             {jobDetails?.description}
           </p>
         </section>
 
         {/* Job Requirements */}
         <section className='mb-8'>
-          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+          <h2 className='text-2xl font-semibold text-white mb-3 border-b pb-2 border-secondary'>
             Job Requirements
           </h2>
-          <pre className='whitespace-pre-wrap text-black text-lg bg-gradient-to-r from-primary to-secondary-light p-4 rounded-lg shadow-inner transition-transform transform hover:scale-105'>
+          <p className='whitespace-pre-wrap text-white text-lg p-4 rounded-lg  '>
             {jobDetails?.requirements}
-          </pre>
+          </p>
         </section>
 
         {/* Job Status */}
         <section className='mb-8'>
-          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+          <h2 className='text-2xl font-semibold text-white mb-3 border-b pb-2 border-secondary'>
             Job Status
           </h2>
-          <div className='text-lg text-black space-y-2'>
+          <div className='text-lg text-white p-4 space-y-2'>
             <p>
               <strong>Posted On:</strong>{' '}
               {new Date(jobDetails?.createdAt).toLocaleDateString()}
@@ -58,11 +58,11 @@ const JobDetails = () => {
 
         {/* Applicants */}
         <section>
-          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+          <h2 className='text-2xl font-semibold text-white mb-3 border-b pb-2 border-secondary'>
             Applicants
           </h2>
           {jobDetails?.applicants?.length > 0 ? (
-            <ul className='list-disc ml-5 text-lg text-black space-y-1'>
+            <ul className='list-disc ml-5 text-lg p-4 text-white space-y-1'>
               {jobDetails.applicants.map((applicant, index) => (
                 <li
                   key={index}
@@ -73,7 +73,7 @@ const JobDetails = () => {
               ))}
             </ul>
           ) : (
-            <p className='text-lg text-black animate-fade-in'>
+            <p className='text-lg text-white p-4 animate-fade-in'>
               No applicants yet.
             </p>
           )}
