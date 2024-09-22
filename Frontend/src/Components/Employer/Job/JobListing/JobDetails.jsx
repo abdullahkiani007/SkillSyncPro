@@ -1,62 +1,86 @@
-import React from "react";
-import { useOutletContext } from "react-router-dom";
+import React from 'react'
+import { useOutletContext } from 'react-router-dom'
 
 const JobDetails = () => {
-  const { detail } = useOutletContext();
-  const [jobDetails] = React.useState(detail);
+  const { detail } = useOutletContext()
+  const [jobDetails] = React.useState(detail)
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen flex justify-center items-start">
-      <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-8">
+    <div className='w-4/5 p-8 bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen flex justify-center items-start transition-all duration-500 ease-in-out'>
+      <div className='bg-gradient-to-r  from-secondary-light to-secondary-dark shadow-2xl hover:shadow-3xl transition-shadow duration-300 rounded-lg w-full max-w-4xl p-8 transform hover:scale-105 transition-transform duration-300'>
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        <div className='mb-6'>
+          <h1 className='text-4xl font-extrabold text-black mb-4 tracking-wide animate-fade-in-down'>
             {jobDetails?.title}
           </h1>
-          <p className="text-gray-500 text-lg">
-            {jobDetails?.location} | {jobDetails?.employmentType} | {jobDetails?.salaryRange}
+          <p className='text-black text-lg'>
+            {jobDetails?.location} | {jobDetails?.employmentType} |{' '}
+            {jobDetails?.salaryRange}
           </p>
         </div>
 
         {/* Job Description */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-3 border-b pb-2">Job Description</h2>
-          <p className="text-gray-700 text-lg">{jobDetails?.description}</p>
+        <section className='mb-8'>
+          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+            Job Description
+          </h2>
+          <p className='text-black text-lg leading-relaxed animate-fade-in'>
+            {jobDetails?.description}
+          </p>
         </section>
 
         {/* Job Requirements */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-3 border-b pb-2">Job Requirements</h2>
-          <pre className="whitespace-pre-wrap text-gray-700 text-lg bg-gray-50 p-4 rounded-lg">
+        <section className='mb-8'>
+          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+            Job Requirements
+          </h2>
+          <pre className='whitespace-pre-wrap text-black text-lg bg-gradient-to-r from-primary to-secondary-light p-4 rounded-lg shadow-inner transition-transform transform hover:scale-105'>
             {jobDetails?.requirements}
           </pre>
         </section>
 
         {/* Job Status */}
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-3 border-b pb-2">Job Status</h2>
-          <div className="text-lg text-gray-700 space-y-2">
-            <p><strong>Posted On:</strong> {new Date(jobDetails?.createdAt).toLocaleDateString()}</p>
-            <p><strong>Last Updated:</strong> {new Date(jobDetails?.updatedAt).toLocaleDateString()}</p>
+        <section className='mb-8'>
+          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+            Job Status
+          </h2>
+          <div className='text-lg text-black space-y-2'>
+            <p>
+              <strong>Posted On:</strong>{' '}
+              {new Date(jobDetails?.createdAt).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Last Updated:</strong>{' '}
+              {new Date(jobDetails?.updatedAt).toLocaleDateString()}
+            </p>
           </div>
         </section>
 
         {/* Applicants */}
         <section>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-3 border-b pb-2">Applicants</h2>
+          <h2 className='text-2xl font-semibold text-black mb-3 border-b pb-2 border-secondary'>
+            Applicants
+          </h2>
           {jobDetails?.applicants?.length > 0 ? (
-            <ul className="list-disc ml-5 text-lg text-gray-700 space-y-1">
+            <ul className='list-disc ml-5 text-lg text-black space-y-1'>
               {jobDetails.applicants.map((applicant, index) => (
-                <li key={index}>{applicant}</li>
+                <li
+                  key={index}
+                  className='hover:bg-gray-100 p-2 rounded transition-colors duration-300'
+                >
+                  {applicant}
+                </li>
               ))}
             </ul>
           ) : (
-            <p className="text-lg text-gray-500">No applicants yet.</p>
+            <p className='text-lg text-black animate-fade-in'>
+              No applicants yet.
+            </p>
           )}
         </section>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default JobDetails;
+export default JobDetails
