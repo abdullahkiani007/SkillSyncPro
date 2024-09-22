@@ -152,6 +152,8 @@ const EmployerController = {
         const id = req.query.id;
         const data = req.body;
 
+        console.log("request body", req.body)
+
         const response = await EmployerServices.editAssessment(id,data);
         if(response.status === 500){
             return res.status(500).json({

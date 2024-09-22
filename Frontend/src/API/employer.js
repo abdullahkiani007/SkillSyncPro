@@ -311,6 +311,29 @@ class EmployerController {
     }
   }
 
+  async updateAssessment(token, assessmentId, assessment) {
+    try {
+      console.log("Sending /update/assessment request");
+      console.log(assessmentId);
+      const response = await this.apiClient.put(
+        `assessment/?id=${assessmentId}`,
+        assessment,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error deleting assessment:", error);
+      throw error;
+    }
+  }
+
   async archiveJob(token, jobId) {
     try {
       console.log("Sending /archive/job request");
