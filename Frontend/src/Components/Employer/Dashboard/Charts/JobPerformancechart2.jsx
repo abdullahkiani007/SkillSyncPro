@@ -71,26 +71,34 @@ const JobPerformanceChart2 = () => {
   }, [startDate, endDate])
 
   return (
-    <div>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          className='text-xs w-40 p-0 m-0'
-          label='From Date'
-          value={startDate}
-          onChange={(date) => setStartDate(date)}
-          renderInput={(params) => <TextField {...params} />}
-        />
-        <DatePicker
-          label='To Date'
-          className='text-xs w-40'
-          value={endDate}
-          onChange={(date) => setEndDate(date)}
-          minDate={startDate}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-      {loading ? <h1>Loading ...</h1> : <Bar data={chartData} />}{' '}
-      {/* Replaced Line with Bar */}
+    <div
+      className='bg-gradient-to-r from-primary-light to-secondary-dark'
+      style={{
+        padding: '20px',
+        borderRadius: '10px',
+      }}
+    >
+      <div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            className='text-xs w-40 p-0 m-0'
+            label='From Date'
+            value={startDate}
+            onChange={(date) => setStartDate(date)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DatePicker
+            label='To Date'
+            className='text-xs w-40'
+            value={endDate}
+            onChange={(date) => setEndDate(date)}
+            minDate={startDate}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+        {loading ? <h1>Loading ...</h1> : <Bar data={chartData} />}{' '}
+        {/* Replaced Line with Bar */}
+      </div>
     </div>
   )
 }
