@@ -88,7 +88,7 @@ const Signup = () => {
             withBorder
             title='Notification'
             onClose={() => setShowNotification(false)}
-            className='bg-primary-light text-primary-dark animate-bounce'
+            className='bg-primary-light text-primary-dark '
           >
             {notification}
           </Notification>
@@ -114,7 +114,7 @@ const Signup = () => {
                 onChange={handleOptionChange}
                 className='hidden'
               />
-              <span className='inline-block text-white text-lg py-2 px-4 bg-primary-default bg-primary  rounded-full cursor-pointer hover:bg-primary-dark transition-all duration-300 ease-in-out'>
+              <span className='inline-block text-white text-lg py-2 px-4 bg-primary-default bg-primary  rounded-full cursor-pointer hover:bg-secondary-dark transition-all duration-300 ease-in-out'>
                 Join a Company
               </span>
             </label>
@@ -127,7 +127,7 @@ const Signup = () => {
                 onChange={handleOptionChange}
                 className='hidden'
               />
-              <span className='inline-block  text-white text-lg py-2 px-4 bg-primary rounded-full cursor-pointer hover:bg-primary-dark transition-all duration-300 ease-in-out '>
+              <span className='inline-block  text-white text-lg py-2 px-4 bg-primary rounded-full cursor-pointer hover:bg-secondary-dark transition-all duration-300 ease-in-out '>
                 Register a Company
               </span>
             </label>
@@ -230,7 +230,7 @@ const Signup = () => {
 
           <button
             type='submit'
-            className='mt-6 w-full bg-primary text-white py-3 rounded-lg transition-transform transform hover:scale-105 hover:bg-primary-dark shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-opacity-50'
+            className='mt-6 w-full bg-primary text-white py-3 rounded-lg transition-transform transform hover:scale-105 hover:bg-secondary-dark shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-opacity-50'
           >
             Submit
           </button>

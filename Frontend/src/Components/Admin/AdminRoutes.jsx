@@ -18,7 +18,7 @@ const AdminRoutes = () => {
         <div className='flex flex-col flex-1 md:ml-64 '>
           {/* <Topbar /> */}
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div className='py-4'>
+          <div>
             <Outlet className='bg-gray-200 ' />
           </div>
         </div>
