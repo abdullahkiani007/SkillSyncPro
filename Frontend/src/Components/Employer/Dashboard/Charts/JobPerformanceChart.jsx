@@ -78,8 +78,8 @@ const JobPerformanceChart = () => {
 
   return (
     <div
+      className='bg-gradient-to-r from-secondary-light to-primary-light '
       style={{
-        backgroundColor: '#374151',
         padding: '20px',
         borderRadius: '10px',
       }}
@@ -132,19 +132,19 @@ const JobPerformanceChart = () => {
             plugins: {
               legend: {
                 labels: {
-                  color: '#FFF', // Set legend text to white
+                  color: '#000', // Set legend text to white
                 },
               },
             },
             scales: {
               x: {
                 ticks: {
-                  color: '#FFF', // X-axis tick color to white
+                  color: '#000', // X-axis tick color to white
                 },
               },
               y: {
                 ticks: {
-                  color: '#FFF', // Y-axis tick color to white
+                  color: '#000', // Y-axis tick color to white
                 },
               },
             },

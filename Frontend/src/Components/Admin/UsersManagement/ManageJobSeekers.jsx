@@ -58,13 +58,13 @@ const ManageJobSeekers = () => {
   }
 
   return (
-    <div className='p-8 bg-slate-100 min-h-screen'>
-      <h2 className='text-4xl font-extrabold text-slate-800 mb-8'>
+    <div className='p-8 bg-gradient-to-r from-secondary-dark to-secondary-dark  min-h-screen'>
+      <h2 className='text-4xl font-extrabold text-white   mb-8'>
         Manage Job Seekers
       </h2>
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-white shadow-md rounded-lg overflow-hidden'>
-          <thead className='bg-gradient-to-r from-slate-600 to-slate-800 text-white'>
+          <thead className='bg-gradient-to-r from-primary to-primary text-white'>
             <tr>
               <th className='py-3 px-4 text-left'>Name</th>
               <th className='py-3 px-4 text-left'>Email</th>
@@ -77,11 +77,13 @@ const ManageJobSeekers = () => {
                 key={jobSeeker._id}
                 className='border-b cursor-pointer hover:bg-slate-50 transition-colors'
               >
-                <td className='py-4 px-4'>{`${
-                  jobSeeker.user.firstName || 'No data added yet'
-                } ${jobSeeker.user.lastName || ''}`}</td>
                 <td className='py-4 px-4'>
-                  {jobSeeker.user.email || 'No data added yet'}
+                  {`${jobSeeker.user?.firstName || 'No data available '} ${
+                    jobSeeker.user?.lastName || ''
+                  }`}
+                </td>
+                <td className='py-4 px-4'>
+                  {jobSeeker.user?.email || 'No data available '}
                 </td>
                 <td className='py-4 px-4'>
                   <div className='flex items-center space-x-4'>
@@ -90,7 +92,7 @@ const ManageJobSeekers = () => {
                       className='text-blue-500 hover:text-blue-700 transition-colors'
                       title='View Details'
                     >
-                      <FaEye className='w-5 h-5' />
+                      <FaEye className='w-5 h-5 text-black' />
                     </button>
                     {!jobSeeker.archived ? (
                       <button
@@ -135,69 +137,69 @@ const ManageJobSeekers = () => {
               &times;
             </button>
             <h3 className='text-3xl font-semibold text-slate-800 mb-6 text-center'>
-              {`${selectedJobSeeker.user.firstName || 'No data added yet'} ${
-                selectedJobSeeker.user.lastName || ''
+              {`${selectedJobSeeker.user?.firstName || 'No data available '} ${
+                selectedJobSeeker.user?.lastName || ''
               }`}
             </h3>
             <div className='flex flex-col space-y-6'>
               <p className='text-lg'>
                 <strong>Email:</strong>{' '}
-                {selectedJobSeeker.user.email || 'No data added yet'}
+                {selectedJobSeeker.user?.email || 'No data available '}
               </p>
               <div>
                 <strong className='block text-lg mb-2'>Skills:</strong>
                 <p className='text-gray-600 bg-gray-100 p-4 rounded-md'>
-                  {selectedJobSeeker.skills.length > 0
+                  {selectedJobSeeker.skills?.length > 0
                     ? selectedJobSeeker.skills.join(', ')
-                    : 'No data added yet'}
+                    : 'No data available '}
                 </p>
               </div>
               <div>
                 <strong className='block text-lg mb-2'>Experience:</strong>
-                {selectedJobSeeker.experience.length > 0 ? (
+                {selectedJobSeeker.experience?.length > 0 ? (
                   selectedJobSeeker.experience.map((exp, index) => (
                     <div
                       key={index}
                       className='bg-gray-50 p-4 rounded-md mb-4 shadow-sm'
                     >
                       <p className='text-slate-700 font-medium'>{`${
-                        exp.companyName || 'No data added yet'
+                        exp.companyName || 'No data available '
                       } - ${exp.role || ''}`}</p>
                       <p className='text-sm text-gray-500'>
                         {exp.startDate
                           ? new Date(exp.startDate).toLocaleDateString()
-                          : 'No data added yet'}{' '}
+                          : 'No data available '}{' '}
                         -{' '}
                         {exp.endDate
                           ? new Date(exp.endDate).toLocaleDateString()
                           : 'Present'}
                       </p>
                       <p className='text-slate-600 mt-2'>
-                        {exp.description || 'No data added yet'}
+                        {exp.description || 'No data available '}
                       </p>
                     </div>
                   ))
                 ) : (
-                  <p className='text-gray-600'>No data added yet</p>
+                  <p className='text-gray-600'>No data available </p>
                 )}
               </div>
               <div>
                 <strong className='block text-lg mb-2'>Education:</strong>
-                {selectedJobSeeker.education.length > 0 ? (
+                {selectedJobSeeker.education?.length > 0 ? (
                   selectedJobSeeker.education.map((edu, index) => (
                     <div
                       key={index}
                       className='bg-gray-50 p-4 rounded-md mb-4 shadow-sm'
                     >
                       <p className='text-slate-700 font-medium'>{`${
-                        edu.institution || 'No data added yet'
-                      } - ${edu.degree || 'No data added yet'} in ${
-                        edu.fieldOfStudy || 'No data added yet'
+                        edu.institution || 'No data available '
+                      } - ${edu.degree || 'No data available '} in ${
+                        edu.fieldOfStudy || 'No data available '
                       }`}</p>
                       <p className='text-sm text-gray-500'>
                         {edu.startDate
                           ? new Date(edu.startDate).toLocaleDateString()
-                          : 'No data added yet'}{' '}
+                          : 'No data available '}{' '}
                         -{' '}
                         {edu.endDate
                           ? new Date(edu.endDate).toLocaleDateString()
@@ -206,29 +208,29 @@ const ManageJobSeekers = () => {
                     </div>
                   ))
                 ) : (
-                  <p className='text-gray-600'>No data added yet</p>
+                  <p className='text-gray-600'>No data available </p>
                 )}
               </div>
               <div>
                 <strong className='block text-lg mb-2'>Certifications:</strong>
-                {selectedJobSeeker.certifications.length > 0 ? (
+                {selectedJobSeeker.certifications?.length > 0 ? (
                   selectedJobSeeker.certifications.map((cert, index) => (
                     <div
                       key={index}
                       className='bg-gray-50 p-4 rounded-md mb-4 shadow-sm'
                     >
                       <p className='text-slate-700 font-medium'>{`${
-                        cert.title || 'No data added yet'
-                      } - ${cert.institution || 'No data added yet'}`}</p>
+                        cert.title || 'No data available '
+                      } - ${cert.institution || 'No data available '}`}</p>
                       <p className='text-sm text-gray-500'>
                         {cert.date
                           ? new Date(cert.date).toLocaleDateString()
-                          : 'No data added yet'}
+                          : 'No data available '}
                       </p>
                     </div>
                   ))
                 ) : (
-                  <p className='text-gray-600'>No data added yet</p>
+                  <p className='text-gray-600'>No data available </p>
                 )}
               </div>
             </div>
