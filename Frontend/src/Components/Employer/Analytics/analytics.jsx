@@ -33,12 +33,12 @@ const timeToHireData = [
 const EmployerAnalytics = () => {
   return (
     <Container
-      maxWidth='xl'
+      maxWidth={false}
       sx={{
         minHeight: '100vh', // Full height container
         p: 4,
-        backgroundColor: '#1b1b1b', // Dark background
-        borderRadius: 4,
+        background: 'linear-gradient(135deg, #2D4059, #2D4059)', // Gradient background
+        backgroundSize: 'cover', // Ensure the gradient covers the entire container
       }}
     >
       <Typography
@@ -60,18 +60,18 @@ const EmployerAnalytics = () => {
             sx={{
               borderRadius: 3,
               boxShadow: 3,
-              backgroundColor: '#2C3E50', // Dark navy blue card
+              background: 'linear-gradient(135deg, #E14411, #2D4059)', // Dark navy blue card
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
               '&:hover': {
                 transform: 'scale(1.03)', // Slight scale on hover
                 boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.2)', // Softer shadow on hover
-                backgroundColor: '#34495E', // New background color on hover
+                // New background color on hover
               },
             }}
           >
             <CardContent>
-              <Typography variant='h6' sx={{ mb: 2, color: '#FF6F61' }}>
+              <Typography variant='h6' sx={{ mb: 2, color: '#FFF' }}>
                 Job Posting Performance
               </Typography>
               <ResponsiveContainer width='100%' height={300}>
@@ -98,27 +98,26 @@ const EmployerAnalytics = () => {
             sx={{
               borderRadius: 3,
               boxShadow: 3,
-              backgroundColor: '#34495E', // Dark card color
+              background: 'linear-gradient(135deg, #E14411, #FFD460)', // Dark card color
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
               '&:hover': {
                 transform: 'scale(1.03)',
                 boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.2)',
-                backgroundColor: '#2C3E50', // New background color on hover
               },
             }}
           >
             <CardContent>
-              <Typography variant='h6' sx={{ mb: 2, color: '#50C878' }}>
+              <Typography variant='h6' sx={{ mb: 2, color: '#fff' }}>
                 Candidate Demographics
               </Typography>
               <ResponsiveContainer width='100%' height={300}>
                 <BarChart data={candidateDemographicsData}>
                   <CartesianGrid strokeDasharray='3 3' stroke='#ccc' />
-                  <XAxis dataKey='name' stroke='#f5f5f5' />
-                  <YAxis stroke='#f5f5f5' />
+                  <XAxis dataKey='name' stroke='#fff' />
+                  <YAxis stroke='#fff' />
                   <Tooltip />
-                  <Bar dataKey='value' fill='#50C878' radius={[10, 10, 0, 0]} />
+                  <Bar dataKey='value' fill=' #fff' radius={[10, 10, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -131,13 +130,11 @@ const EmployerAnalytics = () => {
             sx={{
               borderRadius: 3,
               boxShadow: 3,
-              backgroundColor: '#2C3E50', // Matching navy blue card
+              background: 'linear-gradient(135deg,#000,#333)', // Matching navy blue card
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
               '&:hover': {
                 transform: 'scale(1.03)',
-                boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.2)',
-                backgroundColor: '#34495E', // New background color on hover
               },
             }}
           >

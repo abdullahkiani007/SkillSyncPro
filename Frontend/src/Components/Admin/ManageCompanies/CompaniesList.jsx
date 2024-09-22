@@ -106,9 +106,9 @@ const ManageCompanies = () => {
             <td className='px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center'>
               <button
                 onClick={() => handleCompanyClick(company._id)}
-                className='text-teal-600 hover:text-teal-900 flex items-center'
+                className='text-black hover:text-teal-900 flex items-center'
               >
-                <FaEye className='mr-2' />
+                <FaEye className='mr-2 text-black' />
                 View Details
               </button>
               {activeTab === 'unauthorized' && (
@@ -139,7 +139,7 @@ const ManageCompanies = () => {
             activeTab === 'authorized'
               ? 'bg-teal-500 text-white'
               : 'bg-gray-200 hover:bg-teal-200'
-          } rounded-l-full`}
+          } `}
         >
           Authorized Companies
         </button>
@@ -149,7 +149,7 @@ const ManageCompanies = () => {
             activeTab === 'unauthorized'
               ? 'bg-teal-500 text-white'
               : 'bg-gray-200 hover:bg-teal-200'
-          } rounded-r-full`}
+          } `}
         >
           Unauthorized Companies
         </button>

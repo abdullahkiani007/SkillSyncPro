@@ -94,7 +94,7 @@ const ManageEmployees = ({ companyId }) => {
   }
 
   return (
-    <div className='bg-white p-8 rounded-lg shadow-md animate-fade-in-up'>
+    <div className='bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen p-8 rounded-lg shadow-md animate-fade-in-up'>
       <h2 className='text-3xl font-semibold mb-6 text-secondary-dark animate-slide-in-right'>
         Manage Employees
       </h2>
@@ -106,7 +106,7 @@ const ManageEmployees = ({ companyId }) => {
             activeTab === 'authorized'
               ? 'bg-primary text-white'
               : 'bg-gray-200 text-gray-600'
-          } hover:bg-primary hover:text-white transform hover:scale-105 transition-transform`}
+          } hover:bg-gray-200 hover:text-black transform hover:scale-105 transition-transform`}
           onClick={() => setActiveTab('authorized')}
         >
           <FaUserShield className='inline-block mr-2' />
@@ -117,7 +117,7 @@ const ManageEmployees = ({ companyId }) => {
             activeTab === 'unauthorized'
               ? 'bg-primary text-white'
               : 'bg-gray-200 text-gray-600'
-          } hover:bg-primary hover:text-white transform hover:scale-105 transition-transform`}
+          } hover:bg-gray-200 hover:text-black transform hover:scale-105 transition-transform`}
           onClick={() => setActiveTab('unauthorized')}
         >
           <FaUserAltSlash className='inline-block mr-2' />
@@ -189,7 +189,7 @@ const ManageEmployees = ({ companyId }) => {
                 >
                   <div>
                     <p
-                      className='font-semibold text-lg cursor-pointer text-primary'
+                      className='text-lg font-extrabold font-4xl cursor-pointer text-white '
                       onClick={() => handleViewDetails(employee.id)}
                     >
                       {employee.user.firstName} {employee.user.lastName}
@@ -198,7 +198,7 @@ const ManageEmployees = ({ companyId }) => {
                   </div>
                   <button
                     onClick={() => handleAuthorize(employee.id)}
-                    className='text-green-500 hover:underline transform hover:scale-110 transition-transform'
+                    className='text-white rounded-lg  p-3 bg-green-700  transform hover:scale-110 transition-transform'
                   >
                     Authorize
                   </button>

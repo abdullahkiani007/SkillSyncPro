@@ -58,15 +58,15 @@ const ManageEmployees = () => {
   }
 
   return (
-    <div className='p-8 bg-slate-50 min-h-screen'>
-      <h2 className='text-4xl font-extrabold text-slate-900 mb-8'>
+    <div className='p-8 bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen'>
+      <h2 className='text-4xl font-extrabold text-white mb-8'>
         Manage Employees
       </h2>
 
       {/* Employees Table */}
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-white shadow-md rounded-lg overflow-hidden'>
-          <thead className='bg-gradient-to-r from-slate-600 to-slate-800 text-white'>
+          <thead className='bg-gradient-to-r from-primary to-primary text-white'>
             <tr>
               <th className='py-3 px-4 text-left'>Name</th>
               <th className='py-3 px-4 text-left'>Email</th>
@@ -81,12 +81,12 @@ const ManageEmployees = () => {
                 className='border-b hover:bg-slate-100 transition-colors'
               >
                 <td className='py-4 px-4'>
-                  {employee.user.firstName && employee.user.lastName
+                  {employee.user?.firstName && employee.user?.lastName
                     ? `${employee.user.firstName} ${employee.user.lastName}`
                     : 'No data available'}
                 </td>
                 <td className='py-4 px-4'>
-                  {employee.user.email
+                  {employee.user?.email
                     ? employee.user.email
                     : 'No data available'}
                 </td>
@@ -100,7 +100,7 @@ const ManageEmployees = () => {
                       className='text-blue-500 hover:text-blue-700 transition-colors'
                       title='View Details'
                     >
-                      <FaEye className='w-5 h-5' />
+                      <FaEye className='w-5 h-5 text-black' />
                     </button>
                     <button
                       onClick={() => handleArchiveEmployee(employee._id)}
@@ -137,14 +137,15 @@ const ManageEmployees = () => {
             </button>
             {/* Modal Content */}
             <h3 className='text-3xl font-bold text-slate-800 mb-6 text-center'>
-              {selectedEmployee.user.firstName && selectedEmployee.user.lastName
+              {selectedEmployee.user?.firstName &&
+              selectedEmployee.user?.lastName
                 ? `${selectedEmployee.user.firstName} ${selectedEmployee.user.lastName}`
                 : 'No data available'}
             </h3>
             <div className='space-y-6'>
               <p className='text-lg'>
                 <strong>Email:</strong>{' '}
-                {selectedEmployee.user.email
+                {selectedEmployee.user?.email
                   ? selectedEmployee.user.email
                   : 'No data available'}
               </p>
@@ -156,7 +157,7 @@ const ManageEmployees = () => {
               </p>
               <p className='text-lg'>
                 <strong>Company:</strong>{' '}
-                {selectedEmployee.company && selectedEmployee.company.name
+                {selectedEmployee.company?.name
                   ? selectedEmployee.company.name
                   : 'No data available'}
               </p>
