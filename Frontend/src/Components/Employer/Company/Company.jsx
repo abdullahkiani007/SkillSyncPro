@@ -1,21 +1,12 @@
-// src/pages/Company/Company.js
-
 import React, { useState, useEffect } from 'react'
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Button,
-} from '@mui/material'
 import EmployerController from '../../../API/employer'
 import Loader from '../../Loader/Loader'
 import CompanyForm from './CompanyForm'
 import companyBackgroundImg from '../../../assets/company_background.jpg'
 import logo from '../../../assets/companyLogo.png'
 import personImage from '../../../assets/person.jpeg'
+import { Button } from '@mui/material'
+
 const Company = () => {
   const [company, setCompany] = useState(null)
   const [edit, setEdit] = useState(false)
@@ -25,19 +16,18 @@ const Company = () => {
   const [jobs, setJobs] = useState([])
 
   let company_description =
-    'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum, fuga.Nostrum culpa hic perspiciatis reprehenderit iusto minima nobis, a,autem sequi dignissimos possimus. Perspiciatis, nisi eaque ea voluptatem quis sunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptates officia totam illum optio obcaecati, corporis placeat eum nihil sapiente maxime magni dolore sint et temporibus quidem libero, ipsum velit tenetur? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus, ratione beatae? Possimus architecto non unde ratione facilis quaerat reiciendis atque aliquid, fugit enim sunt, perferendis nobis quasi ex ipsam fugiat. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates natus voluptate sed alias sint corrupti, fuga magnam, velit dignissimos ullam rem laboriosam delectus suscipit. Placeat molestias unde eos harum itaque.'
+    'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum, fuga.Nostrum culpa hic perspiciatis reprehenderit iusto minima nobis, a,autem sequi dignissimos possimus. Perspiciatis, nisi eaque ea voluptatem quis sunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit...'
+
   useEffect(() => {
     const fetchCompany = async () => {
       const token = localStorage.getItem('token')
       let company = await EmployerController.getCompany(token)
-      console.log('Company -->', company)
 
       if (company.status === 200) {
         let Employees = await EmployerController.getEmployees(
           token,
           company.data.data._id
         )
-
         if (Employees.status === 200) {
           Employees = Employees.data.employees
         } else {
@@ -49,45 +39,36 @@ const Company = () => {
           employees: Employees.authEmployees,
         }
         setCompany(newCompany)
-        console.log(newCompany)
-
         setLoding(false)
       } else if (company.status === 404) {
         setCreate(true)
         setLoding(false)
-      } else console.log(company.message)
+      } else {
+        console.log(company.message)
+      }
     }
+
     const fetchJobs = async () => {
       let jobs = JSON.parse(localStorage.getItem('empJobs'))
-      console.log(jobs)
       let date = Date.now()
       let jobDate = jobs[0].createdAt
       let newDate = new Date(jobDate)
-
-      // Calculate the difference in milliseconds
       let differenceInMilliseconds = date - newDate.getTime()
-
-      // Convert the difference from milliseconds to days
       let differenceInDays = Math.floor(
         differenceInMilliseconds / (1000 * 60 * 60 * 24)
       )
 
-      // console.log(`The job was posted ${differenceInDays} days ago.`);
-
-      jobs = jobs.map((job) => {
-        return {
-          ...job,
-          jobType: 'Full Time',
-          salary: '$1000 - $2000',
-          jobMode: 'Hybrid',
-          jobPostDays: differenceInDays,
-        }
-      })
+      jobs = jobs.map((job) => ({
+        ...job,
+        jobType: 'Full Time',
+        salary: '$1000 - $2000',
+        jobMode: 'Hybrid',
+        jobPostDays: differenceInDays,
+      }))
       jobs = jobs.slice(0, 3)
-      if (jobs) {
-        setJobs(jobs)
-      }
+      setJobs(jobs)
     }
+
     fetchCompany()
     fetchJobs()
   }, [])
@@ -108,280 +89,163 @@ const Company = () => {
       />
     )
   }
+
   return (
-    <div className='w-full overflow-y-auto overflow-x-hidden-auto bg-slate-100 min-h-screen '>
-      <div className='bg-slate-100 flex flex-col items-center w-full'>
-        <div className=' flex flex-col items-center justify-between'>
-          <div className='w-full max-h-52 overflow-clip z-3'>
-            <img
-              className='object-cover '
-              src={companyBackgroundImg}
-              alt='companyBackground'
-            />
-          </div>
-          {/* // company info container */}
-          <div className='bg-white w-4/5 lg:w-3/5 p-3 rounded-xl top-52 z-10  absolute shadow-2xl'>
-            {/* logo and edit button */}
-            <div className=' flex mx-10  items-center '>
-              <img
-                className='w-20 h-20 rounded-full mr-2'
-                src={logo}
-                alt='companyLogo'
-              />
-              <div>
-                <h1 className='font-bold text-lg'>
-                  {company.name.toUpperCase()}
-                </h1>
-                <h2 className='text-sm text-gray-400'>{company.industry}</h2>
-              </div>
-              <div className='ml-auto' variant='Outlined'>
-                <Button onClick={() => setEdit(true)}>Manage</Button>
-              </div>
-            </div>
-            {/* company info */}
-            <div className='md:flex md:space-x-32 mx-10'>
-              <div className='my-2'>
-                <h1 className='text-gray-500'>Website</h1>
-                <a
-                  href={company.website}
-                  target='_blank'
-                  className='text-blue-700 text-sm'
-                >
-                  {company.website}
-                </a>
-              </div>
+    <div className='w-full min-h-screen bg-slate-50 font-poppins'>
+      <div className='relative w-full h-60'>
+        <img
+          className='w-full h-full object-cover'
+          src={companyBackgroundImg}
+          alt='companyBackground'
+        />
+        <div className='absolute inset-0 bg-gradient-to-t from-black opacity-60'></div>
+        <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center'>
+          <img
+            className='w-24 h-24 rounded-full border-4 border-white shadow-md'
+            src={logo}
+            alt='companyLogo'
+          />
+          <h1 className='text-white text-2xl font-bold mt-2'>
+            {company.name.toUpperCase()}
+          </h1>
+          <p className='text-gray-300 text-sm'>{company.industry}</p>
+        </div>
+      </div>
 
-              <div className='my-2 '>
-                <h1 className='text-gray-500 '>Location</h1>
-                <p className='font-bold text-sm'>{company.address}</p>
-              </div>
-
-              <div className='my-2 '>
-                <h1 className='text-gray-500 '>Company Size</h1>
-                <p className='font-bold text-sm'>
-                  {company.employees.length} - {company.employees.length + 50}
-                </p>
-              </div>
+      <div className='max-w-7xl mx-auto px-4 py-8'>
+        <div className='bg-white p-6 shadow-lg rounded-lg'>
+          <div className='flex justify-between items-center'>
+            <div className='space-y-2'>
+              <p className='text-gray-500 text-sm'>Website</p>
+              <a
+                href={company.website}
+                target='_blank'
+                rel='noreferrer'
+                className='text-blue-600 hover:underline'
+              >
+                {company.website}
+              </a>
             </div>
+            <div className='space-y-2'>
+              <p className='text-gray-500 text-sm'>Location</p>
+              <p className='text-sm font-bold'>{company.address}</p>
+            </div>
+            <div className='space-y-2'>
+              <p className='text-gray-500 text-sm'>Company Size</p>
+              <p className='text-sm font-bold'>
+                {company.employees.length} - {company.employees.length + 50}
+              </p>
+            </div>
+            <Button
+              sx={{
+                backgroundColor: '#007bff',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#0056b3',
+                },
+              }}
+              onClick={() => setEdit(true)}
+            >
+              Manage
+            </Button>
           </div>
         </div>
 
-        {/* description and jobs */}
-        <div className='lg:flex justify-between  lg:w-4/5'>
-          <div className='mt-60 px-10 w-full text-start lg:w-1/2'>
-            <h1 className='font-bold text-lg mb-2'>About {company.name}</h1>
-            <div>
-              {isExpanded ? (
-                <p className='text-gray-500 text-sm'>{company_description}</p>
-              ) : (
-                <p className='text-gray-500 text-sm'>
-                  {company_description.substring(0, 200)}
-                </p>
-              )}
-              {/* mui button */}
+        <div className='mt-12 grid lg:grid-cols-3 gap-6'>
+          <div className='lg:col-span-2'>
+            <div className='bg-white p-6 shadow-lg rounded-lg'>
+              <h2 className='font-bold text-lg mb-4'>About {company.name}</h2>
+              <p className='text-gray-700 text-sm'>
+                {isExpanded
+                  ? company_description
+                  : company_description.substring(0, 200)}
+              </p>
               <Button
-                sx={{ fontSyle: 'bold' }}
+                sx={{
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  color: 'blue',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                    color: 'blue',
+                  },
+                }}
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 {isExpanded ? 'Show Less' : 'Read More'}
               </Button>
             </div>
-            <div>
-              <h1 className='font-bold text-lg mb-2'>
+
+            <div className='bg-white p-6 shadow-lg rounded-lg mt-8'>
+              <h2 className='font-bold text-lg mb-4'>
                 Jobs from {company.name}
-              </h1>
-              {/* jobs container */}
-              {jobs &&
-                jobs.map((job) => (
-                  <div className='my-2'>
-                    <Card className='w-full'>
-                      <CardContent>
-                        <Grid container direction='row'>
-                          {/* company logo */}
-                          <Grid item xs={2} sm={1}>
-                            <CardMedia
-                              component='img'
-                              sx={{
-                                marginRight: '3px',
-                                width: 50,
-                                borderRadius: '50%',
-                              }}
-                              image={logo}
-                              alt='companyLogo'
-                            />
-                          </Grid>
-                          <Grid item xs={10} sm={9}>
-                            <Typography
-                              variant='h6'
-                              style={{
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {job.title}
-                            </Typography>
-                            <Typography
-                              style={{
-                                color: 'gray',
-                              }}
-                              variant='subtitle2'
-                            >
-                              {job.location}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Grid
-                          container
-                          direction='row'
-                          style={{
-                            marginTop: '10px',
-                          }}
-                        >
-                          <Grid
-                            item
-                            xs={3}
-                            style={{
-                              backgroundColor: '#f5f5f5',
-                              borderRadius: '5px',
-                              padding: '5px 2px 5px 2px',
-                              textAlign: 'center',
-                            }}
-                          >
-                            <Typography variant='body2'>
-                              {job.jobType}
-                            </Typography>
-                          </Grid>
-
-                          <Grid
-                            item
-                            xs={2}
-                            style={{
-                              backgroundColor: '#f5f5f5',
-                              borderRadius: '5px',
-                              padding: '5px 2px 5px 2px',
-                              textAlign: 'center',
-                              marginLeft: '5px',
-                            }}
-                          >
-                            <Typography variant='body2'>
-                              {job.jobMode}
-                            </Typography>
-                          </Grid>
-
-                          <Grid
-                            item
-                            xs={4}
-                            style={{
-                              backgroundColor: '#f5f5f5',
-                              borderRadius: '5px',
-                              padding: '5px 2px 5px 2px',
-                              textAlign: 'center',
-                              marginLeft: '5px',
-                            }}
-                          >
-                            <Typography variant='body2'>
-                              {job.salary}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Grid
-                          style={{
-                            marginTop: '10px',
-                          }}
-                        >
-                          <Grid>
-                            {/* days passed since posted */}
-                            <Typography
-                              style={{
-                                color: 'gray',
-                              }}
-                              variant='subtitle2'
-                            >
-                              {job.jobPostDays} days ago{' '}
-                              <span className='font-bold text-black'>. </span>
-                              {job.applicants.length} applicants
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </Card>
+              </h2>
+              {jobs.map((job, index) => (
+                <div
+                  key={index}
+                  className='bg-gray-100 p-4 rounded-lg shadow-md mb-4'
+                >
+                  <div className='flex items-center mb-2'>
+                    <img
+                      className='w-10 h-10 rounded-full mr-4'
+                      src={logo}
+                      alt='companyLogo'
+                    />
+                    <div>
+                      <h3 className='font-bold'>{job.title}</h3>
+                      <p className='text-gray-500'>{job.location}</p>
+                    </div>
                   </div>
-                ))}
+                  <div className='flex space-x-4'>
+                    <span className='bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded'>
+                      {job.jobType}
+                    </span>
+                    <span className='bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded'>
+                      {job.jobMode}
+                    </span>
+                    <span className='bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded'>
+                      {job.salary}
+                    </span>
+                  </div>
+                  <p className='text-gray-500 text-xs mt-2'>
+                    {job.jobPostDays} days ago · {job.applicants.length}{' '}
+                    applicants
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* people section */}
-          <div className='px-10 lg:mt-60  w-full text-start lg:w-2/5'>
-            <h1 className='font-bold text-lg'>People at {company.name}</h1>
-            <Card className='w-full'>
-              <CardContent>
-                {company.employees.map((employee) => (
-                  <Grid
-                    container
-                    xs={12}
-                    sm={12}
-                    style={{
-                      marginTop: '10px',
-                    }}
-                    direction='row'
-                  >
-                    <Grid xs={2} sm={2}>
-                      <CardMedia
-                        component='img'
-                        sx={{
-                          marginRight: '3px',
-                          width: 50,
-                          height: 50,
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          objectPosition: 'center',
-                          transform: 'scale(1)',
-                        }}
-                        image={employee.user.profilePicture}
-                        alt='companyLogo'
-                      />
-                    </Grid>
-                    <Grid
-                      xs={8}
-                      sm={8}
-                      sx={{
-                        textAlign: 'start',
-                        marginLeft: '10px',
-                      }}
-                    >
-                      <Typography
-                        variant='subtitle2'
-                        style={{
-                          textAlign: 'start',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {employee.user.firstName}
-                      </Typography>
-                      <Typography
-                        variant='subtitle2'
-                        style={{
-                          textAlign: 'start',
-                          color: 'gray',
-                        }}
-                      >
-                        {employee.position || 'Recruiter'}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                ))}
-                <Grid xs={12} sm={12}>
-                  <Button
-                    style={{
-                      width: '100%',
-                      marginTop: '10px',
-                    }}
-                    variant='outlined'
-                  >
-                    Show All
-                  </Button>
-                </Grid>
-              </CardContent>
-            </Card>
+          <div className='bg-white p-6 shadow-lg rounded-lg'>
+            <h2 className='font-bold text-lg mb-4'>People at {company.name}</h2>
+            {company.employees.map((employee, index) => (
+              <div key={index} className='flex items-center mb-4'>
+                <img
+                  className='w-10 h-10 rounded-full mr-4 object-cover'
+                  src={employee.user.profilePicture || personImage}
+                  alt='person'
+                />
+                <div>
+                  <p className='font-bold'>{employee.user.firstName}</p>
+                  <p className='text-gray-500 text-sm'>
+                    {employee.position || 'Recruiter'}
+                  </p>
+                </div>
+              </div>
+            ))}
+            <Button
+              sx={{
+                width: '100%',
+                border: '1px solid #007bff',
+                color: '#007bff',
+                '&:hover': {
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                },
+              }}
+            >
+              Show All
+            </Button>
           </div>
         </div>
       </div>
