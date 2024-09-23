@@ -177,10 +177,14 @@ const jobseekerService = {
           // Create the application
           application.resume = data.resume;
           application.videoIntroduction = data.videoIntroduction;
-          application.similarityScore  = data.similarityScore
           
           await application.save();
+
+          const applicationReport = await ApplicationResultModel.findOne({application:data.application_id})
         
+          applicationReport.similaryScore = data.similarityScore
+          await applicationReport.save();
+          
       
           // If the job has a skill assessment, create the CandidateAssessment
           if (job.skillAssessment) {
