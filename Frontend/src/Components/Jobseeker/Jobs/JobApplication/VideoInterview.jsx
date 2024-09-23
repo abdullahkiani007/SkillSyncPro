@@ -6,6 +6,7 @@ import axios from "axios";
 import Loader from "../../../../Components/Loader/Loader";
 import UserController from "../../../../API/index";
 import {WaveFile} from "wavefile"; // Import the default export
+import { useSelector } from "react-redux"
 
 const questions = [
   "So please tell me about yourself.",
@@ -22,6 +23,8 @@ const VideoInterview = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
+  const {_id} = useSelector( (state)=> state.user)
+  
 
   // Video recording using react-media-recorder
   const {
@@ -114,23 +117,13 @@ const VideoInterview = () => {
       const audioBlob = await audioResponse.blob();
       const wavBlob = await convertToWav(audioBlob); // Convert to WAV
       
+      console.log("heyyyy")
       const formDataVideo = new FormData();
-      formDataVideo.append("video", videoBlob, "interview_video.webm");
+      formDataVideo.append("video", videoBlob, `${_id}.webm`);
 
-      const formDataAudio = new FormData();
-      formDataAudio.append("audio", wavBlob, "interview_audio.wav");
-      formDataAudio.append("application_id", application_id);
+      formDataVideo.append("application_id", application_id);
         // Upload audio to FastAPI server
-        let audioUploadResponse = await axios.post(
-          "http://localhost:8000/predict_score/", // FastAPI endpoint for audio upload and scoring
-          formDataAudio,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log("Audio upload successful:", audioUploadResponse.data);
+        
 
         // Call the backend to get the pre-signed URL for video
         let videoUploadResponse = await UserController.generatePresignedUrl(
@@ -151,6 +144,18 @@ const VideoInterview = () => {
         goToNextStep();
         setIsProcessing(false);
 
+        let audioUploadResponse = await axios.post(
+          "http://localhost:8000/predict_score/", // FastAPI endpoint for audio upload and scoring
+          formDataVideo,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Audio upload successful:", audioUploadResponse.data);
+
+
 
         // Upload the video to S3 using the pre-signed URL
         await axios.put(url.data, videoBlob, {
@@ -159,10 +164,7 @@ const VideoInterview = () => {
           },
         });
 
-        
-
-        alert("Interview uploaded successfully!");
-      } catch (error) {
+          } catch (error) {
         console.error("Error uploading interview:", error);
         alert("Failed to upload interview.");
         setIsProcessing(false);
