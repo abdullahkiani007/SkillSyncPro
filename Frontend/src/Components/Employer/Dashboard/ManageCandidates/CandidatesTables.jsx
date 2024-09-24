@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Table,
   TableBody,
@@ -10,75 +10,79 @@ import {
   Paper,
   IconButton,
   Tooltip,
-} from "@mui/material";
+} from '@mui/material'
 import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
   MoreVert as MoreVertIcon,
-} from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+} from '@mui/icons-material'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const statusColors = {
   Review: {
-    border: "border-blue-600",
-    background: "bg-blue-100",
+    border: 'border-blue-600',
+    background: 'bg-blue-100',
   },
   Accepted: {
-    border: "border-green-600",
-    background: "bg-green-100",
+    border: 'border-green-600',
+    background: 'bg-green-100',
   },
   Rejected: {
-    border: "border-red-600",
-    background: "bg-red-100",
+    border: 'border-red-600',
+    background: 'bg-red-100',
   },
   // Add more statuses and their colors as needed
-};
+}
 
 function CandidateTable({ candidates }) {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id } = useParams()
+  const navigate = useNavigate()
   const handleApprove = (index) => {
-    const updatedCandidates = [...candidates];
-    updatedCandidates[index].isApproved = !updatedCandidates[index].isApproved;
+    const updatedCandidates = [...candidates]
+    updatedCandidates[index].isApproved = !updatedCandidates[index].isApproved
     // setCandidates(updatedCandidates);
-  };
+  }
 
   return (
     <div>
-      <div className="overflow-x-scroll">
+      <div className=' max-w-7xl mx-auto'>
         <TableContainer>
-          <Table className="min-w-full">
+          <Table className='min-w-full border-1 mb-1 border-black rounded-lg'>
             <TableHead
               sx={{
-                backgroundColor: "#1976d2",
-                color: "#fff",
+                backgroundColor: '#E14400',
               }}
             >
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
+                <TableCell
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'white',
+                  }}
+                >
                   Candidate
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
+                <TableCell sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>
                   Job Title
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
+                <TableCell sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>
                   Applied Date
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
+                <TableCell sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>
                   Location
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
+                <TableCell sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>
                   Contact
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
+                <TableCell sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>
                   Email ID
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", color: "#e3f2fd" }}>
+                <TableCell sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>
                   Stage
                 </TableCell>
                 <TableCell
                   // align="right"
-                  sx={{ fontWeight: "bold", color: "#e3f2fd" }}
+                  sx={{ fontWeight: 'bold', color: '#e3f2fd' }}
                 >
                   Actions
                 </TableCell>
@@ -88,18 +92,39 @@ function CandidateTable({ candidates }) {
               {candidates.map((candidate, index) => (
                 <TableRow
                   key={index}
-                  className="hover:bg-blue-50"
+                  className='hover:bg-blue-100'
                   onClick={() =>
-                    navigate(`/employer/dashboard/candidates/manage/${candidate._id}`)
+                    navigate(
+                      `/employer/dashboard/candidates/manage/${candidate._id}`
+                    )
                   }
+                  sx={{
+                    '&:hover': {
+                      '& .MuiTableCell-root': {
+                        color: 'black', // Change all TableCell text to black on hover
+                      },
+                    },
+                  }}
                 >
-                  <TableCell>{candidate.candidateName}</TableCell>
-                  <TableCell>{candidate.jobTitle}</TableCell>
-                  <TableCell>{new Date(candidate.appliedDate).toLocaleDateString()}</TableCell>
-                  <TableCell>{candidate.location}</TableCell>
-                  <TableCell>{candidate.contact}</TableCell>
-                  <TableCell>{candidate.email}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ color: 'white' }}>
+                    {candidate.candidateName}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white' }}>
+                    {candidate.jobTitle}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white' }}>
+                    {new Date(candidate.appliedDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white' }}>
+                    {candidate.location}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white' }}>
+                    {candidate.contact}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white' }}>
+                    {candidate.email}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white' }}>
                     <p
                       className={`border w-fit px-2 py-1 rounded ${
                         statusColors[candidate.stage]?.border
@@ -110,11 +135,11 @@ function CandidateTable({ candidates }) {
                   </TableCell>
                   <TableCell>
                     <Tooltip
-                      title={candidate.isApproved ? "Disapprove" : "Approve"}
+                      title={candidate.isApproved ? 'Disapprove' : 'Approve'}
                     >
                       <IconButton
                         onClick={() => handleApprove(index)}
-                        color={candidate.isApproved ? "success" : "error"}
+                        color={candidate.isApproved ? 'success' : 'error'}
                         sx={{ mr: 1 }}
                       >
                         {candidate.isApproved ? (
@@ -124,7 +149,7 @@ function CandidateTable({ candidates }) {
                         )}
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="More options">
+                    <Tooltip title='More options'>
                       <IconButton>
                         <MoreVertIcon />
                       </IconButton>
@@ -137,7 +162,7 @@ function CandidateTable({ candidates }) {
         </TableContainer>
       </div>
     </div>
-  );
+  )
 }
 
-export default CandidateTable;
+export default CandidateTable
