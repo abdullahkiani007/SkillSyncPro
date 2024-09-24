@@ -1,25 +1,32 @@
-import React from 'react';
-import { Card, CardContent, Typography, List, ListItem, ListItemText } from '@mui/material';
+import React from 'react'
+import {
+  Card,
+  CardContent,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material'
 
 const ViewAssessment = ({ assessment }) => {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography variant='h5' component='div'>
           {assessment.title}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant='body2' color='textSecondary'>
           {assessment.description}
         </Typography>
 
-        <Typography variant="h6" component="div" style={{ marginTop: '16px' }}>
+        <Typography variant='h6' component='div' style={{ marginTop: '16px' }}>
           Language: {assessment.language}
         </Typography>
-        <Typography variant="h6" component="div">
+        <Typography variant='h6' component='div'>
           Time Limit: {assessment.timeLimit} minutes
         </Typography>
 
-        <Typography variant="h6" component="div" style={{ marginTop: '16px' }}>
+        <Typography variant='h6' component='div' style={{ marginTop: '16px' }}>
           Problems
         </Typography>
         <List>
@@ -40,7 +47,7 @@ const ViewAssessment = ({ assessment }) => {
         </List>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default ViewAssessment;
+export default ViewAssessment
