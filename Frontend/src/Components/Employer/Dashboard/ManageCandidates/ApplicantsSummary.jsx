@@ -96,6 +96,8 @@ const ApplicationSummary = () => {
         console.log("Application", summaryDataArr);
         setLoading(false);
       }
+
+      setLoading(false)
     };
 
     fetchSummaryData();
