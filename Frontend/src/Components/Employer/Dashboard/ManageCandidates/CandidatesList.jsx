@@ -21,7 +21,7 @@ const CandidatesList = () => {
   }, [])
 
   return (
-    <div className='bg-white min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark'>
+    <div className=' min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark'>
       <h1 className='py-10 px-6 font-bold text-2xl text-white'>
         Candidates Summary
       </h1>

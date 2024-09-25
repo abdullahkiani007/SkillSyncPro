@@ -101,7 +101,7 @@ const Company = () => {
   }
 
   return (
-    <div className='w-full min-h-screen font-poppins'>
+    <div className='w-full min-h-screen font-poppins '>
       <div
         className={`relative w-full h-60 ${
           animationTriggered

@@ -37,6 +37,7 @@ const EmployerAnalytics = () => {
       sx={{
         minHeight: '100vh', // Full height container
         p: 4,
+        backgroundColor: 'white',
         // Gradient background
         backgroundSize: 'cover', // Ensure the gradient covers the entire container
       }}
@@ -60,7 +61,7 @@ const EmployerAnalytics = () => {
             sx={{
               borderRadius: 3,
               boxShadow: 3,
-              background: 'linear-gradient(135deg, #E14411, #2D4059)', // Dark navy blue card
+              background: '#E14400', // Dark navy blue card
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
               '&:hover': {
