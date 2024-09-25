@@ -40,7 +40,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark p-10'>
+    <div className='min-h-screen bg-slate-200 p-10'>
       <h1 className='text-4xl font-extrabold text-white mb-10 text-center'>
         {admin ? 'Company Admin' : 'Employer'} Dashboard
       </h1>
