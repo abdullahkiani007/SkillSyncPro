@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   return (
     <div className='min-h-screen bg-slate-200 p-10'>
-      <h1 className='text-4xl font-extrabold text-white mb-10 text-center'>
+      <h1 className='text-4xl font-extrabold text-secondary-dark mb-10 text-center'>
         {admin ? 'Company Admin' : 'Employer'} Dashboard
       </h1>
       {dashboardData && (
@@ -68,7 +68,7 @@ const Dashboard = () => {
 
           {/* Jobs Posted Card */}
           <div
-            className='bg-indigo-700 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
+            className='bg-indigo-400 text-white p-8 rounded-xl shadow-xl transition-transform transform hover:scale-105 cursor-pointer hover:shadow-2xl'
             onClick={() => navigate('../job/job-listing')}
           >
             <h2 className='text-3xl font-semibold mb-4'>Jobs Posted</h2>
