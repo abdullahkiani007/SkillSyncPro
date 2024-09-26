@@ -10,39 +10,94 @@ import {
 
 const ViewAssessment = ({ assessment }) => {
   return (
-    <Card>
+    <Card
+      sx={{
+        backgroundColor: '#f9fafb',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        padding: '20px',
+      }}
+    >
       <CardContent>
-        <Typography variant='h5' component='div'>
+        <Typography variant='h5' sx={{ fontWeight: 'bold', color: '#333' }}>
           {assessment.title}
         </Typography>
-        <Typography variant='body2' color='textSecondary'>
+        <Typography
+          variant='body2'
+          color='textSecondary'
+          sx={{ marginBottom: '1rem' }}
+        >
           {assessment.description}
         </Typography>
 
-        <Typography variant='h6' component='div' style={{ marginTop: '16px' }}>
-          Language: {assessment.language}
+        <Typography
+          variant='h6'
+          sx={{ fontWeight: 'bold', marginBottom: '8px' }}
+        >
+          Language:
         </Typography>
-        <Typography variant='h6' component='div'>
-          Time Limit: {assessment.timeLimit} minutes
+        <Typography
+          variant='body1'
+          sx={{ marginLeft: '1.5rem', color: '#555' }}
+        >
+          {assessment.language}
         </Typography>
 
-        <Typography variant='h6' component='div' style={{ marginTop: '16px' }}>
+        <Typography
+          variant='h6'
+          sx={{ fontWeight: 'bold', marginTop: '1rem', marginBottom: '8px' }}
+        >
+          Time Limit:
+        </Typography>
+        <Typography
+          variant='body1'
+          sx={{ marginLeft: '1.5rem', color: '#555' }}
+        >
+          {assessment.timeLimit} minutes
+        </Typography>
+
+        <Typography variant='h6' sx={{ fontWeight: 'bold', marginTop: '2rem' }}>
           Problems
         </Typography>
-        <List>
+
+        <List sx={{ marginTop: '1rem' }}>
           {assessment.problems.map((problem, index) => (
-            <ListItem key={index}>
-              <ListItemText
-                primary={`Problem ${index + 1}: ${problem.title}`}
-                secondary={
-                  <>
-                    <pre>{problem.description}</pre>
-                    <pre>{problem.initialCode}</pre>
-                    <pre>{problem.testCases}</pre>
-                  </>
-                }
-              />
-            </ListItem>
+            <Card
+              key={index}
+              sx={{
+                marginBottom: '1rem',
+                backgroundColor: '#fff',
+                borderRadius: '8px',
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <CardContent>
+                <Typography
+                  variant='h6'
+                  sx={{ fontWeight: 'bold', color: '#333' }}
+                >
+                  Problem {index + 1}: {problem.title}
+                </Typography>
+                <Typography
+                  variant='body2'
+                  sx={{ color: '#555', marginTop: '0.5rem' }}
+                >
+                  <pre>{problem.description}</pre>
+                </Typography>
+                <Typography
+                  variant='body2'
+                  sx={{ color: '#007bff', marginTop: '0.5rem' }}
+                >
+                  <pre>{problem.initialCode}</pre>
+                </Typography>
+                <Typography
+                  variant='body2'
+                  sx={{ color: '#ff5722', marginTop: '0.5rem' }}
+                >
+                  <pre>{problem.testCases}</pre>
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
         </List>
       </CardContent>
