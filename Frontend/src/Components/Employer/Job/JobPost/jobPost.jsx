@@ -436,6 +436,11 @@ const JobPost = () => {
                       '.MuiSvgIcon-root': {
                         color: 'white', // Dropdown arrow color
                       },
+                      '&.Mui-focused': {
+                        color: 'white',
+                        borderColor: 'white', // Label color when focused
+                      },
+
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
                     }}
                   >
@@ -476,12 +481,18 @@ const JobPost = () => {
                       '.MuiOutlinedInput-notchedOutline': {
                         borderColor: 'white', // Border color
                       },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color when focused
+                      '&.MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white',
+                        color: 'white', // Border color when focused
                       },
                       '.MuiSvgIcon-root': {
                         color: 'white', // Dropdown arrow color
                       },
+                      '&.Mui-focused': {
+                        color: 'white',
+                        borderColor: 'white', // Label color when focused
+                      },
+
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
                     }}
                   >
@@ -508,7 +519,12 @@ const JobPost = () => {
                 <FormControl className='w-full'>
                   <InputLabel
                     id='skills-label'
-                    sx={{ color: 'white' }} // Label color to white
+                    sx={{
+                      color: 'white',
+                      '&.Mui-focused': {
+                        color: 'white', // Label color when focused
+                      },
+                    }} // Label color to white
                   >
                     Skills
                   </InputLabel>
@@ -579,7 +595,12 @@ const JobPost = () => {
                 <FormControl variant='outlined' className='w-full'>
                   <InputLabel
                     id='skillAssessment-label'
-                    sx={{ color: 'white' }} // Label color to white
+                    sx={{
+                      color: 'white', // Label color
+                      '&.Mui-focused': {
+                        color: 'white', // Label color when focused
+                      },
+                    }}
                   >
                     Skill Assessment
                   </InputLabel>
@@ -604,6 +625,9 @@ const JobPost = () => {
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
                       '&:hover .MuiOutlinedInput-notchedOutline': {
                         borderColor: 'white', // Border color on hover
+                      },
+                      '&.Mui-focused': {
+                        color: 'white', // Label color when focused
                       },
                     }}
                   >
@@ -765,7 +789,7 @@ const JobPost = () => {
         fixed
         bottom-0
         right-0
-      
+        bg-primary
         mt-10 '
         >
           {message}

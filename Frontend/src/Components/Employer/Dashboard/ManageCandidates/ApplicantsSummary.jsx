@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, Typography, CardHeader } from "@mui/material";
+import React, { useState, useEffect } from 'react'
+import { Card, CardContent, Typography, CardHeader } from '@mui/material'
 import {
   Description as DescriptionIcon,
   Search as SearchIcon,
   EventAvailable as EventAvailableIcon,
   Cancel as CancelIcon,
-} from "@mui/icons-material";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-cards";
-import { EffectCards } from "swiper/modules";
-import EmployerController from "../../../../API/employer";
-import Loader from "../../../../Components/Loader/Loader";
+  BorderAllRounded,
+} from '@mui/icons-material'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/effect-cards'
+import { EffectCards } from 'swiper/modules'
+import EmployerController from '../../../../API/employer'
+import Loader from '../../../../Components/Loader/Loader'
 
 // ApplicationSummaryCard Component
 const ApplicationSummaryCard = ({ title, count, color, Icon }) => (
@@ -20,130 +21,133 @@ const ApplicationSummaryCard = ({ title, count, color, Icon }) => (
       width: 250,
       height: 200,
       backgroundColor: `${color}`,
-      color: "white",
-      "&:hover": {
-        transform: "scale(1.05)",
+      color: 'white',
+      '&:hover': {
+        transform: 'scale(1.05)',
         boxShadow: 6,
       },
-      transition: "transform 0.3s, box-shadow 0.3s",
+      transition: 'transform 0.3s, box-shadow 0.3s',
     }}
   >
     <CardHeader
-      title={<Icon sx={{ fontSize: 50, color: "white" }} />}
+      title={<Icon sx={{ fontSize: 50, color: 'white' }} />}
       sx={{
         bgcolor: `${color}`,
-        textAlign: "center",
+        textAlign: 'center',
         py: 1,
       }}
     />
-    <CardContent sx={{ textAlign: "center" }}>
-      <Typography variant="h6" component="div">
+    <CardContent sx={{ textAlign: 'center' }}>
+      <Typography variant='h6' component='div'>
         {title}
       </Typography>
-      <Typography variant="h4" component="div" mt={2}>
+      <Typography variant='h4' component='div' mt={2}>
         {count}
       </Typography>
     </CardContent>
   </Card>
-);
+)
 
 // ApplicationSummary Component
 const ApplicationSummary = () => {
-  const [summaryData, setSummaryData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [summaryData, setSummaryData] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchSummaryData = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      const response = await EmployerController.getApplicationsGroupedByStatus(accessToken);
-      const data = response.data;
+      const accessToken = localStorage.getItem('accessToken')
+      const response = await EmployerController.getApplicationsGroupedByStatus(
+        accessToken
+      )
+      const data = response.data
 
       if (response.status === 200) {
         const summaryDataArr = Object.entries(data).map(([key, value]) => {
-          let color = "";
-          let Icon = DescriptionIcon; // Default icon
+          let color = ''
+          let Icon = DescriptionIcon // Default icon
 
           switch (key) {
-            case "Applied":
-              color = "#821131";
-              Icon = DescriptionIcon;
-              break;
-            case "Under Review":
-              color = "#399918";
-              Icon = SearchIcon;
-              break;
-            case "Interview Scheduled":
-              color = "#0D7C66";
-              Icon = EventAvailableIcon;
-              break;
-            case "Rejected":
-              color = "#021526";
-              Icon = CancelIcon;
-              break;
+            case 'Applied':
+              color = '#821131'
+              Icon = DescriptionIcon
+
+              break
+            case 'Under Review':
+              color = '#399918'
+              Icon = SearchIcon
+              break
+            case 'Interview Scheduled':
+              color = '#0D7C66'
+              Icon = EventAvailableIcon
+              break
+            case 'Rejected':
+              color = '#021526'
+              Icon = CancelIcon
+              break
             default:
-              color = "#000000"; // Default color
-              break;
+              color = '#000000' // Default color
+              break
           }
           return {
             _id: key,
             count: value,
             color,
             Icon,
-          };
-        });
+          }
+        })
 
-        setSummaryData(summaryDataArr);
-        console.log("Application", summaryDataArr);
-        setLoading(false);
+        setSummaryData(summaryDataArr)
+        console.log('Application', summaryDataArr)
+        setLoading(false)
       }
 
       setLoading(false)
     };
 
-    fetchSummaryData();
-  }, []);
+    fetchSummaryData()
+  }, [])
 
   if (loading) {
-    return <Loader />;
+    return <Loader />
   }
   return (
-    <div className=" ">
+    <div className='mx-auto '>
       {/* Carousel for smaller devices */}
-      <div className="md:hidden w-80 bg-white ">
+      <div className='md:hidden w-full bg-white mx-auto'>
         <Swiper
-          effect={"cards"}
+          effect={'cards'}
           grabCursor={true}
           modules={[EffectCards]}
-          className=""
+          className=''
           spaceBetween={16}
           slidesPerView={1}
           pagination={{ clickable: true }}
           navigation
-          style={{ height: "auto" }}
+          style={{ height: 'auto' }}
         >
           {summaryData.map((item) => {
-            let Icon;
+            let Icon
             switch (item._id) {
-              case "Applied":
-                Icon = DescriptionIcon;
-                break;
-              case "Under Review":
-                Icon = SearchIcon;
-                break;
-              case "Interview Scheduled":
-                Icon = EventAvailableIcon;
-                break;
-              case "Rejected":
-                Icon = CancelIcon;
-                break;
+              case 'Applied':
+                Icon = DescriptionIcon
+                break
+              case 'Under Review':
+                Icon = SearchIcon
+                break
+              case 'Interview Scheduled':
+                Icon = EventAvailableIcon
+                break
+              case 'Rejected':
+                Icon = CancelIcon
+                break
               default:
-                Icon = DescriptionIcon;
-                break;
+                Icon = DescriptionIcon
+                break
             }
             return (
               <SwiperSlide
                 key={item._id}
-                className="flex items-center justify-center rounded-lg text-white font-bold text-2xl"
+                className='flex items-center justify-center rounded-lg text-white font-bold text-2xl'
               >
                 <ApplicationSummaryCard
                   title={item._id}
@@ -152,31 +156,31 @@ const ApplicationSummary = () => {
                   Icon={Icon}
                 />
               </SwiperSlide>
-            );
+            )
           })}
         </Swiper>
       </div>
 
       {/* Static Cards for larger devices */}
-      <div className="hidden md:flex flex-wrap justify-center gap-4">
+      <div className='hidden md:flex w-full mx-auto gap-10'>
         {summaryData.map((item) => {
-          let Icon;
+          let Icon
           switch (item._id) {
-            case "Applied":
-              Icon = DescriptionIcon;
-              break;
-            case "Under Review":
-              Icon = SearchIcon;
-              break;
-            case "Interview Scheduled":
-              Icon = EventAvailableIcon;
-              break;
-            case "Rejected":
-              Icon = CancelIcon;
-              break;
+            case 'Applied':
+              Icon = DescriptionIcon
+              break
+            case 'Under Review':
+              Icon = SearchIcon
+              break
+            case 'Interview Scheduled':
+              Icon = EventAvailableIcon
+              break
+            case 'Rejected':
+              Icon = CancelIcon
+              break
             default:
-              Icon = DescriptionIcon;
-              break;
+              Icon = DescriptionIcon
+              break
           }
           return (
             <ApplicationSummaryCard
@@ -186,11 +190,11 @@ const ApplicationSummary = () => {
               color={item.color}
               Icon={Icon}
             />
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ApplicationSummary;
+export default ApplicationSummary

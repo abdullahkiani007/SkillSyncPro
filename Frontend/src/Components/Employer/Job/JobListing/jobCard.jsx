@@ -12,16 +12,19 @@ const JobCard = ({ job }) => {
     <Card
       sx={{
         color: 'white', // Ensure all text inside the card is white
-        width: '100%',
-        maxWidth: '24rem', // Equivalent to `max-w-sm`
-        backgroundColor: '#E14411', // Your custom primary color
+        width: '100%', // Full width
+        background: '#2D4059 ', // Attractive gradient
         borderRadius: '1rem', // Equivalent to `rounded-xl`
-        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1)', // Equivalent to `shadow-sm`
-        transition: 'box-shadow 0.3s', // Equivalent to `transition-shadow duration-300`
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', // More pronounced shadow
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease', // Smooth transition for hover effects
         cursor: 'pointer',
         overflow: 'hidden',
         '&:hover': {
-          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', // Equivalent to `hover:shadow-md`
+          transform: 'scale(1.05)', // Slight scaling on hover
+          boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)', // Larger shadow on hover
+        },
+        '&:active': {
+          transform: 'scale(0.98)', // Scale down on click to give a pressed effect
         },
       }}
       onClick={() => {
@@ -83,7 +86,6 @@ const JobCard = ({ job }) => {
               color: 'white', // White text for Chip
               border: '2px solid white',
               padding: '10px 10px',
-
               textTransform: 'capitalize',
             }}
             variant='outlined'
@@ -105,8 +107,7 @@ const JobCard = ({ job }) => {
             <WorkIcon
               sx={{ marginRight: '0.5rem', color: '#D2E0FB' }}
               fontSize='small'
-            />{' '}
-            {/* Blue color for WorkIcon */}
+            />
             <Typography variant='body2' component='p' sx={{ color: 'white' }}>
               {job.companyName}
             </Typography>
@@ -115,8 +116,7 @@ const JobCard = ({ job }) => {
             <LocationOnIcon
               sx={{ marginRight: '0.5rem', color: '#EEDF7A' }}
               fontSize='small'
-            />{' '}
-            {/* Green color for LocationOnIcon */}
+            />
             <Typography
               variant='body2'
               component='span'
@@ -130,10 +130,9 @@ const JobCard = ({ job }) => {
         {/* Applicants */}
         <Box sx={{ display: 'flex', alignItems: 'center', color: 'white' }}>
           <PeopleIcon
-            sx={{ marginRight: '0.5rem', color: '#001F3F' }}
+            sx={{ marginRight: '0.5rem', color: '#fff' }}
             fontSize='small'
-          />{' '}
-          {/* Purple color for PeopleIcon */}
+          />
           <Typography variant='body2' component='p' sx={{ color: 'white' }}>
             {job.applicants.length} Applicants
           </Typography>

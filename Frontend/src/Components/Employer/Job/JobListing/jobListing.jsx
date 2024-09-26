@@ -9,6 +9,7 @@ const JobListing = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState('active')
+  const [animationTriggered, setAnimationTriggered] = useState(false) // New state for animation
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -21,6 +22,11 @@ const JobListing = () => {
           setJobs(jobsData)
           setFilteredJobs(jobsData.filter((job) => !job.archived))
           localStorage.setItem('empJobs', JSON.stringify(jobsData))
+
+          // Trigger animation after data is fetched
+          setTimeout(() => {
+            setAnimationTriggered(true)
+          }, 100) // Add slight delay to ensure data is ready before animation
         } else {
           throw new Error('Failed to fetch jobs')
         }
@@ -39,6 +45,12 @@ const JobListing = () => {
     setFilteredJobs(
       jobs.filter((job) => job.archived === (category === 'archived'))
     )
+
+    // Reset and retrigger animation when category changes
+    setAnimationTriggered(false)
+    setTimeout(() => {
+      setAnimationTriggered(true)
+    }, 100)
   }
 
   if (loading) {
@@ -58,11 +70,11 @@ const JobListing = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark mx-auto p-4'>
+    <div className='min-h-screen bg-slate-200 mx-auto p-4'>
       {/* Category Filter */}
       <div className='flex justify-center mb-8'>
         <button
-          className={`px-6 py-3 mr-2 rounded-lg font-semibold transition-all duration-200 ${
+          className={`px-6 py-3 mr-2 border-[1px] border-primary rounded-lg font-semibold transition-all duration-200 ${
             selectedCategory === 'active'
               ? 'bg-primary text-white shadow-lg'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -75,7 +87,7 @@ const JobListing = () => {
           Active Jobs
         </button>
         <button
-          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+          className={`px-6 py-3 rounded-lg border-[1px] border-primary font-semibold transition-all duration-200 ${
             selectedCategory === 'archived'
               ? 'bg-primary text-white shadow-lg'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -90,9 +102,15 @@ const JobListing = () => {
       </div>
 
       {/* Job Listings */}
-      <section>
+      <section className='w-full'>
         {filteredJobs.length > 0 ? (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full transition-transform duration-700 ease-in-out ${
+              animationTriggered
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-[-50px] opacity-0'
+            }`}
+          >
             {filteredJobs.map((job) => (
               <JobCard job={job} key={job._id} />
             ))}

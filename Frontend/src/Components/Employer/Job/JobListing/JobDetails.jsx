@@ -6,7 +6,7 @@ const JobDetails = () => {
   const [jobDetails] = React.useState(detail)
 
   return (
-    <div className='w-4/5 p-8 bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen flex justify-center items-start transition-all duration-500 ease-in-out'>
+    <div className='w-4/5 p-8 bg-slate-200 min-h-screen flex justify-center items-start transition-all duration-500 ease-in-out'>
       <div className='bg-black m-auto shadow-2xl hover:shadow-3xl duration-300s rounded-lg w-full max-w-4xl p-8 transform hover:scale-105 transition-transform duration-300s'>
         {/* Header */}
         <div className='mb-6'>

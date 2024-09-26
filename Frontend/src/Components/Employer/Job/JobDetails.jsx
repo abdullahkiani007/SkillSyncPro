@@ -82,7 +82,7 @@ const JobDetails = () => {
     return <Loader />
   }
   return (
-    <div className='flex  bg-gradient-to-r from-secondary-dark to-secondary-dark flex-col px-10 pt-10'>
+    <div className='flex  bg-slate-200 flex-col px-10 pt-10'>
       <div className='flex justify-between'>
         {/* Back to Jobs Button with primary light color */}
         <Button
@@ -93,7 +93,7 @@ const JobDetails = () => {
           startIcon={<ArrowBackIosIcon />}
           sx={{
             mt: 4, // Equivalent to `mt-4` in Tailwind
-            backgroundColor: '#E14411',
+            backgroundColor: '#2D4059',
             borderRadius: '30px',
             transition: 'transform 3s ease-in', // Equivalent to `bg-primary-light`
 
@@ -118,7 +118,7 @@ const JobDetails = () => {
             }}
             sx={{
               mt: 4, // Equivalent to `mt-4` in Tailwind
-              backgroundColor: '#E14411',
+              backgroundColor: '#2D4059',
               color: '#fff',
 
               transition: 'transform 0.3s ease',
@@ -139,7 +139,6 @@ const JobDetails = () => {
 
           {/* Delete Button with custom color 3 */}
           <Button
-            variant='outlined'
             onClick={() => {
               handleDelete(id)
             }}
@@ -147,12 +146,12 @@ const JobDetails = () => {
               mt: 4, // Equivalent to `mt-4` in Tailwind
               // Equivalent to `border-custom-3`
               color: 'white',
-              backgroundColor: '#E14411',
+              backgroundColor: 'red',
               transition: 'transform 0.3s ease',
+              paddingX: '10px',
 
               // Equivalent to `text-custom-3`
               '&:hover': {
-                borderColor: 'black',
                 backgroundColor: 'red ', // Equivalent to `hover:bg-custom-3`
                 color: 'white',
                 transform: 'scale(1.1)', // Equivalent to `hover:text-neutral-1`
@@ -165,40 +164,32 @@ const JobDetails = () => {
       </div>
       <div>
         {/* Job Title */}
-        <h1 className='font-bold mt-4 text-white text-3xl hover:text-secondary-default transition-colors'>
+        <h1 className='font-bold mt-4 text-black text-3xl hover:text-secondary-default transition-colors'>
           {detail.title}
         </h1>
-        <h2 className='text-sm mb-5 text-white text-neutral-5'>
+        <h2 className='text-sm mb-5 text-black text-neutral-5'>
           {detail.location}
         </h2>
       </div>
 
       {/* Navigation Links */}
-      <nav className='flex mb-4'>
-        <Link
-          to='./'
-          className='bg-primary text-white hover:bg-secondary-default text-neutral-5 hover:text-neutral-1 rounded-md px-3 py-1 mr-2 transition-all'
-        >
-          Candidates
-        </Link>
-        <Link
-          to='./jobdetails'
-          className='bg-primary text-white hover:bg-secondary-default text-neutral-5 hover:text-neutral-1 rounded-md px-3 py-1 mr-2 transition-all'
-        >
-          Job Details
-        </Link>
-        <Link
-          to='./notes'
-          className='bg-primary text-white hover:bg-secondary-default text-neutral-5 hover:text-neutral-1 rounded-md px-3 py-1 mr-2 transition-all'
-        >
-          Notes
-        </Link>
-        <Link
-          to='./reports'
-          className='bg-primary text-white  hover:bg-secondary-default text-neutral-5 hover:text-neutral-1 rounded-md px-3 py-1 mr-2 transition-all'
-        >
-          Reports
-        </Link>
+      <nav className='flex flex-wrap items-center justify-center bg-gray-100 p-4 rounded-lg shadow-lg'>
+        {[
+          { name: 'Candidates', to: './' },
+          { name: 'Job Details', to: './jobdetails' },
+          { name: 'Notes', to: './notes' },
+          { name: 'Reports', to: './reports' },
+        ].map((item) => (
+          <Link
+            key={item.name}
+            to={item.to}
+            className='relative group mx-2 mb-2 px-6 py-3 bg-primary text-white rounded-md transition-all duration-500 ease-in-out overflow-hidden shadow-md hover:bg-secondary-default'
+          >
+            <span className='absolute inset-0 w-full h-full bg-gradient-to-r from-transparent to-white opacity-0 group-hover:opacity-10 transition-opacity duration-500'></span>
+            <span className='absolute inset-0 w-full h-full transform translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out bg-neutral-5 opacity-10'></span>
+            <span className='relative z-10'>{item.name}</span>
+          </Link>
+        ))}
       </nav>
 
       <Outlet context={{ candidatesList, detail }} />
