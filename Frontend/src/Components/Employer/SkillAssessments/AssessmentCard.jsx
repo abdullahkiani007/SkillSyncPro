@@ -46,7 +46,6 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
     <>
       <Card
         sx={{
-          background: 'linear-gradient(90deg, white,darkgray)',
           marginBottom: 2,
           borderRadius: 2,
           // Slight shadow
@@ -81,7 +80,7 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
           <Grid container spacing={1}>
             <Grid item>
               <IconButton
-                color='primary'
+                color='dark'
                 onClick={() => onView(assessment)}
                 sx={{
                   '&:hover': {
@@ -94,7 +93,7 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
             </Grid>
             <Grid item>
               <IconButton
-                color='primary'
+                color='dark'
                 onClick={() => onEdit(assessment)}
                 sx={{
                   '&:hover': {

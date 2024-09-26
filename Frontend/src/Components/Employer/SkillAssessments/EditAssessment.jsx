@@ -28,7 +28,13 @@ const EditAssessment = ({ assessment, onSave }) => {
   }
 
   return (
-    <form className='bg-gray-300 p-8 m-8 rounded-lg '>
+    <form
+      className='p-8 m-8 rounded-lg'
+      style={{
+        backgroundColor: '#f5f5f5',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      }}
+    >
       <TextField
         label='Assessment Title'
         name='title'
@@ -37,6 +43,13 @@ const EditAssessment = ({ assessment, onSave }) => {
         fullWidth
         required
         sx={{ marginBottom: 2 }}
+        InputLabelProps={{ style: { color: '#333' } }}
+        InputProps={{
+          sx: {
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+          },
+        }}
       />
       <TextField
         label='Description'
@@ -48,12 +61,23 @@ const EditAssessment = ({ assessment, onSave }) => {
         multiline
         rows={4}
         sx={{ marginBottom: 2 }}
+        InputLabelProps={{ style: { color: '#333' } }}
+        InputProps={{
+          sx: {
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+          },
+        }}
       />
       <FormControl fullWidth sx={{ marginBottom: 2 }}>
         <Select
           name='language'
           value={editableAssessment.language}
           onChange={handleChange}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+          }}
         >
           <MenuItem value='javascript'>JavaScript</MenuItem>
           <MenuItem value='python'>Python</MenuItem>
@@ -69,11 +93,28 @@ const EditAssessment = ({ assessment, onSave }) => {
         fullWidth
         required
         sx={{ marginBottom: 2 }}
+        InputLabelProps={{ style: { color: '#333' } }}
+        InputProps={{
+          sx: {
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+          },
+        }}
       />
 
       {editableAssessment.problems.map((problem, index) => (
-        <div key={problem.id} style={{ marginBottom: 20 }}>
-          <Typography variant='h6'>Problem {index + 1}</Typography>
+        <div
+          key={problem.id}
+          style={{
+            marginBottom: 20,
+            padding: '16px',
+            backgroundColor: '#e8f0fe',
+            borderRadius: '8px',
+          }}
+        >
+          <Typography variant='h6' sx={{ fontWeight: 'bold', color: '#333' }}>
+            Problem {index + 1}
+          </Typography>
           <TextField
             label='Problem Title'
             value={problem.title}
@@ -82,6 +123,13 @@ const EditAssessment = ({ assessment, onSave }) => {
             }
             fullWidth
             sx={{ marginBottom: 2 }}
+            InputLabelProps={{ style: { color: '#333' } }}
+            InputProps={{
+              sx: {
+                backgroundColor: '#fff',
+                borderRadius: '5px',
+              },
+            }}
           />
           <TextField
             label='Problem Description'
@@ -93,6 +141,13 @@ const EditAssessment = ({ assessment, onSave }) => {
             multiline
             rows={4}
             sx={{ marginBottom: 2 }}
+            InputLabelProps={{ style: { color: '#333' } }}
+            InputProps={{
+              sx: {
+                backgroundColor: '#fff',
+                borderRadius: '5px',
+              },
+            }}
           />
           <Editor
             height='200px'
@@ -101,16 +156,34 @@ const EditAssessment = ({ assessment, onSave }) => {
             onChange={(value) =>
               handleProblemChange(index, 'initialCode', value)
             }
+            options={{
+              theme: 'light',
+              fontSize: 14,
+              minimap: { enabled: false },
+            }}
           />
           <Editor
             height='200px'
             defaultLanguage='javascript'
             value={problem.testCases}
             onChange={(value) => handleProblemChange(index, 'testCases', value)}
+            options={{
+              theme: 'light',
+              fontSize: 14,
+              minimap: { enabled: false },
+            }}
           />
         </div>
       ))}
-      <Button variant='contained' color='primary' onClick={handleSave}>
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={handleSave}
+        sx={{
+          backgroundColor: '#4caf50',
+          '&:hover': { backgroundColor: '#45a049' },
+        }}
+      >
         Save Assessment
       </Button>
     </form>

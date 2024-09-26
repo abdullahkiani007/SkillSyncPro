@@ -126,9 +126,8 @@ const ManageAssessments = () => {
               />
               <Button
                 variant='outlined'
-                color='secondary'
                 onClick={handleCancel}
-                sx={{ marginTop: 2 }}
+                sx={{ marginTop: 2, color: 'white', backgroundColor: 'black' }}
               >
                 Cancel
               </Button>
@@ -138,24 +137,36 @@ const ManageAssessments = () => {
               <ViewAssessment assessment={selectedAssessment} />
               <Button
                 variant='outlined'
-                color='secondary'
                 onClick={handleCancel}
-                sx={{ marginTop: 2 }}
+                sx={{
+                  marginTop: 2,
+                  backgroundColor: '#E14411',
+                  color: 'white',
+
+                  '&:hover': {
+                    backgroundColor: 'black',
+                    border: 'none',
+                    transform: 'scale(1.05)',
+                  },
+                }}
               >
                 Back to List
               </Button>
             </>
           )
         ) : (
-          assessments.map((assessment) => (
-            <AssessmentCard
-              key={assessment._id}
-              assessment={assessment}
-              onView={() => handleView(assessment)}
-              onEdit={() => handleEdit(assessment)}
-              onDelete={() => onDelete(assessment)}
-            />
-          ))
+          <Grid container spacing={3}>
+            {assessments.map((assessment) => (
+              <Grid item xs={12} sm={6} md={4} key={assessment._id}>
+                <AssessmentCard
+                  assessment={assessment}
+                  onView={() => handleView(assessment)}
+                  onEdit={() => handleEdit(assessment)}
+                  onDelete={() => onDelete(assessment)}
+                />
+              </Grid>
+            ))}
+          </Grid>
         )}
         {!selectedAssessment && assessments.length === 0 && (
           <Typography>No assessments available</Typography>
