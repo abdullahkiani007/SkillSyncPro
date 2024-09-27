@@ -24,6 +24,7 @@ const JobPerformanceChart = () => {
   // Fetch jobs for the company
   const fetchJobs = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("accessToken");
       let response = await Employer.getJobs(token);
       let jobs = response.data.data;
@@ -39,7 +40,7 @@ const JobPerformanceChart = () => {
   // Fetch job performance data
   const fetchData = async () => {
     console.log("fetching data");
-    setLoading(true);
+   
 
     try {
       const company = JSON.parse(localStorage.getItem("company"));
@@ -58,12 +59,12 @@ const JobPerformanceChart = () => {
 
       console.log("data is ", data);
 
-      const labels = data.map((entry) =>
+      const labels = data?.map((entry) =>
         new Date(entry._id.date).toLocaleDateString()
       );
-      const views = data.map((entry) => entry.views);
-      const applications = data.map((entry) => entry.applications);
-      const hires = data.map((entry) => entry.hires);
+      const views = data?.map((entry) => entry.views);
+      const applications = data?.map((entry) => entry.applications);
+      const hires = data?.map((entry) => entry.hires);
 
       setChartData({
         labels,
@@ -175,7 +176,7 @@ const JobPerformanceChart = () => {
       }
     }}
   >
-    {jobs.map((job) => (
+    {jobs?.map((job) => (
       <MenuItem key={job._id} value={job._id} sx={{ color: "#000" }}>
         {job.title}
       </MenuItem>
