@@ -111,6 +111,13 @@ const jobseekerService = {
             });
 
             if (existingApplication) {
+              console.log("Application already existing")
+              if (existingApplication.resume && existingApplication.videoIntroduction ){
+                return{
+                  status:401,
+                  message:"You have already Applied"
+                }
+              }
                 return {
                     status: 200,
                     application: existingApplication
@@ -177,6 +184,7 @@ const jobseekerService = {
           // Create the application
           application.resume = data.resume;
           application.videoIntroduction = data.videoIntroduction;
+          application.status = "Under Review"
           
           await application.save();
 

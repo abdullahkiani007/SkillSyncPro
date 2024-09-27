@@ -82,13 +82,14 @@ class JobPerformanceTracker {
     }
   }
 
-  async getJobPerformanceByDate(companyId, startDate, endDate) {
+  async getJobPerformanceByDate(companyId, startDate, endDate , job) {
     console.log("company id is ", companyId);
     console.log("start date is ", startDate);
     console.log("end date is ", endDate);
+    console.log("Selected job is ", job)
     try {
       const response = await this.apiClient.get(
-        `/performanceByDate/${companyId}?startDate=${startDate}&endDate=${endDate}`,
+        `/performanceByDate/${companyId}?startDate=${startDate}&endDate=${endDate}&jobId=${job}`,
         {
           params: {
             companyId,
