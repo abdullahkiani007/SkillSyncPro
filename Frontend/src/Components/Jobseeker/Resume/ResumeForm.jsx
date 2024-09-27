@@ -46,7 +46,9 @@ const ResumeForm = ({ onSubmit }) => {
       formData.title &&
       formData.phone &&
       formData.email &&
-      formData.address
+      formData.address &&
+      formData.intro &&
+      formData.profilePic
     const isEducationComplete = formData.education.every(
       (edu) => edu.degree && edu.year && edu.institution
     )
@@ -153,10 +155,10 @@ const ResumeForm = ({ onSubmit }) => {
       onSubmit={handleSubmit}
       className='space-y-4 w-4/5 mx-auto p-8 rounded-lg shadow-lg font-poppins'
       style={{
-        background: 'linear-gradient(135deg, #000428, #004e92)', // Dark blue to cyan gradient
+        background: 'linear-gradient(135deg, #FFFFFF, #E14411)', // White to dark orange gradient
         maxWidth: '1000px',
         marginTop: '20px',
-        color: '#fff',
+        color: '#333',
         padding: '20px',
         borderRadius: '10px',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
@@ -169,7 +171,7 @@ const ResumeForm = ({ onSubmit }) => {
         <div
           className='space-y-4 p-4 rounded-lg'
           style={{
-            background: 'linear-gradient(135deg, #000428, #004e92)', // Apply gradient to section
+            background: '#ffffff', // White background for contrast
             borderRadius: '10px',
           }}
         >
@@ -178,7 +180,7 @@ const ResumeForm = ({ onSubmit }) => {
               General Details
               {completedSections.general && (
                 <CheckCircleIcon
-                  style={{ color: 'green', marginLeft: '10px' }}
+                  style={{ color: '#E14411', marginLeft: '10px' }} // Updated checkmark color
                 />
               )}
             </h2>
@@ -190,7 +192,7 @@ const ResumeForm = ({ onSubmit }) => {
           {sections.general && (
             <>
               <input
-                className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:ring-blue-500 transition-all outline-none py-2 px-3 rounded-md text-white'
+                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                 placeholder='Name'
                 name='name'
                 value={formData.name}
@@ -198,7 +200,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:ring-blue-500 transition-all outline-none py-2 px-3 rounded-md text-white'
+                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                 placeholder='Title'
                 name='title'
                 value={formData.title}
@@ -206,7 +208,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:ring-blue-500 transition-all outline-none py-2 px-3 rounded-md text-white'
+                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                 placeholder='Phone'
                 name='phone'
                 value={formData.phone}
@@ -214,7 +216,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:ring-blue-500 transition-all outline-none py-2 px-3 rounded-md text-white'
+                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                 placeholder='Email'
                 name='email'
                 value={formData.email}
@@ -222,11 +224,26 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:ring-blue-500 transition-all outline-none py-2 px-3 rounded-md text-white'
+                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                 placeholder='Address'
                 name='address'
                 value={formData.address}
                 onChange={handleChange}
+                required
+              />
+              <textarea
+                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                placeholder='Intro'
+                name='intro'
+                value={formData.intro}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type='file'
+                accept='image/*'
+                onChange={handleImageChange}
+                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                 required
               />
             </>
@@ -237,7 +254,7 @@ const ResumeForm = ({ onSubmit }) => {
         <div
           className='space-y-4 p-4 rounded-lg'
           style={{
-            background: 'linear-gradient(135deg, #000428, #004e92)', // Apply gradient to section
+            background: '#ffffff', // White background for contrast
             borderRadius: '10px',
           }}
         >
@@ -246,7 +263,7 @@ const ResumeForm = ({ onSubmit }) => {
               Education
               {completedSections.education && (
                 <CheckCircleIcon
-                  style={{ color: 'green', marginLeft: '10px' }}
+                  style={{ color: '#E14411', marginLeft: '10px' }} // Updated checkmark color
                 />
               )}
             </h2>
@@ -260,10 +277,10 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.education.map((edu, index) => (
                 <div
                   key={index}
-                  className='bg-[#0d3759] p-4 rounded-lg space-y-2 border-2 border-white'
+                  className='bg-[#f3f4f6] p-4 rounded-lg space-y-2 border-2 border-gray-300'
                 >
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Degree'
                     value={edu.degree}
                     onChange={(e) =>
@@ -272,7 +289,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Year'
                     value={edu.year}
                     onChange={(e) =>
@@ -281,7 +298,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Institution'
                     value={edu.institution}
                     onChange={(e) =>
@@ -298,7 +315,7 @@ const ResumeForm = ({ onSubmit }) => {
                     aria-label='delete'
                     onClick={() => handleRemoveItem('education', index)}
                   >
-                    <DeleteIcon sx={{ color: 'white' }} />
+                    <DeleteIcon sx={{ color: '#E14411' }} />
                   </IconButton>
                 </div>
               ))}
@@ -310,7 +327,7 @@ const ResumeForm = ({ onSubmit }) => {
                     institution: '',
                   })
                 }
-                className='bg-gradient-to-r from-purple-500 to-blue-500 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
               >
                 <AddIcon />
                 <span>Add Education</span>
@@ -323,7 +340,7 @@ const ResumeForm = ({ onSubmit }) => {
         <div
           className='space-y-4 p-4 rounded-lg'
           style={{
-            background: 'linear-gradient(135deg, #000428, #004e92)', // Apply gradient to section
+            background: '#ffffff', // White background for contrast
             borderRadius: '10px',
           }}
         >
@@ -332,7 +349,7 @@ const ResumeForm = ({ onSubmit }) => {
               Skills
               {completedSections.skills && (
                 <CheckCircleIcon
-                  style={{ color: 'green', marginLeft: '10px' }}
+                  style={{ color: '#E14411', marginLeft: '10px' }}
                 />
               )}
             </h2>
@@ -346,7 +363,7 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.skills.map((skill, index) => (
                 <div key={index} className='flex items-center space-x-2'>
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Skill'
                     value={skill}
                     onChange={(e) => handleArrayChange(e, index, 'skills')}
@@ -354,15 +371,15 @@ const ResumeForm = ({ onSubmit }) => {
                   />
                   <IconButton
                     aria-label='delete'
-                    onClick={() => handleRemoveItem('education', index)}
+                    onClick={() => handleRemoveItem('skills', index)}
                   >
-                    <DeleteIcon sx={{ color: 'white' }} />
+                    <DeleteIcon sx={{ color: '#E14411' }} />
                   </IconButton>
                 </div>
               ))}
               <button
                 onClick={() => handleAddItem('skills', '')}
-                className='bg-gradient-to-r from-purple-500 to-blue-500 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
               >
                 <AddIcon />
                 <span>Add Skill</span>
@@ -375,7 +392,7 @@ const ResumeForm = ({ onSubmit }) => {
         <div
           className='space-y-4 p-4 rounded-lg'
           style={{
-            background: 'linear-gradient(135deg, #000428, #004e92)', // Apply gradient to section
+            background: '#ffffff', // White background for contrast
             borderRadius: '10px',
           }}
         >
@@ -384,7 +401,7 @@ const ResumeForm = ({ onSubmit }) => {
               Languages
               {completedSections.languages && (
                 <CheckCircleIcon
-                  style={{ color: 'green', marginLeft: '10px' }}
+                  style={{ color: '#E14411', marginLeft: '10px' }}
                 />
               )}
             </h2>
@@ -398,7 +415,7 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.languages.map((language, index) => (
                 <div key={index} className='flex items-center space-x-2'>
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Language'
                     value={language}
                     onChange={(e) => handleArrayChange(e, index, 'languages')}
@@ -406,15 +423,15 @@ const ResumeForm = ({ onSubmit }) => {
                   />
                   <IconButton
                     aria-label='delete'
-                    onClick={() => handleRemoveItem('education', index)}
+                    onClick={() => handleRemoveItem('languages', index)}
                   >
-                    <DeleteIcon sx={{ color: 'white' }} />
+                    <DeleteIcon sx={{ color: '#E14411' }} />
                   </IconButton>
                 </div>
               ))}
               <button
                 onClick={() => handleAddItem('languages', '')}
-                className='bg-gradient-to-r from-purple-500 to-blue-500 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
               >
                 <AddIcon />
                 <span>Add Language</span>
@@ -427,7 +444,7 @@ const ResumeForm = ({ onSubmit }) => {
         <div
           className='space-y-4 p-4 rounded-lg'
           style={{
-            background: 'linear-gradient(135deg, #000428, #004e92)', // Apply gradient to section
+            background: '#ffffff', // White background for contrast
             borderRadius: '10px',
           }}
         >
@@ -436,7 +453,7 @@ const ResumeForm = ({ onSubmit }) => {
               Projects
               {completedSections.projects && (
                 <CheckCircleIcon
-                  style={{ color: 'green', marginLeft: '10px' }}
+                  style={{ color: '#E14411', marginLeft: '10px' }}
                 />
               )}
             </h2>
@@ -450,10 +467,10 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.projects.map((project, index) => (
                 <div
                   key={index}
-                  className='bg-[#0d3759] p-4 rounded-lg space-y-2 border-2 border-white'
+                  className='bg-[#f3f4f6] p-4 rounded-lg space-y-2 border-2 border-gray-300'
                 >
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Project Name'
                     value={project.name}
                     onChange={(e) =>
@@ -462,7 +479,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <textarea
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Project Description'
                     value={project.description}
                     onChange={(e) =>
@@ -477,9 +494,9 @@ const ResumeForm = ({ onSubmit }) => {
                   />
                   <IconButton
                     aria-label='delete'
-                    onClick={() => handleRemoveItem('education', index)}
+                    onClick={() => handleRemoveItem('projects', index)}
                   >
-                    <DeleteIcon sx={{ color: 'white' }} />
+                    <DeleteIcon sx={{ color: '#E14411' }} />
                   </IconButton>
                 </div>
               ))}
@@ -487,7 +504,7 @@ const ResumeForm = ({ onSubmit }) => {
                 onClick={() =>
                   handleAddItem('projects', { name: '', description: '' })
                 }
-                className='bg-gradient-to-r from-purple-500 to-blue-500 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
               >
                 <AddIcon />
                 <span>Add Project</span>
@@ -500,7 +517,7 @@ const ResumeForm = ({ onSubmit }) => {
         <div
           className='space-y-4 p-4 rounded-lg'
           style={{
-            background: 'linear-gradient(135deg, #000428, #004e92)', // Apply gradient to section
+            background: '#ffffff', // White background for contrast
             borderRadius: '10px',
           }}
         >
@@ -509,7 +526,7 @@ const ResumeForm = ({ onSubmit }) => {
               Work Experience
               {completedSections.workExperience && (
                 <CheckCircleIcon
-                  style={{ color: 'green', marginLeft: '10px' }}
+                  style={{ color: '#E14411', marginLeft: '10px' }}
                 />
               )}
             </h2>
@@ -527,10 +544,10 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.workExperience.map((work, index) => (
                 <div
                   key={index}
-                  className='bg-[#0d3759] p-4 rounded-lg space-y-2 border-2 border-white'
+                  className='bg-[#f3f4f6] p-4 rounded-lg space-y-2 border-2 border-gray-300'
                 >
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Company'
                     value={work.company}
                     onChange={(e) =>
@@ -544,7 +561,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Role'
                     value={work.role}
                     onChange={(e) =>
@@ -558,7 +575,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-white focus:border-blue-500 focus:bg-gray-700 transition-all outline-none py-2 px-3 rounded-md text-white'
+                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
                     placeholder='Duration'
                     value={work.duration}
                     onChange={(e) =>
@@ -573,9 +590,9 @@ const ResumeForm = ({ onSubmit }) => {
                   />
                   <IconButton
                     aria-label='delete'
-                    onClick={() => handleRemoveItem('education', index)}
+                    onClick={() => handleRemoveItem('workExperience', index)}
                   >
-                    <DeleteIcon sx={{ color: 'white' }} />
+                    <DeleteIcon sx={{ color: '#E14411' }} />
                   </IconButton>
                 </div>
               ))}
@@ -587,7 +604,7 @@ const ResumeForm = ({ onSubmit }) => {
                     duration: '',
                   })
                 }
-                className='bg-gradient-to-r from-purple-500 to-blue-500 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
               >
                 <AddIcon />
                 <span>Add Work Experience</span>
@@ -598,7 +615,7 @@ const ResumeForm = ({ onSubmit }) => {
 
         <button
           type='submit'
-          className='w-full bg-gradient-to-r from-purple-500 to-blue-500 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105 mt-6'
+          className='w-full bg-secondary-dark border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105 mt-6'
         >
           <span>Generate Resume</span>
         </button>
