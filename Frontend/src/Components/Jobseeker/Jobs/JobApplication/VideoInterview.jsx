@@ -118,9 +118,14 @@ const VideoInterview = () => {
   const handleSubmit = async () => {
     console.log("Submitting interview to backend...");
     console.log("timer", timer)
-    if (timer < 120){
-      setError("You Interview must be atleast of 2 minute")
+    if (!videoBlobUrl || !audioBlobUrl) {
+      console.error("Video or Audio Blob URL is undefined");
+      return;
     }
+    
+    // if (timer < 120){
+    //   setError("You Interview must be atleast of 2 minute")
+    // }
     // setIsProcessing(true);
 
     console.log("Audio blob url ", audioBlobUrl , "VideoBlob url", videoBlobUrl)
@@ -279,7 +284,7 @@ const VideoInterview = () => {
             onClick={handleNextQuestion}
             variant="contained"
             color="primary"
-            disabled={currentQuestion === questions.length - 1}
+            disabled={currentQuestion === questions.length }
           >
             Next Question
           </Button>
