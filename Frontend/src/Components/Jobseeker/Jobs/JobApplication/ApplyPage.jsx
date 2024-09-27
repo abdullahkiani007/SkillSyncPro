@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, Outlet, useParams, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useParams, useNavigate} from "react-router-dom";
 import jobSeeker from "../../../../API/jobseeker";
 import { useDispatch, useSelector } from "react-redux";
+
 
 const ApplyPage = () => {
   const { id } = useParams();
@@ -9,6 +10,8 @@ const ApplyPage = () => {
   const navigate = useNavigate();
   const [jobDescription , setJobDescription] = useState("")
   const [application, setApplication] = useState({});
+  const [error , setError] = useState("");
+
 
   // Step tracking state
   const [step, setStep] = useState(1);
@@ -22,8 +25,15 @@ const ApplyPage = () => {
         setApplication({application_id : response.data.application._id , job:id});
         localStorage.setItem("application_id", JSON.stringify(response.data.application._id));
       }
+
     } catch (err) {
       console.error("Start application error:", err);
+      setError("You have already Applied")
+      setTimeout( ()=>{
+        console.log("hiiiiiii")
+        setError("");
+        navigate("/jobseeker/dashboard")
+      },3000)
     }
   };
 
@@ -117,6 +127,11 @@ const ApplyPage = () => {
   const disabledClassName = "text-gray-400 cursor-not-allowed";
   const defaultClassName = "text-gray-500 hover:text-blue-500 cursor-pointer";
 
+  if (error){
+    return (
+      <h1>{error}</h1>
+    )
+  }
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-center mt-10 text-secondary-dark">

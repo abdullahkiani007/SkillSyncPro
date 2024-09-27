@@ -51,6 +51,7 @@ const AppliedJobs = () => {
     const getAllJobs = async () => {
       const token = localStorage.getItem('accessToken')
       const response = await jobseeker.getAppliedJobs(token)
+      console.log('Applied jobs', response)
       if (response.status === 200) {
         setJobs(response.data.jobs)
       }
