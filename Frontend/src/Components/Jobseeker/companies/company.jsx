@@ -1,6 +1,4 @@
-// src/pages/Company/Company.js
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   Container,
   Typography,
@@ -9,347 +7,228 @@ import {
   CardMedia,
   Grid,
   Button,
-} from "@mui/material";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+} from '@mui/material'
+import { useLocation, useParams, useNavigate } from 'react-router-dom'
 
-import Loader from "../../Loader/Loader";
-import companyBackgroundImg from "../../../assets/company_background.jpg";
-import logo from "../../../assets/companyLogo.png";
-import personImage from "../../../assets/person.jpeg";
+import Loader from '../../Loader/Loader'
+import companyBackgroundImg from '../../../assets/company_background.jpg'
+import logo from '../../../assets/companyLogo.png'
+import personImage from '../../../assets/person.jpeg'
 
 const Company = () => {
-  const [company, setCompany] = useState(null);
-  const [edit, setEdit] = useState(false);
-  const [create, setCreate] = useState(false);
-  const [loading, setLoding] = useState(true);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [jobs, setJobs] = useState([]);
-  const location = useLocation();
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const [company, setCompany] = useState(null)
+  const [edit, setEdit] = useState(false)
+  const [create, setCreate] = useState(false)
+  const [loading, setLoding] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [jobs, setJobs] = useState([])
+  const location = useLocation()
+  const { id } = useParams()
+  const navigate = useNavigate()
 
-  let company_description =
-    "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum, fuga.Nostrum culpa hic perspiciatis reprehenderit iusto minima nobis, a,autem sequi dignissimos possimus. Perspiciatis, nisi eaque ea voluptatem quis sunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptates officia totam illum optio obcaecati, corporis placeat eum nihil sapiente maxime magni dolore sint et temporibus quidem libero, ipsum velit tenetur? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus, ratione beatae? Possimus architecto non unde ratione facilis quaerat reiciendis atque aliquid, fugit enim sunt, perferendis nobis quasi ex ipsam fugiat. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates natus voluptate sed alias sint corrupti, fuga magnam, velit dignissimos ullam rem laboriosam delectus suscipit. Placeat molestias unde eos harum itaque.";
   useEffect(() => {
     const fetchCompany = () => {
-      const company = JSON.parse(localStorage.getItem("companiesData")).filter(
-        (company) => {
-          return company._id == id;
-        }
-      )[0];
+      const company = JSON.parse(localStorage.getItem('companiesData')).filter(
+        (company) => company._id === id
+      )[0]
 
-      setCompany(company);
-      console.log("companies", company);
+      setCompany(company)
+      console.log('companies', company)
 
-      let jobs = company.jobs;
-      jobs = jobs.map((job) => {
-        let newDate = new Date(job.createdAt);
-        let differenceInMilliseconds = Date.now() - newDate.getTime();
+      let jobs = company.jobs.map((job) => {
+        let newDate = new Date(job.createdAt)
         let differenceInDays = Math.floor(
-          differenceInMilliseconds / (1000 * 60 * 60 * 24)
-        );
+          (Date.now() - newDate.getTime()) / (1000 * 60 * 60 * 24)
+        )
 
         return {
           ...job,
           jobPostDays: differenceInDays,
-        };
-      });
+        }
+      })
 
-      if (jobs) {
-        setJobs(jobs);
-      }
-      setLoding(false);
-    };
+      if (jobs) setJobs(jobs)
+      setLoding(false)
+    }
 
-    fetchCompany();
-  }, []);
+    fetchCompany()
+  }, [])
 
   if (loading) {
-    return <Loader />;
+    return <Loader />
   }
+
   return (
-    <div className="w-full overflow-y-auto overflow-x-hidden-auto bg-slate-100 ">
-      <div className="bg-slate-100 flex flex-col items-center w-full">
-        <div className=" flex flex-col items-center justify-between">
-          <div className="w-full max-h-52 overflow-clip z-3">
-            <img
-              className="object-cover "
-              src={companyBackgroundImg}
-              alt="companyBackground"
-            />
-          </div>
-          {/* // company info container */}
-          <div className="bg-white w-4/5 lg:w-3/5 p-3 rounded-xl top-52 z-10  absolute shadow-2xl">
-            {/* logo and edit button */}
-            <div className=" flex mx-10  items-center ">
-              <img
-                className="w-20 h-20 rounded-full mr-2"
-                src={logo}
-                alt="companyLogo"
-              />
-              <div>
-                <h1 className="font-bold text-lg">
-                  {company.name.toUpperCase()}
-                </h1>
-                <h2 className="text-sm text-gray-400">{company.industry}</h2>
-              </div>
-            </div>
-            {/* company info */}
-            <div className="md:flex md:space-x-32 mx-10">
-              <div className="my-2">
-                <h1 className="text-gray-500">Website</h1>
-                <a
-                  href={company.website}
-                  target="_blank"
-                  className="text-blue-700 text-sm"
-                >
-                  {company.website}
-                </a>
-              </div>
+    <div className='w-full bg-gradient-to-b from-gray-50 to-gray-200'>
+      {/* Hero Section */}
+      <div className='relative'>
+        <img
+          className='object-cover w-full h-60'
+          src={companyBackgroundImg}
+          alt='Company Background'
+        />
+        <div className='absolute inset-0 bg-black opacity-40'></div>
+        <div className='absolute top-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center'>
+          <img
+            className='w-24 h-24 rounded-full shadow-lg mb-4 border-4 border-emerald-500'
+            src={logo}
+            alt='Company Logo'
+          />
+          <h1 className='text-white text-3xl font-bold'>{company.name}</h1>
+          <p className='text-emerald-200 font-semibold'>{company.industry}</p>
+        </div>
+      </div>
 
-              <div className="my-2 ">
-                <h1 className="text-gray-500 ">Location</h1>
-                <p className="font-bold text-sm">{company.address}</p>
-              </div>
-
-              <div className="my-2 ">
-                <h1 className="text-gray-500 ">Company Size</h1>
-                <p className="font-bold text-sm">
-                  {company.employees.length} - {company.employees.length + 50}
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* Company Details Section */}
+      <Container maxWidth='md' className='mt-10'>
+        <div className='bg-white shadow-lg p-6 rounded-lg border-t-4 border-emerald-500'>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Typography variant='h6' className='text-emerald-600'>
+                Website
+              </Typography>
+              <a
+                href={company.website}
+                className='text-emerald-500 underline'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {company.website}
+              </a>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant='h6' className='text-emerald-600'>
+                Location
+              </Typography>
+              <Typography variant='body1' className='text-gray-700'>
+                {company.address}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant='h6' className='text-emerald-600'>
+                Company Size
+              </Typography>
+              <Typography variant='body1' className='text-gray-700'>
+                {company.employees.length} - {company.employees.length + 50}
+              </Typography>
+            </Grid>
+          </Grid>
         </div>
 
-        {/* description and jobs */}
-        <div className="lg:flex justify-between  lg:w-4/5">
-          <div className="mt-60 px-10 w-full text-start lg:w-1/2">
-            <h1 className="font-bold text-lg mb-2">About {company.name}</h1>
-            <div>
-              {isExpanded ? (
-                <p className="text-gray-500 text-sm">{company.description}</p>
-              ) : (
-                <p className="text-gray-500 text-sm">
-                  {company.description.substring(0, 200)}
-                </p>
-              )}
-              {/* mui button */}
-              <Button
-                sx={{ fontSyle: "bold" }}
-                onClick={() => setIsExpanded(!isExpanded)}
+        {/* About Section */}
+        <div className='mt-8'>
+          <Typography variant='h5' className='font-bold text-emerald-700 mb-4'>
+            About {company.name}
+          </Typography>
+          <Typography variant='body1' className='text-gray-600'>
+            {isExpanded
+              ? company.description
+              : company.description.substring(0, 200) + '...'}
+          </Typography>
+          <Button
+            onClick={() => setIsExpanded(!isExpanded)}
+            sx={{ marginTop: 2, color: 'emerald', fontWeight: 'bold' }}
+          >
+            {isExpanded ? 'Show Less' : 'Read More'}
+          </Button>
+        </div>
+
+        {/* Jobs Section */}
+        <div className='mt-10'>
+          <Typography variant='h5' className='font-bold text-emerald-700 mb-4'>
+            Jobs at {company.name}
+          </Typography>
+          {jobs.length > 0 ? (
+            jobs.map((job) => (
+              <Card
+                key={job._id}
+                className='shadow-md hover:shadow-lg transition-shadow mb-4 border-l-4 border-emerald-500'
+                onClick={() => navigate(`../job/${job._id}`)}
               >
-                {isExpanded ? "Show Less" : "Read More"}
-              </Button>
-            </div>
-            <div>
-              <h1 className="font-bold text-lg mb-2">
-                Jobs from {company.name}
-              </h1>
-              {/* jobs container */}
-              {jobs.length > 0 ? (
-                jobs.map((job) => (
-                  <div key={job._id} className="my-2">
-                    <Card
-                      className="w-full"
-                      onClick={() => navigate(`../job/${job._id}`)}
-                    >
-                      <CardContent>
-                        <Grid container direction="row">
-                          {/* company logo */}
-                          <Grid item xs={2} sm={1}>
-                            <CardMedia
-                              component="img"
-                              sx={{
-                                marginRight: "3px",
-                                width: 50,
-                                borderRadius: "50%",
-                              }}
-                              image={logo}
-                              alt="companyLogo"
-                            />
-                          </Grid>
-                          <Grid item xs={10} sm={9}>
-                            <Typography
-                              variant="h6"
-                              style={{
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {job.title}
-                            </Typography>
-                            <Typography
-                              style={{
-                                color: "gray",
-                              }}
-                              variant="subtitle2"
-                            >
-                              {job.location}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Grid
-                          container
-                          direction="row"
-                          style={{
-                            marginTop: "10px",
-                          }}
-                        >
-                          <Grid
-                            item
-                            xs={3}
-                            style={{
-                              backgroundColor: "#f5f5f5",
-                              borderRadius: "5px",
-                              padding: "5px 2px 5px 2px",
-                              textAlign: "center",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              {job.employmentType}
-                            </Typography>
-                          </Grid>
-
-                          <Grid
-                            item
-                            xs={2}
-                            style={{
-                              backgroundColor: "#f5f5f5",
-                              borderRadius: "5px",
-                              padding: "5px 2px 5px 2px",
-                              textAlign: "center",
-                              marginLeft: "5px",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              {job.jobMode}
-                            </Typography>
-                          </Grid>
-
-                          <Grid
-                            item
-                            xs={4}
-                            style={{
-                              backgroundColor: "#f5f5f5",
-                              borderRadius: "5px",
-                              padding: "5px 2px 5px 2px",
-                              textAlign: "center",
-                              marginLeft: "5px",
-                            }}
-                          >
-                            <Typography variant="body2">
-                              {job.salaryRange} Rs.
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Grid
-                          style={{
-                            marginTop: "10px",
-                          }}
-                        >
-                          <Grid>
-                            {/* days passed since posted */}
-                            <Typography
-                              style={{
-                                color: "gray",
-                              }}
-                              variant="subtitle2"
-                            >
-                              {job.jobPostDays} days ago{" "}
-                              <span className="font-bold text-black">. </span>
-                              {job.applicants.length} applicants
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))
-              ) : (
-                <p>No Jobs Found</p>
-              )}
-            </div>
-          </div>
-
-          {/* people section */}
-          <div className="px-10 lg:mt-60  w-full text-start lg:w-2/5">
-            <h1 className="font-bold text-lg">People at {company.name}</h1>
-            <Card className="w-full">
-              <CardContent>
-                {company.employees.map((employee) => (
-                  <Grid
-                    container
-                    xs={12}
-                    sm={12}
-                    style={{
-                      marginTop: "10px",
-                    }}
-                    direction="row"
-                  >
-                    <Grid xs={2} sm={2}>
+                <CardContent>
+                  <Grid container>
+                    <Grid item xs={2}>
                       <CardMedia
-                        component="img"
-                        sx={{
-                          marginRight: "3px",
-                          width: 50,
-                          height: 50,
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          objectPosition: "center",
-                          transform: "scale(1)",
-                        }}
-                        image={personImage}
-                        alt="companyLogo"
+                        component='img'
+                        sx={{ borderRadius: '50%', width: 50 }}
+                        image={logo}
+                        alt='Company Logo'
                       />
                     </Grid>
-                    <Grid
-                      xs={8}
-                      sm={8}
-                      sx={{
-                        textAlign: "start",
-                        marginLeft: "10px",
-                      }}
-                    >
+                    <Grid item xs={10}>
                       <Typography
-                        variant="subtitle2"
-                        style={{
-                          textAlign: "start",
-                          fontWeight: "bold",
-                        }}
+                        variant='h6'
+                        className='font-bold text-emerald-700'
                       >
-                        {employee.user.firstName} {employee.user.lastName}
+                        {job.title}
                       </Typography>
-                      <Typography
-                        variant="subtitle2"
-                        style={{
-                          textAlign: "start",
-                          color: "gray",
-                        }}
-                      >
-                        {employee.user.role}
+                      <Typography className='text-gray-500'>
+                        {job.location} - {job.jobPostDays} days ago
+                      </Typography>
+                      <Typography className='text-gray-500'>
+                        {job.employmentType} | {job.jobMode} | {job.salaryRange}{' '}
+                        Rs.
                       </Typography>
                     </Grid>
                   </Grid>
-                ))}
-                <Grid xs={12} sm={12}>
-                  <Button
-                    style={{
-                      width: "100%",
-                      marginTop: "10px",
-                    }}
-                    variant="outlined"
-                  >
-                    Show All
-                  </Button>
-                </Grid>
-              </CardContent>
-            </Card>
-          </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <Typography>No Jobs Found</Typography>
+          )}
         </div>
-      </div>
-    </div>
-    // <h1>Details</h1>
-  );
-};
 
-export default Company;
+        {/* People Section */}
+        <div className='mt-10'>
+          <Typography variant='h5' className='font-bold text-emerald-700 mb-4'>
+            People at {company.name}
+          </Typography>
+          <Card className='shadow-md border-l-4 border-emerald-500'>
+            <CardContent>
+              {company.employees.map((employee) => (
+                <Grid container key={employee.user._id} className='mb-4'>
+                  <Grid item xs={2}>
+                    <CardMedia
+                      component='img'
+                      sx={{ borderRadius: '50%', width: 50, height: 50 }}
+                      image={personImage}
+                      alt={employee.user.firstName}
+                    />
+                  </Grid>
+                  <Grid item xs={10}>
+                    <Typography
+                      variant='body1'
+                      className='font-bold text-emerald-600'
+                    >
+                      {employee.user.firstName} {employee.user.lastName}
+                    </Typography>
+                    <Typography variant='body2' className='text-gray-500'>
+                      {employee.user.role}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
+              <Button
+                fullWidth
+                variant='outlined'
+                sx={{ borderColor: 'emerald', color: 'emerald' }}
+              >
+                Show All
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </Container>
+
+      {/* Footer Section */}
+      <footer className='w-full bg-secondary-dark text-white py-6 text-center mt-10'>
+        <p>
+          &copy; {new Date().getFullYear()} Your Company. All Rights Reserved.
+        </p>
+      </footer>
+    </div>
+  )
+}
+
+export default Company
