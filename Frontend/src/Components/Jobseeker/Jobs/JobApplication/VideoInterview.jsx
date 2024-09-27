@@ -7,6 +7,17 @@ import Loader from "../../../../Components/Loader/Loader";
 import UserController from "../../../../API/index";
 import {WaveFile} from "wavefile"; // Import the default export
 import { useSelector } from "react-redux"
+import { Alert } from '@mantine/core';
+import { FaCircleInfo } from "react-icons/fa6";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 
 const questions = [
   "So please tell me about yourself.",
@@ -24,8 +35,10 @@ const VideoInterview = () => {
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
   const {_id} = useSelector( (state)=> state.user)
+  const [error,setError] = useState("")
+  const [openDialog, setOpenDialog] = useState(true); // State to control dialog
   
-
+  const icon = <FaCircleInfo />;
   // Video recording using react-media-recorder
   const {
     startRecording: startVideoRecording,
@@ -104,20 +117,21 @@ const VideoInterview = () => {
   // Submit the video and audio interview separately
   const handleSubmit = async () => {
     console.log("Submitting interview to backend...");
-    setIsProcessing(true);
+    console.log("timer", timer)
+    if (timer < 120){
+      setError("You Interview must be atleast of 2 minute")
+    }
+    // setIsProcessing(true);
 
     console.log("Audio blob url ", audioBlobUrl , "VideoBlob url", videoBlobUrl)
 
-    if (videoBlobUrl && audioBlobUrl) {
-      try{
+    try{
       const videoResponse = await fetch(videoBlobUrl);
       const videoBlob = await videoResponse.blob();
 
       const audioResponse = await fetch(audioBlobUrl);
       const audioBlob = await audioResponse.blob();
-      const wavBlob = await convertToWav(audioBlob); // Convert to WAV
       
-      console.log("heyyyy")
       const formDataVideo = new FormData();
       formDataVideo.append("video", videoBlob, `${_id}.webm`);
 
@@ -169,14 +183,16 @@ const VideoInterview = () => {
         alert("Failed to upload interview.");
         setIsProcessing(false);
       }
-    }
+    
   };
 
   // Automatically stop recording after 3 minutes
   useEffect(() => {
     if (timer >= 180) {
       handleStopCaptureClick();
-      alert("Recording stopped after reaching the 3-minute limit.");
+      setError("Recording stopped after reaching the 3-minute limit.");
+      handleSubmit();
+
     }
   }, [timer]);
 
@@ -189,74 +205,118 @@ const VideoInterview = () => {
     clearInterval(timerRef.current); // Stop any ongoing timers
   };
 
+    // Handle dialog close
+    const handleDialogClose = () => {
+      setOpenDialog(false);
+    };
+
   return (
-    <div className="mt-10 flex flex-col items-center justify-center">
-      {isProcessing && <Loader />}
-      <div className="w-full max-w-2xl p-6 bg-white shadow-lg rounded-lg">
-        <h1 className="font-bold text-2xl mb-6 text-center text-secondary-dark">
-          Step 2: Video Interview
-        </h1>
-        <p className="text-gray-600 mb-4 text-center">
-          Please answer the following question by recording a video:
-        </p>
-        <h2 className="text-lg font-semibold text-gray-800 mb-6 text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    {/* Error Alert */}
+    {error && (
+      <div className="fixed bottom-0 w-4/5 md:w-1/3">
+        <Alert
+          variant="filled"
+          severity="error"
+          onClose={() => setError("")}
+        >
+          {error}
+        </Alert>
+      </div>
+    )}
+
+    {/* Instructions Dialog */}
+    <Dialog open={openDialog} onClose={handleDialogClose}>
+      <DialogTitle>Video Interview Instructions</DialogTitle>
+      <DialogContent>
+        <Typography variant="body1" gutterBottom>
+          Please ensure that you are in a quiet and well-lit environment.
+          You will be asked a series of questions. Make sure to record your
+          responses, and note that the total interview must be at least 2
+          minutes long. You can move to the next question when you're ready.
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleDialogClose} color="primary" variant="contained">
+          Got it
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+    {/* Main Interview Card */}
+    <div className="w-full max-w-3xl p-6 bg-white shadow-lg rounded-lg mt-1">
+      <h1 className="font-bold text-3xl mb-6 text-center text-slate-700">
+        Step 2: Video Interview
+      </h1>
+      <p className="text-gray-700 mb-4 text-center">
+        Answer the following question by recording a video response.
+      </p>
+
+      {/* Question and Timer */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 text-center mb-4 md:mb-0">
           {questions[currentQuestion]}
         </h2>
-
-        {/* Timer display */}
-        <div className="text-center text-gray-500 mb-4">
+        <div className="text-center text-gray-500">
           Timer: {Math.floor(timer / 60)}:{("0" + (timer % 60)).slice(-2)}
         </div>
+      </div>
 
-        <div className="flex flex-col items-center">
-          {/* Webcam component */}
-          <Webcam className="w-full h-64 rounded-md" />
-          <div className="mt-4 flex space-x-4">
-            <button
-              onClick={handleStartCaptureClick}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold p-3 rounded-md"
-            >
-              Start Recording
-            </button>
-            <button
-              onClick={handleStopCaptureClick}
-              className="bg-red-600 hover:bg-red-700 text-white font-semibold p-3 rounded-md"
-            >
-              Stop Recording
-            </button>
-            <button
-              onClick={handleNextQuestion}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-md"
-            >
-              Next Question
-            </button>
-            <button
-              onClick={handleDownload}
-              className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold p-3 rounded-md"
-            >
-              Download Video & Audio
-            </button>
-            <button
-              onClick={handleRedo}
-              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold p-3 rounded-md transition duration-300 ease-in-out"
-            >
-              Redo Interview
-            </button>
-          </div>
-
-          {/* Submit button - only shown after all questions are answered */}
-          {currentQuestion === questions.length - 1 && (
-            <button
-              onClick={handleSubmit}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold p-3 rounded-md mt-6"
-            >
-              Submit Interview
-            </button>
-          )}
+      {/* Webcam and Buttons */}
+      <div className="flex flex-col items-center justify-center">
+        <div className="w-full h-64 mb-4 bg-gray-200 rounded-md overflow-hidden shadow-inner">
+          <Webcam className="w-full h-full object-cover" />
         </div>
+        <div className="flex flex-wrap justify-center space-x-4 mt-4">
+          <Button
+            onClick={handleStartCaptureClick}
+            variant="contained"
+            color="success"
+          >
+            Start Recording
+          </Button>
+          <Button
+            onClick={handleNextQuestion}
+            variant="contained"
+            color="primary"
+            disabled={currentQuestion === questions.length - 1}
+          >
+            Next Question
+          </Button>
+          <Button
+            onClick={handleDownload}
+            variant="contained"
+            color="warning"
+          >
+            Download Video
+          </Button>
+          <Button
+            onClick={handleRedo}
+            variant="outlined"
+            color="secondary"
+          >
+            Redo Interview
+          </Button>
+        </div>
+
+        {/* Submit button - only shown after all questions are answered */}
+        {currentQuestion === questions.length - 1 && (
+          <Button
+            onClick={handleSubmit}
+            className="mt-6"
+            variant="contained"
+            color="secondary"
+          >
+            Submit Interview
+          </Button>
+        )}
       </div>
     </div>
-  );
+
+    {isProcessing && <Loader />}
+  </div>
+);
 };
+
 
 export default VideoInterview;

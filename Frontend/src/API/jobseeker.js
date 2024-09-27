@@ -1,227 +1,199 @@
-import { TrySharp } from "@mui/icons-material";
+import ApiClient from './ApiClient'; // Import the ApiClient class
 
 class JobseekerController {
   constructor() {
-    (this.jobUrl = "http://localhost:3000/api/v1/jobs"),
-      (this.jobSeekerUrl = "http://localhost:3000/api/v1/jobseeker");
+    // Initialize the ApiClient with the base URL
+    this.apiClient = new ApiClient("http://localhost:3000/api/v1");
+    this.fastApiClient = new ApiClient("http://localhost:8000/")
   }
+
+  // Get all jobs
   async getJobs() {
     try {
-      const response = await fetch(this.jobUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await this.apiClient.get("/jobs");
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
+      console.error("Error fetching jobs:", error);
       return { status: 500, message: "Internal server error" };
     }
   }
 
-  async getJobDescription(id){
+  async getRecommendedJbs(user_id){
     try{
-      const response = await fetch(`${this.jobUrl}/description?id=${id}` , {
-        method: "GET",
-        headers:{
-          "Content-Type": "application/json"
-        }
-      });
+      const response = await this.fastApiClient.post("recommend-jobs",user_id)
 
-      return {
-        data : await response.json(),
-        status: response.status
-      }
-
+      return response.data;
+      
     }catch(err){
-      return { status: 500 , message : "Internal server error"}
+      console.log(err);
+      return {status: 500 , message: "Internal server error"}
     }
   }
 
+  // Get a specific job description by ID
+  async getJobDescription(id) {
+    try {
+      const response = await this.apiClient.get(`/jobs/description?id=${id}`);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching job description:", error);
+      return { status: 500, message: "Internal server error" };
+    }
+  }
+
+  // Apply to a job
   async applyJob(data, token) {
     try {
-      const response = await fetch(this.jobSeekerUrl + "/job/apply", {
-        method: "POST",
+      const response = await this.apiClient.post("/jobseeker/job/apply", data, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
       });
-
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
+      console.error("Error applying for job:", error);
+      return { status: 500, message: "Internal Server Error" };
     }
   }
 
+  // Get all applied jobs for a job seeker
   async getAppliedJobs(token) {
     try {
-      const response = await fetch(this.jobSeekerUrl + "/jobs/applied", {
-        method: "GET",
+      const response = await this.apiClient.get("/jobseeker/jobs/applied", {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${token}`,
         },
       });
-
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
+      console.error("Error fetching applied jobs:", error);
+      return { status: 500, message: "Internal Server Error" };
     }
   }
 
+  // Get all applications
   async getApplications(token) {
     try {
-      const response = await fetch(this.jobSeekerUrl + "/applications", {
-        method: "GET",
+      const response = await this.apiClient.get("/jobseeker/applications", {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${token}`,
         },
       });
-
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
+      console.error("Error fetching applications:", error);
+      return { status: 500, message: "Internal Server Error" };
     }
   }
 
+  // Get all companies
   async getCompanies() {
     try {
-      const response = await fetch(this.jobSeekerUrl + "/companies", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
+      const response = await this.apiClient.get("/jobseeker/companies");
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
+      console.error("Error fetching companies:", error);
+      return { status: 500, message: "Internal Server Error" };
     }
   }
 
+  // Get a specific assessment by ID
   async getAssessmentById(id) {
-    console.log("ID", id);
     try {
-      const response = await fetch(`${this.jobSeekerUrl}/assessment?id=${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
+      const response = await this.apiClient.get(`/jobseeker/assessment?id=${id}`);
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
+      console.error("Error fetching assessment:", error);
+      return { status: 500, message: "Internal Server Error" };
     }
   }
 
+  // Start a job application
   async startApplication(jobId, token) {
     try {
-      const response = await fetch(this.jobSeekerUrl + "/startApplication", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({ jobId }),
-      });
-
+      const response = await this.apiClient.post(
+        "/jobseeker/startApplication",
+        { jobId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
-    }
-
-  }
-
-  async submitApplication(data, token) {
-    console.log("Data", data);
-    try {
-      const response = await fetch(this.jobSeekerUrl + "/application", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(data),
-      });
-
-      return {
-        data: await response.json(),
-        status: response.status,
-      };
-    } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
+      console.error("Error starting application:", error);
+      return { status: 500, message: "Internal Server Error" };
     }
   }
 
+  // Submit a job application
   async submitApplication(data, token) {
     try {
-      console.log("Data going to backend", data);
-      const response = await fetch(this.jobSeekerUrl + "/submitApplication", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify(data),
-      });
-
+      const response = await this.apiClient.post(
+        "/jobseeker/submitApplication",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return {
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {
-      return {
-        status: 500,
-        message: "Internal Server Error",
-      };
+      console.error("Error submitting application:", error);
+      return { status: 500, message: "Internal Server Error" };
     }
   }
+
+  async uploadResume(userId , file) {
+    console.log("Uploading resume to backend", file , userId)
+    try {
+      // Create a FormData object to send file and user_id
+      const formData = new FormData();
+      formData.append('user_id', userId);
+      formData.append('file', file);
+  
+      // Make a POST request to the FastAPI backend
+      const response = await this.fastApiClient.post('/upload_resume', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+  
+      return response.data;
+
+    } catch (error) {
+      console.error('Error uploading resume:', error);
+      alert('Failed to upload resume.');
+    }
+  }
+  
 }
 
 export default new JobseekerController();

@@ -11,6 +11,7 @@ class JobDTO {
         this.employmentType = job.employmentType;
         this.applicants = job.applicants;
         this.createdAt = job.createdAt;
+        this.archived = job.archived;
     }
 }
 
