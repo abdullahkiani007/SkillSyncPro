@@ -1,202 +1,242 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 import {
   Typography,
   Container,
   Card,
   CardContent,
-  Chip,
-  Box,
-  Divider,
   Button,
-} from "@mui/material";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { HiOutlineCurrencyDollar } from "react-icons/hi2";
-import companyLogo from "../../../assets/companyLogo.png";
-import { FaRegBookmark } from "react-icons/fa6";
-import { FaBookmark } from "react-icons/fa6";
-import { IoCaretForwardOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import JobPerformanceTracker from "../../../API/JobPerfomanceTracker";
-import Loader from "../../Loader/Loader";
+  Chip,
+  Divider,
+  Box,
+} from '@mui/material'
+import { IoMdArrowRoundBack } from 'react-icons/io'
+import { HiOutlineCurrencyDollar } from 'react-icons/hi2'
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa6'
+import { IoCaretForwardOutline } from 'react-icons/io5'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import JobPerformanceTracker from '../../../API/JobPerfomanceTracker'
+import Loader from '../../Loader/Loader'
+import companyLogo from '../../../assets/companyLogo.png'
 
 const Job = () => {
-  const id = window.location.pathname.split("/")[3];
-  const navigate = useNavigate();
-  const [jobDetails, setJobDetails] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  console.log(id);
-  const [job, setJob] = useState({});
-  const [applied, setApplied] = useState(false);
-  const user = useSelector((state) => state.user);
-  // console.log(
-  //   jobDetails.applicants.filter((applicant) => applicant._id === user._id)
-  // );
-  // if (jobDetails.applicants.find((applicant) => applicant._id === user._id)) {
-  //   setApplied(true);
-  // }
+  const id = window.location.pathname.split('/')[3]
+  const navigate = useNavigate()
+  const [jobDetails, setJobDetails] = useState({})
+  const [loading, setLoading] = useState(true)
+  const [job, setJob] = useState({})
+  const [applied, setApplied] = useState(false)
+  const user = useSelector((state) => state.user)
 
   useEffect(() => {
-    async function handlView() {
+    async function handleView() {
       try {
-        await JobPerformanceTracker.trackJobView(id, user._id);
+        await JobPerformanceTracker.trackJobView(id, user._id)
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
     }
 
-    handlView();
-  });
+    handleView()
+  }, [id, user._id])
 
   useEffect(() => {
-    console.log("retrieving job from local storage");
-    const jobs = JSON.parse(localStorage.getItem("jobs"));
-    console.log(jobs);
+    const jobs = JSON.parse(localStorage.getItem('jobs'))
     if (jobs) {
-      console.log("id -->", id);
-      const jobItem = jobs.filter((job) => job._id.trim() === id.trim());
-      setJob(jobItem[0]);
-      console.log("job state", job);
-      setLoading(false);
+      const jobItem = jobs.find((job) => job._id.trim() === id.trim())
+      setJob(jobItem)
+      setLoading(false)
     }
-  }, []);
+  }, [id])
 
   if (loading) {
-    return <Loader />;
+    return <Loader />
   }
+
   return (
     <>
-      <div className="flex items-center pl-10 py-2 border border-b-gray-200">
+      <div className='flex items-center pl-10 py-3 border-b border-gray-300 bg-gray-100'>
         <IoMdArrowRoundBack
-          className="hover:cursor-pointer"
-          onClick={() => navigate("../jobs")}
+          className='hover:cursor-pointer text-2xl text-indigo-500 hover:text-indigo-700 transition duration-200'
+          onClick={() => navigate('../jobs')}
         />
-        <p
-          className="ml-2 font-bold hover:cursor-pointer"
-          onClick={() => navigate("../jobs")}
+        <Typography
+          variant='h6'
+          className='ml-3 font-semibold text-indigo-500 hover:text-indigo-700 transition duration-200 hover:cursor-pointer'
+          onClick={() => navigate('../jobs')}
         >
-          All Jobs
-        </p>
+          Back to All Jobs
+        </Typography>
       </div>
 
-      <div className="lg:flex lg:flex-row">
-        <Container className="">
-          <Card className="shadow-2xl">
-            <CardContent className="flex flex-row justify-between ">
-              <div className="p-5">
+      <div className='lg:flex lg:flex-row lg:gap-8 mt-8 px-10'>
+        {/* Main Job Card */}
+        <Container>
+          <Card className='shadow-xl hover:shadow-2xl transition-shadow rounded-lg bg-white border-t-8 border-indigo-500'>
+            <CardContent className='flex justify-between p-8'>
+              <div>
                 <img
                   src={companyLogo}
-                  alt="company logo"
-                  className="w-20 h-20 rounded-full"
+                  alt='Company Logo'
+                  className='w-24 h-24 rounded-full mb-6 shadow-md'
                 />
-                <h1 className="font-bold mt-2 text-lg">{job.title}</h1>
-                <p className="text-sm text-gray-500 my-2">
+                <Typography variant='h5' className='font-bold text-gray-800'>
+                  {job.title}
+                </Typography>
+                <Typography className='text-sm text-gray-500 my-3'>
                   {job.companyWebsite}
-                </p>
-                <div className="flex flex-row ">
-                  <p className="text-sm text-gray-700 mr-4">
+                </Typography>
+                <div className='flex items-center space-x-6'>
+                  <Typography variant='body2' className='text-gray-700'>
                     {job.companyName}
-                  </p>
-                  <div className="flex flex-row items-center justify-center">
-                    <HiOutlineCurrencyDollar className="text-xl" />
-                    <p className="text-sm text-gray-500">{job.salaryRange}</p>
+                  </Typography>
+                  <div className='flex items-center space-x-1'>
+                    <HiOutlineCurrencyDollar className='text-xl text-green-500' />
+                    <Typography variant='body2' className='text-gray-500'>
+                      {job.salaryRange}
+                    </Typography>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col justify-between">
-                <FaRegBookmark className="text-2xl m-10" />
-                <div className="mb-7">
-                  <Button
-                    onClick={() => navigate(`../../jobseeker/job/apply/${id}`)}
-                    variant="contained"
-                    sx={{
-                      background: "#182235",
-                    }}
-                    className="bg-green-700 text-white "
-                  >
-                    Apply
-                  </Button>
-                </div>
+              <div className='flex flex-col justify-between items-end'>
+                <FaRegBookmark className='text-3xl text-gray-400 cursor-pointer hover:text-yellow-500 transition duration-200' />
+                <Button
+                  onClick={() => navigate(`../../jobseeker/job/apply/${id}`)}
+                  variant='contained'
+                  sx={{
+                    background: '#4F46E5',
+                    '&:hover': {
+                      backgroundColor: '#4338CA',
+                    },
+                  }}
+                  className='text-white mt-4 shadow-lg transform hover:scale-105 transition-transform'
+                >
+                  Apply Now
+                </Button>
               </div>
             </CardContent>
-            <CardContent className="shaeow-2xl border border-t-gray-300">
-              <div className="p-5">
-                <h1 className="font-bold  text-lg">Requirements</h1>
 
+            <Divider />
+
+            {/* Job Requirements */}
+            <CardContent>
+              <div className='p-5'>
+                <Typography
+                  variant='h6'
+                  className='font-bold mb-2 text-indigo-600'
+                >
+                  Requirements
+                </Typography>
                 {job.requirements?.map((requirement, index) => (
-                  <div className="flex flex-row items-center">
-                    <IoCaretForwardOutline />
-                    <p key={index} className="text-sm ml-1 text-gray-700 my-1">
+                  <div className='flex items-center my-1' key={index}>
+                    <IoCaretForwardOutline className='text-indigo-400' />
+                    <Typography className='text-sm ml-1 text-gray-600'>
                       {requirement}
-                    </p>
+                    </Typography>
                   </div>
                 ))}
               </div>
-              <div className="p-5">
-                <h1 className="font-bold  text-lg">Description</h1>
 
-                <div className="flex flex-row items-center">
-                  <IoCaretForwardOutline />
-                  <p className="text-sm ml-1 text-gray-700 my-1">
+              {/* Job Description */}
+              <div className='p-5'>
+                <Typography
+                  variant='h6'
+                  className='font-bold mb-2 text-indigo-600'
+                >
+                  Job Description
+                </Typography>
+                <div className='flex items-center'>
+                  <IoCaretForwardOutline className='text-indigo-400' />
+                  <Typography className='text-sm ml-1 text-gray-600'>
                     {job.description}
-                  </p>
+                  </Typography>
                 </div>
               </div>
             </CardContent>
-            <CardContent className="shaeow-2xl border border-t-gray-300">
-              <div className="p-5">
-                <h1 className="font-bold  text-lg">Skills</h1>
 
-                <div className="flex flex-row items-center">
-                  {job.skills &&
-                    job.skills.map((skill, index) => (
-                      <p
-                        key={index}
-                        className="text-sm ml-1 bg-secondary-dark text-white px-3 py-2 rounded-lg hover:text-secondary-dark hover:bg-white transition  shadow-xl my-1"
-                      >
-                        {skill}
-                      </p>
-                    ))}
+            <Divider />
+
+            {/* Skills */}
+            <CardContent>
+              <div className='p-5'>
+                <Typography
+                  variant='h6'
+                  className='font-bold mb-2 text-indigo-600'
+                >
+                  Skills Required
+                </Typography>
+                <div className='flex flex-wrap gap-3'>
+                  {job.skills?.map((skill, index) => (
+                    <Chip
+                      key={index}
+                      label={skill}
+                      className='text-sm bg-indigo-500 text-white shadow-md'
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: '#E2E8F0',
+                          color: '#4C51BF',
+                        },
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
             </CardContent>
-            {/* <CardContent className="shaeow-2xl border border-t-gray-300">
-              <div className="p-5">
-                <h1 className="font-bold text-lg">About {job.companyName}</h1>
-                <p className="mt-1 text-justify text-gray-700">
-                  {jobDetails.companyDescription}
-                </p>
-              </div>
-            </CardContent> */}
           </Card>
         </Container>
 
-        <Container className="basis-1/3">
-          <CardContent className="shadow-2xl rounded-lg">
-            <div className="p-5">
-              <h1 className="font-bold text-lg mb-8">About the Job</h1>
-              <h2 className="text-gray-500 text-sm">Apply Before</h2>
-              <p className="mt-0.5 mb-5">{job.deadLine}</p>
-              <h2 className="text-gray-500 text-sm">Posted on</h2>
-              <p className="mt-0.5 mb-5">{jobDetails.postedOn}</p>
-              <h2 className="text-gray-500 text-sm">Job type</h2>
-              <p className="mt-0.5 mb-5">{job.employmentType}</p>
-              <h2 className="text-gray-500 text-sm">Experience level</h2>
-              <p className="mt-0.5 mb-5 text-gray-500  rounded-sm p-1 border border-gray-400 w-fit text-xs">
-                {job.experienceLevel}
-              </p>
-              <h2 className="text-gray-500 text-sm">Salary</h2>
-              <div className="flex flex-row items-center py-1 ">
-                <HiOutlineCurrencyDollar className="text-xl" />
-                <p className="text-sm text-gray-500">{job.salaryRange}</p>
-              </div>
+        {/* Job Details Section */}
+        <Container className='basis-1/3 mt-6 lg:mt-0'>
+          <CardContent className='shadow-lg rounded-lg p-8 bg-gray-50'>
+            <Typography variant='h6' className='font-bold mb-6 text-indigo-600'>
+              About the Job
+            </Typography>
+
+            <Typography className='text-gray-500 text-sm'>
+              Apply Before
+            </Typography>
+            <Typography className='mb-6 text-gray-700'>
+              {job.deadLine}
+            </Typography>
+
+            <Typography className='text-gray-500 text-sm'>Posted on</Typography>
+            <Typography className='mb-6 text-gray-700'>
+              {jobDetails.postedOn}
+            </Typography>
+
+            <Typography className='text-gray-500 text-sm'>Job Type</Typography>
+            <Typography className='mb-6 text-gray-700'>
+              {job.employmentType}
+            </Typography>
+
+            <Typography className='text-gray-500 text-sm'>
+              Experience Level
+            </Typography>
+            <Typography className='mb-6 text-gray-500 border border-gray-300 rounded-md p-2 text-xs w-fit'>
+              {job.experienceLevel}
+            </Typography>
+
+            <Typography className='text-gray-500 text-sm'>Salary</Typography>
+            <div className='flex items-center py-1 mb-6'>
+              <HiOutlineCurrencyDollar className='text-xl text-green-500' />
+              <Typography className='ml-1 text-sm text-gray-700'>
+                {job.salaryRange}
+              </Typography>
             </div>
           </CardContent>
         </Container>
       </div>
-    </>
-  );
-};
 
-export default Job;
+      {/* Footer */}
+      <footer className='bg-gray-800 text-white py-4 mt-12'>
+        <Container>
+          <Typography variant='body2' className='text-center text-gray-400'>
+            &copy; 2024 JobBoard. All rights reserved.
+          </Typography>
+        </Container>
+      </footer>
+    </>
+  )
+}
+
+export default Job

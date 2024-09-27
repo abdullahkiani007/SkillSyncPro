@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import Navbar from "./navbar/Navbar";
-import Topbar from "./navbar/Topbar";
-import { useSelector } from "react-redux";
-import Loader from "../Loader/Loader";
-import Sidebar from "./navbar/Sidebar";
-import Header from "./navbar/Header";
+import React, { useEffect, useState } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+import Navbar from './navbar/Navbar'
+import Topbar from './navbar/Topbar'
+import { useSelector } from 'react-redux'
+import Loader from '../Loader/Loader'
+import Sidebar from './navbar/Sidebar'
+import Header from './navbar/Header'
 
 const JobseekerRoutes = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = useSelector((state) => state.user);
-  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const user = useSelector((state) => state.user)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (!(user.auth && user.role === "jobseeker")) {
-      navigate("/login/jobseeker");
+    if (!(user.auth && user.role === 'jobseeker')) {
+      navigate('/login/jobseeker')
     }
-  }, [user, navigate]);
+  }, [user, navigate])
 
-  if (user.auth && user.role === "jobseeker") {
+  if (user.auth && user.role === 'jobseeker') {
     return (
-      <div className="flex h-full">
+      <div className='flex h-full'>
         {/* <Navbar /> */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="flex flex-col flex-1 ">
+        <div className='flex flex-col flex-1 '>
           {/* <Topbar /> */}
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div className="">
-            <Outlet className="bg-gray-200 " />
+          <div className=''>
+            <Outlet className='bg-gray-200 ' />
           </div>
         </div>
       </div>
-    );
+    )
   } else {
-    return null;
+    return null
   }
-};
+}
 
-export default JobseekerRoutes;
+export default JobseekerRoutes
