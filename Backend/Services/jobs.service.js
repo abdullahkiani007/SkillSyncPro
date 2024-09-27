@@ -96,7 +96,7 @@ const jobService = {
             const applications = await ApplicationModel.find({ jobSeeker: jobseekerId._id })
                 .populate('job');
     
-            const jobs = applications.map((application) => {
+            let jobs = applications.map((application) => {
                 return {
                     jobId: application.job._id,
                     title: application.job.title,
@@ -109,6 +109,10 @@ const jobService = {
                     resume: application.resume,
                     videoIntroduction: application.videoIntroduction
                 };
+            });
+
+            jobs = jobs.filter((job) => {
+                return job.resume && job.videoIntroduction;
             });
     
             return {
@@ -254,51 +258,59 @@ const jobService = {
         }
     },
 
-    getJobPerformanceByDate: async(companyId,startDate,endDate) =>{
-
-    console.log("In service function of getjob performance by date");
-    console.log("state" , companyId, startDate , endDate)
-  const performances = await JobPerformance.aggregate([
-    {
-      $match: {
-        date: { $gte: new Date(startDate), $lte: new Date(endDate) },
-      }
-    },
-    {
-      $lookup: {
-        from: 'jobs',
-        localField: 'job',
-        foreignField: '_id',
-        as: 'job',
-      },
-    },
-    {
-      $unwind: '$job'
-    },
-    {
-      $match: {
-        'job.company':new mongoose.Types.ObjectId(companyId)
-      }
-    },
-    {
-      $group: {
-        _id: {
-          job_id: '$job._id',
-          date: '$date'
-        },
-        views: { $sum: '$views' },
-        applications: { $sum: '$applications' },
-        hires: { $sum: '$hires' },
-      }
-    },
-    {
-      $sort: { '_id.date': 1 }
-    }
-  ]);
-
-
+    getJobPerformanceByDate: async (companyId, jobId, startDate, endDate) => {
+        console.log("In service function of getJobPerformanceByDate");
+        console.log("state", companyId, startDate, endDate, jobId);
+      
+        const matchCriteria = {
+          date: { $gte: new Date(startDate), $lte: new Date(endDate) },
+          'job.company': new mongoose.Types.ObjectId(companyId),
+        };
+      
+        // If a jobId is provided, add it to the match criteria
+        if (jobId) {
+          matchCriteria['job._id'] = new mongoose.Types.ObjectId(jobId);
+        }
+      
+        const performances = await JobPerformance.aggregate([
+          {
+            $match: {
+              date: { $gte: new Date(startDate), $lte: new Date(endDate) },
+            }
+          },
+          {
+            $lookup: {
+              from: 'jobs',
+              localField: 'job',
+              foreignField: '_id',
+              as: 'job',
+            },
+          },
+          {
+            $unwind: '$job'
+          },
+          {
+            $match: matchCriteria
+          },
+          {
+            $group: {
+              _id: {
+                job_id: '$job._id',
+                date: '$date'
+              },
+              views: { $sum: '$views' },
+              applications: { $sum: '$applications' },
+              hires: { $sum: '$hires' },
+            }
+          },
+          {
+            $sort: { '_id.date': 1 }
+          }
+        ]);
+      
         return performances;
-    }
+      }
+      
 
 
     }

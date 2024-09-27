@@ -1,6 +1,4 @@
-implement Module 5: Job Listing and Description
-FE-1: Allow recruiters to create job listings and job description.
-FE-2: Candidates can apply for jobs through the job listings.
-FE-3: Candidates can search for jobs according to their preference.
-FE-4: Candidates will receive notification if a new job is posted.
-FE-5: Candidates can save jobs and check statuses.
+recommend jobseeker to employer
+set the scoring criteria of the assessment
+set the deadline of job
+generate random questions for the jobseeker

@@ -21,6 +21,8 @@ function Jobs() {
       setLoading(true);
       try {
         const { data } = await JobSeekerController.getJobs();
+
+        let jobs = data.jobs.filter((job)=> !job.archived)
         const formData = new FormData();
         formData.append("user_id", userId);
 
@@ -28,15 +30,16 @@ function Jobs() {
         console.log("recommendedJobs: ", recommendedJobsResponse);
 
         const recommendedJobIds = recommendedJobsResponse.recommended_jobs;
+        console.log("jobs ", jobs)
 
         // Filter jobs based on recommended IDs
-        const filteredRecommendedJobs = data.jobs.filter((job) =>
+        const filteredRecommendedJobs = jobs.filter((job) =>
           recommendedJobIds.includes(job._id) // Assuming job._id matches the recommended job ID
         );
 
-        setJobs(data.jobs);
+        setJobs(jobs);
         setRecommendedJobs(filteredRecommendedJobs);
-        localStorage.setItem("jobs", JSON.stringify(data.jobs));
+        localStorage.setItem("jobs", JSON.stringify(jobs));
       } catch (error) {
         setError(error.message);
       } finally {

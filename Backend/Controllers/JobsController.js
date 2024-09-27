@@ -101,10 +101,10 @@ const JobsController = {
     async getJobPerformanceByDate(req, res,next) {
         console.log("Fetching job performance by date...");
         const {companyId} = req.params;
-        const {startDate,endDate} = req.query;
+        const {startDate,endDate,jobId} = req.query;
         try{
             
-            const performance = await Job.getJobPerformanceByDate(companyId,startDate,endDate);
+            const performance = await Job.getJobPerformanceByDate(companyId,jobId,startDate,endDate);
             console.log("performance is ",performance);
             // return res.status(200).json({performance});
             return res.status(200).json({performance: [
