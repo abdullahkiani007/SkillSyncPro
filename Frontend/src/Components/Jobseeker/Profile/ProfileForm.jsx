@@ -39,9 +39,11 @@ const ProfileForm = () => {
         ...data,
         education: data.education.map((edu) => ({
           ...edu,
-          startDate: parseISO(edu.startDate), // Parse date from stored string
-          endDate: parseISO(edu.endDate), // Parse date from stored string
+          startDate: new Date(edu.startDate).toLocaleDateString('en-GB'),
+          endDate: new Date(edu.endDate).toLocaleDateString('en-GB'),
         })),
+          // Format education dates
+          
       }
       setUser(formattedData.user || {})
       setFormData(formattedData || { education: [], skills: [] })
