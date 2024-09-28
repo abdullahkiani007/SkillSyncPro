@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import Controller from '../../../API/index'
 import ImageUpload from '../../Uploader/ImageUploader'
 import placeholderImage_person from '../../../assets/placeholderImage_person.jpg'
-import { format } from 'date-fns'
+import { format, parseISO, isValid } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 
 const ProfileForm = () => {
@@ -29,12 +29,22 @@ const ProfileForm = () => {
     startDate: '',
     endDate: '',
   })
+  const [errors, setErrors] = useState({})
 
+  // Fetch profile data from localStorage and parse dates correctly
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('profile'))
     if (data) {
-      setUser(data.user || {})
-      setFormData(data || { education: [], skills: [] })
+      const formattedData = {
+        ...data,
+        education: data.education.map((edu) => ({
+          ...edu,
+          startDate: parseISO(edu.startDate), // Parse date from stored string
+          endDate: parseISO(edu.endDate), // Parse date from stored string
+        })),
+      }
+      setUser(formattedData.user || {})
+      setFormData(formattedData || { education: [], skills: [] })
     }
   }, [])
 
@@ -70,26 +80,40 @@ const ProfileForm = () => {
     }))
   }
 
-  const formatDate = (date) => {
-    return date ? format(new Date(date), 'yyyy/MM/dd') : ''
-  }
-
-  const handleDateChange = (e) => {
-    const { name, value } = e.target
-    const formattedDate = value ? format(new Date(value), 'yyyy/MM/dd') : ''
-    handleEduChange({ target: { name, value: formattedDate } })
-  }
-
   const addEducation = () => {
+    // Validation for education fields
+    if (!edu.institution || !edu.degree || !edu.startDate || !edu.endDate) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        education: 'Please fill out all education fields.',
+      }))
+      return
+    }
+
+    const startDate = new Date(edu.startDate)
+    const endDate = new Date(edu.endDate)
+    const yearDifference = endDate.getFullYear() - startDate.getFullYear()
+
+    if (yearDifference < 2) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        education: 'The degree duration must be at least 2 years.',
+      }))
+      return
+    }
+
     const formattedEdu = {
       ...edu,
-      startDate: new Date(edu.startDate),
-      endDate: new Date(edu.endDate),
+      startDate: format(startDate, 'yyyy-MM-dd'), // Save date in ISO format
+      endDate: format(endDate, 'yyyy-MM-dd'), // Save date in ISO format
     }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       education: [...prevFormData.education, formattedEdu],
     }))
+
+    // Reset form fields and clear errors
     setEdu({
       institution: '',
       degree: '',
@@ -97,6 +121,11 @@ const ProfileForm = () => {
       startDate: '',
       endDate: '',
     })
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      education: '', // Clear education errors
+    }))
   }
 
   const removeEducation = (index) => {
@@ -117,18 +146,58 @@ const ProfileForm = () => {
     { value: 'SQL', label: 'SQL' },
   ]
 
+  const validateForm = () => {
+    let validationErrors = {}
+
+    const nameRegex = /^[a-zA-Z\s-]+$/
+    const phoneRegex = /^\+?[0-9]+$/
+
+    // Name validation
+    if (!nameRegex.test(user.firstName)) {
+      validationErrors.firstName = 'First name should contain only alphabets'
+    }
+
+    if (!nameRegex.test(user.lastName)) {
+      validationErrors.lastName = 'Last name should contain only alphabets'
+    }
+
+    // Phone validation
+    if (!phoneRegex.test(user.phone)) {
+      validationErrors.phone =
+        'Phone number should contain only numbers and can start with +'
+    }
+
+    // Check required user fields
+    if (!user.firstName) validationErrors.firstName = 'First name is required'
+    if (!user.lastName) validationErrors.lastName = 'Last name is required'
+    if (!user.phone) validationErrors.phone = 'Phone number is required'
+    if (!user.address) validationErrors.address = 'Address is required'
+
+    // Check if there are skills
+    if (formData.skills.length === 0)
+      validationErrors.skills = 'At least one skill is required'
+
+    // Check if there is education added
+    if (formData.education.length === 0)
+      validationErrors.education = 'At least one education record is required'
+
+    setErrors(validationErrors)
+
+    return Object.keys(validationErrors).length === 0
+  }
+
   const handleSubmit = async () => {
-    // Ensure profile picture has fallback if not uploaded
+    if (!validateForm()) return
+
     user.profilePicture = img || user.profilePicture || placeholderImage_person
     const token = localStorage.getItem('token')
 
     try {
       const updatedData = {
         ...formData,
-        user, // Ensure `address` and other user fields are included
+        user,
       }
 
-      console.log('Submitting data:', updatedData)
       const response = await Controller.updateProfile(token, updatedData)
       if (response.status === 200) {
         navigate('/jobseeker/profile')
@@ -156,8 +225,6 @@ const ProfileForm = () => {
         </div>
       </div>
 
-      {/* User Details */}
-
       <div className='grid grid-cols-2 gap-4 mb-6'>
         <TextField
           label='First Name'
@@ -167,6 +234,8 @@ const ProfileForm = () => {
           onChange={handleUserChange}
           className='input-style'
           sx={{ zIndex: 5 }}
+          error={!!errors.firstName}
+          helperText={errors.firstName}
         />
 
         <TextField
@@ -177,10 +246,11 @@ const ProfileForm = () => {
           onChange={handleUserChange}
           className='input-style'
           sx={{ zIndex: 5 }}
+          error={!!errors.lastName}
+          helperText={errors.lastName}
         />
       </div>
 
-      {/* Phone and Address with spacing */}
       <div className='grid grid-cols-2 gap-4 mb-6'>
         <TextField
           label='Phone'
@@ -190,6 +260,8 @@ const ProfileForm = () => {
           className='w-full input-style mb-4'
           onChange={handleUserChange}
           sx={{ zIndex: 5 }}
+          error={!!errors.phone}
+          helperText={errors.phone}
         />
 
         <TextField
@@ -200,10 +272,11 @@ const ProfileForm = () => {
           className='w-full input-style mb-6'
           onChange={handleUserChange}
           sx={{ zIndex: 5 }}
+          error={!!errors.address}
+          helperText={errors.address}
         />
       </div>
 
-      {/* Skills Dropdown */}
       <div className='mt-10 relative z-50 mb-6'>
         <h2 className='text-lg font-bold mb-2 text-teal-600'>Skills</h2>
         <CreatableSelect
@@ -225,9 +298,9 @@ const ProfileForm = () => {
             }),
           }}
         />
+        {errors.skills && <p className='text-red-500'>{errors.skills}</p>}
       </div>
 
-      {/* Education Section */}
       <div className='mt-10'>
         <h2 className='text-lg font-bold mb-4 text-teal-600'>Education</h2>
         {formData.education &&
@@ -252,8 +325,14 @@ const ProfileForm = () => {
               <div className='mt-3'>
                 <h3 className='font-bold text-gray-700'>Dates</h3>
                 <p className='border rounded-lg text-gray-600 p-2'>
-                  {new Date(edu.startDate).toLocaleDateString()} -{' '}
-                  {new Date(edu.endDate).toLocaleDateString()}
+                  {/* Ensure that the dates are valid before formatting */}
+                  {isValid(new Date(edu.startDate))
+                    ? format(new Date(edu.startDate), 'yyyy-MM-dd')
+                    : 'Invalid Date'}{' '}
+                  -
+                  {isValid(new Date(edu.endDate))
+                    ? format(new Date(edu.endDate), 'yyyy-MM-dd')
+                    : 'Invalid Date'}
                 </p>
               </div>
               <Button
@@ -267,8 +346,8 @@ const ProfileForm = () => {
               </Button>
             </div>
           ))}
+        {errors.education && <p className='text-red-500'>{errors.education}</p>}
 
-        {/* Add Education Fields */}
         <div className='mb-4 grid grid-cols-2 gap-4'>
           <TextField
             label='Institution'

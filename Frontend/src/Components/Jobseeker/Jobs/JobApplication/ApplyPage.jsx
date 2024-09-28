@@ -1,179 +1,79 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, Outlet, useParams, useNavigate} from "react-router-dom";
-import jobSeeker from "../../../../API/jobseeker";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from 'react'
 
+const InterviewPage = () => {
+  const [answer, setAnswer] = useState('')
+  const [video, setVideo] = useState(null)
 
-const ApplyPage = () => {
-  const { id } = useParams();
-  const user = useSelector((state) => state.user);
-  const navigate = useNavigate();
-  const [jobDescription , setJobDescription] = useState("")
-  const [application, setApplication] = useState({});
-  const [error , setError] = useState("");
-
-
-  // Step tracking state
-  const [step, setStep] = useState(1);
-
-  const handleStartApplication = async () => {
-    try {
-      const accessToken = localStorage  .getItem("accessToken");
-      const response = await jobSeeker.startApplication(id, accessToken);
-      console.log("Start application response:", response.data.application);
-      if (response.status === 200) {
-        setApplication({application_id : response.data.application._id , job:id});
-        localStorage.setItem("application_id", JSON.stringify(response.data.application._id));
-      }
-
-    } catch (err) {
-      console.error("Start application error:", err);
-      setError("You have already Applied")
-      setTimeout( ()=>{
-        console.log("hiiiiiii")
-        setError("");
-        navigate("/jobseeker/dashboard")
-      },3000)
-    }
-  };
-
-  const handleState = (fieldName, value) => {
-    console.log(fieldName, value);
-    setApplication((prev) => ({
-      ...prev,
-      [fieldName]: value,
-    }));
-  };
-
-
-  useEffect(() => {
-    console.log("Starting application");
-    handleStartApplication();
-  }, []); // Empty dependency array ensures this runs only once
-
-  useEffect(() => {
-    console.log("Fetching assessments");
-    const getAssessments = async () => {
-      const data = await jobSeeker.getAssessmentById(id);
-      console.log(data);
-      if (data.status === 200) {
-        console.log(data.data.assessment);
-        localStorage.setItem(
-          "assessment",
-          JSON.stringify(data.data.assessment)
-        );
-      } else {
-        console.log("Error fetching assessments");
-      }
-    };
-    const getJobDetails = async() =>{
-      try{
-        const response = await jobSeeker.getJobDescription(id);
-        const jobDescription = response.data.job.description + " " + response.data.job.requirements
-        setJobDescription(jobDescription)
-      }catch(err){
-        console.log(err)
-      }
-    }
-    getJobDetails()
-    getAssessments();
-
-    setApplication((prev) => ({
-      ...prev,
-      job: id,
-      user: user._id,
-      status: "Applied",
-    }));
-
-    console.log("Application", application);
-  }, [id, user._id]); // Add dependencies to ensure this runs only when id or user._id changes
-
-  // Handler to move to the next step
-  const goToNextStep = () => {
-    setStep((prevStep) => prevStep + 1);
-    if (step === 1) {
-      navigate(`./interview`);
-    } else if (step === 2) {
-      navigate(`./skillAssessment`);
-    }
-  };
-
-  const handleSubmit = async () => {
-    console.log("Application", application);
-    const token = localStorage.getItem("accessToken");
-    try {
-      const response = await jobSeeker.submitApplication(application, token);
-      console.log(response);
-      if (response.status === 200) {
-        navigate("/jobseeker/dashboard");
-      } else {
-        console.log("Failed to submit application. Please try again.");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    console.log("Application in useEffect", application);
-    if (application.skillAssessment) {
-      handleSubmit();
-    }
-  }, [application]); // Add application as a dependency to ensure this runs only when application changes
-
-  // Define active and disabled styles
-  const activeClassName =
-    "text-blue-500 border-b-2 border-blue-500 cursor-pointer";
-  const disabledClassName = "text-gray-400 cursor-not-allowed";
-  const defaultClassName = "text-gray-500 hover:text-blue-500 cursor-pointer";
-
-  if (error){
-    return (
-      <h1>{error}</h1>
-    )
+  const handleFileChange = (e) => {
+    setVideo(e.target.files[0])
   }
+
+  const handleSubmit = () => {
+    // Logic to handle form submission
+    console.log('Answer:', answer)
+    if (video) {
+      console.log('Video file selected:', video.name)
+    }
+  }
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center mt-10 text-secondary-dark">
-        Apply for Job
-      </h1>
+    <div className='container mx-auto p-4 min-h-screen flex flex-col justify-center'>
+      <div className='max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6'>
+        <h1 className='text-4xl font-bold mb-8 text-center text-gray-800'>
+          Interview Section
+        </h1>
+        <div className='mb-8'>
+          <h2 className='text-xl font-semibold text-gray-700 mb-4'>
+            Instructions
+          </h2>
+          <p className='text-gray-600'>
+            Please answer the following questions to the best of your ability.
+            You can either upload a video or type your answers below.
+          </p>
+        </div>
 
-      {/* Render sub routes links */}
-      <div className="flex justify-center space-x-4">
-        <NavLink
-          to={`./`}
-          end
-          className={({ isActive }) =>
-            isActive ? activeClassName : defaultClassName
-          }
-          style={{ pointerEvents: "none" }}
-        >
-          Resume
-        </NavLink>
-        <NavLink
-          to={"./interview"}
-          className={({ isActive }) =>
-            isActive ? activeClassName : defaultClassName
-          }
-          style={{ pointerEvents: "none" }}
-        >
-          Interview
-        </NavLink>
-        <NavLink
-          to={"./skillAssessment"}
-          className={({ isActive }) =>
-            isActive ? activeClassName : defaultClassName
-          }
-          style={{ pointerEvents: "none" }}
-        >
-          Skills
-        </NavLink>
+        <div className='mt-8'>
+          <label className='block mb-2 text-lg font-medium text-gray-700'>
+            Question 1: Tell us about a time you solved a problem at work.
+          </label>
+          <textarea
+            className='w-full px-4 py-3 mb-6 text-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+            rows='6'
+            placeholder='Type your answer here...'
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          ></textarea>
+        </div>
+
+        <div className='mt-8'>
+          <label className='block mb-2 text-lg font-medium text-gray-700'>
+            Upload Video Response (Optional):
+          </label>
+          <input
+            type='file'
+            accept='video/*'
+            className='w-full p-3 border border-gray-300 rounded-md mb-6'
+            onChange={handleFileChange}
+          />
+        </div>
+
+        <div className='mt-10 flex justify-center space-x-4'>
+          <button
+            className='bg-green-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200'
+            onClick={handleSubmit}
+          >
+            Submit Interview
+          </button>
+          <button
+            className='bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200'
+            onClick={() => console.log('Cancel')}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
-
-      {/* Render the current step's content */}
-      <Outlet context={{ step, goToNextStep, handleState , jobDescription}} />
     </div>
-  );
-};
+  )
+}
 
-export default ApplyPage;
+export default InterviewPage
