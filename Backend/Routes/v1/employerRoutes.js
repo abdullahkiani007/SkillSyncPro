@@ -51,4 +51,12 @@ EmployerRouter.get("/application",
 EmployerRouter.put("/application/stage",passport.authenticate('jwt',{session:false}),employerController.updateApplicationStage)
 
 
+// job notes
+EmployerRouter.post('/note',passport.authenticate('jwt',{session:false}), employerController.createJobNote);
+
+// Route to get notes for a specific job
+EmployerRouter.get('/note/:jobId',passport.authenticate('jwt',{session:false}), employerController.getNotesForJob);
+
+// Route to delete a specific note
+EmployerRouter.delete('/note/:noteId',passport.authenticate('jwt',{session:false}), employerController.deleteNote);
 module.exports = EmployerRouter;

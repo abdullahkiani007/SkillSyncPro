@@ -480,6 +480,94 @@ class EmployerController {
     }
   }
 
+  async getJobReport(){
+    const mockData = {
+      "jobTitle": "Frontend Developer",
+      "totalApplications": 120,
+      "shortlisted": 30,
+      "rejected": 50,
+      "inProgress": 40,
+      "averageAge": 28,
+      "topLocations": ["New York", "San Francisco", "London"],
+      "educationLevels": {
+        "Bachelors": 60,
+        "Masters": 30,
+        "PhD": 10
+      },
+      "averageSkillMatch": 75,
+      "topSkills": ["JavaScript", "React", "CSS"],
+      "jobViews": 5000,
+      "clickThroughRate": 4.5,
+      "skillAssessments": {
+        "completed": 50,
+        "averageScore": 80
+      },
+      "averageTimeToHire": 45,
+      "currentJobTime": 30
+    }
+    
+      return mockData
+  }
+
+  // ================= Job Notes API Functions ================= //
+  async getNotesForJob(jobId, token) {
+    try {
+      const response = await this.apiClient.get(`note/${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Use token from parameter
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching notes for job:", error);
+      throw error;
+    }
+  }
+
+  // Create a new note for a job
+  async createJobNote(data, token) {
+    console.log("Crating note in employ", data)
+  
+
+    try {
+      const response = await this.apiClient.post(`note`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Use token from parameter
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error creating job note:", error);
+      throw error;
+    }
+  }
+
+  // Delete a note
+  async deleteNote(noteId, token) {
+    try {
+      const response = await this.apiClient.delete(`note/${noteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Use token from parameter
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error deleting note:", error);
+      throw error;
+    }
+  }
+
+
+
 }
 
 export default new EmployerController();

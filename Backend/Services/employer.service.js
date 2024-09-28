@@ -7,6 +7,9 @@ const Assessment = require("../Models/companyAssessment.model");
 const Company = require("../Models/company.model");
 const CandidateAssessment = require("../Models/candidateAssessment.model")
 const Application = require("../Models/application.model");
+const ApplicationResultModel = require('../Models/applicationResult.model')
+const JobNote = require('../Models/jobNote.model');
+
 
 const EmployerServices = {
   async getJobs(id) {
@@ -414,36 +417,48 @@ const EmployerServices = {
   getCandidatesByJobId: async (jobId) => {
     try {
       const applications = await Application.find({ job: jobId })
-      .populate({
-        path: "jobSeeker",
-        populate: {
-          path: "user",
-        },
-      })
-      .populate("job");
-
+        .populate({
+          path: "jobSeeker",
+          populate: {
+            path: "user",
+          },
+        })
+        .populate("job");
+  
       if (applications) {
-        const candidates = applications.map((application) => {
-          return {
-            _id: application._id,
-            candidateName: application.jobSeeker.user.firstName + " " + application.jobSeeker.user.lastName,
-            jobTitle: application.job.title,
-            appliedDate: application.createdAt,
-            location: application.job.location,
-            contact: application.jobSeeker.user.phone,
-            email: application.jobSeeker.user.email,
-            stage: application.status,
-          };
-        });
-
+        const candidates = await Promise.all(
+          applications.map(async (application) => {
+            // Fetch the application result for the current application
+            const applicationResult = await ApplicationResultModel.findOne({ application: application._id });
+            console.log("application result", applicationResult)
+  
+            return {
+              _id: application._id,
+              candidateName: `${application.jobSeeker.user.firstName} ${application.jobSeeker.user.lastName}`,
+              jobTitle: application.job.title,
+              appliedDate: application.createdAt,
+              location: application.job.location,
+              contact: application.jobSeeker.user.phone,
+              email: application.jobSeeker.user.email,
+              stage: application.status,
+              recommendationScore: applicationResult?.recommendationScore || 0, // Default to 0 if not found
+              similarityScore: applicationResult?.similarityScore || 0, // Default to 0 if not found
+            };
+          })
+        );
+  
         return {
           status: 200,
           candidates,
         };
+      } else {
+        return {
+          status: 404,
+          message: "No applications found for the given job",
+        };
       }
-
-    }catch(err){
-      console.log(err);
+    } catch (err) {
+      console.error(err);
       return {
         status: 500,
         message: "Internal server error",
@@ -541,7 +556,53 @@ const EmployerServices = {
         message: "Internal server error",
       };
     }
+  },
+
+  // job notes 
+  addJobNote : async (jobId, authorId, text, isPrivate) => {
+    try{
+    const note = new JobNote({
+      job: jobId,
+      author: authorId,
+      text,
+      isPrivate,
+    });
+
+    console.log("note created" , note.populate('author', 'firstName lastName email role profilePicture'))
+
+    return await note.save();
+  }catch(err){
+    console.log(err);
+    return err
   }
+ 
+  },
+  
+  getJobNotes : async (jobId, userId, showPrivate = false) => {
+    const filter = { job: jobId };
+    
+    // Filter out private notes unless the current user is the author
+    if (!showPrivate) {
+      filter.$or = [{ isPrivate: false }, { author: userId }];
+    }
+    try{
+      let notes = await JobNote.find(filter).populate('author', 'firstName lastName email role profilePicture');
+      // console.log("notes ->>" , notes)
+    return notes
+    }
+    catch(err){
+      console.log("error",err)
+      return {
+        "message":"internal server error"
+      }
+    }
+  },
+  
+  deleteJobNote : async (noteId, userId) => {
+    const note = await JobNote.findOne({ _id: noteId, author: userId });
+    if (!note) throw new Error('Note not found or unauthorized');
+    return await JobNote.deleteOne({ _id: noteId });
+  },
   
   
 }
