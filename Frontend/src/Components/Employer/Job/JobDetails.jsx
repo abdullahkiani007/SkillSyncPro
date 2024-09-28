@@ -62,7 +62,7 @@ const JobDetails = () => {
       const token = localStorage.getItem('accessToken')
       try {
         const response = await Employer.getCandidatesByJobId(token, id)
-        console.log(response)
+        console.log("candidates", response.data)
         setCandidatesList(response.data)
         setLoading(false)
       } catch (error) {

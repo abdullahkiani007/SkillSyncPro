@@ -342,6 +342,47 @@ const EmployerController = {
             "data":response.application
           })
     },
+    // job notes functions
+    createJobNote : async (req, res) => {
+      console.log("Creating note for job")
+      const { jobId, text, isPrivate } = req.body;
+      console.log("jobId", jobId, 'text', text , 'isPrivate', isPrivate)
+      const authorId = req.user._id; // Assuming you have user auth in place
+      console.log("Author id ", authorId)
+      try {
+        const note = await EmployerServices.addJobNote(jobId, authorId, text, isPrivate);
+        console.log("Noteee", note)
+        res.status(201).json(note);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+    },
+    
+    getNotesForJob : async (req, res) => {
+      console.log("getting notes for job")
+      const { jobId } = req.params;
+      const userId = req.user._id;
+    
+      try {
+        const notes = await EmployerServices.getJobNotes(jobId, userId);
+        res.status(200).json(notes);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+    },
+    
+    deleteNote : async (req, res) => {
+      const { noteId } = req.params;
+      const userId = req.user._id;
+    
+      try {
+        await EmployerServices.deleteJobNote(noteId, userId);
+        res.status(204).send();
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+    },
+    
 
 
 

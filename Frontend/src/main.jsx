@@ -45,6 +45,9 @@ import JsSkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillA
 import ManageEmployees from "./Components/Employer/Dashboard/ManageEmployees.jsx";
 import EmpCandidatesList from "./Components/Employer/Dashboard/ManageCandidates/CandidatesList.jsx";
 import ManageCandidate from "./Components/Employer/Dashboard/ManageCandidates/ManageCandidate/Candidate.jsx";
+import EmpJobNotes from "./Components/Employer/Job/JobListing/JobNotes.jsx"
+import EmpJobReport from "./Components/Employer/Job/JobListing/JobReport.jsx"
+
 
 import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
 import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
@@ -63,8 +66,11 @@ import AdminManageEmployees from "./Components/Admin/UsersManagement/ManageEmplo
 import AdminManageJobSeekers from "./Components/Admin/UsersManagement/ManageJobSeekers.jsx";
 import ManageCompanies from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 
+
+
 import TailorResume from "./Components/Components/TailorResume/TailorResume.jsx";
 import AppliedJobDetails from "./Components/Jobseeker/Jobs/AppliedJobDetails.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -244,11 +250,11 @@ const router = createBrowserRouter([
           },
           {
             path: "notes",
-            element: <h1>Notes</h1>,
+            element: <EmpJobNotes/>,
           },
           {
             path: "reports",
-            element: <h1>Reports</h1>,
+            element: <EmpJobReport/>,
           },
         ],
       },

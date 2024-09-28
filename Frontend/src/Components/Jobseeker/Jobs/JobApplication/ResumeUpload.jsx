@@ -63,7 +63,7 @@ const ResumeUpload = () => {
 
         console.log("Similarity Score : ", similarityScore);
         console.log("Job description ", jobDescription)
-      } catch (err) {
+      } catch (err) { 
         console.log(err);
       }
     } catch (err) {
