@@ -31,25 +31,102 @@ const SkillAssessment = () => {
   const { id } = useParams()
   const [submitApplication, setSubmitApplication] = useState(false)
 
+  // Prevent back navigation
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     event.preventDefault();
+  //     event.returnValue = ""; // This triggers the browser's "Are you sure you want to leave?" dialog.
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const handlePopState = (event) => {
+  //     setAlertMessage("Navigation back is not allowed!");
+  //     setOpenAlert(true);
+  //     window.history.pushState(null, null, window.location.pathname);
+  //   };
+
+  //   window.history.pushState(null, null, window.location.pathname);
+  //   window.addEventListener("popstate", handlePopState);
+
+  //   return () => {
+  //     window.removeEventListener("popstate", handlePopState);
+  //   };
+  // }, []);
+
+  // Prevent copy-paste
+  useEffect(() => {
+    const handlePaste = (event) => {
+      setAlertMessage('Pasting code is not allowed!')
+      setOpenAlert(true)
+      event.preventDefault()
+    }
+
+    const handleCopy = (event) => {
+      setAlertMessage('Copying code is not allowed!')
+      setOpenAlert(true)
+      event.preventDefault()
+    }
+
+    window.addEventListener('paste', handlePaste)
+    window.addEventListener('copy', handleCopy)
+
+    return () => {
+      window.removeEventListener('paste', handlePaste)
+      window.removeEventListener('copy', handleCopy)
+    }
+  }, [])
+
   // Fetch assessments
   useEffect(() => {
     const getAssessments = async () => {
-      try {
-        const data = await jobseeker.getAssessmentById(id)
-        if (data.status === 200) {
-          setAssessments(data.data.assessment)
-          setLoading(false)
-          setInitialCode(data.data.assessment.problems[0].initialCode) // Set initial code for the first problem
-        } else {
-          console.log('Error fetching assessments')
-        }
-      } catch (error) {
-        console.error('Error fetching assessment data', error)
+      const data = await jobseeker.getAssessmentById(id)
+      if (data.status === 200) {
+        setAssessments(data.data.assessment)
+        console.log('Assessments received', data.data.assessment)
         setLoading(false)
+        setInitialCode(data.data.assessment.problems[0].initialCode) // Set initial code for the first problem
+      } else {
+        console.log('Error fetching assessments')
       }
     }
     getAssessments()
   }, [id])
+
+  // Full-screen mode
+  useEffect(() => {
+    const enterFullScreen = () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen()
+      } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozRequestFullScreen()
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen()
+      } else if (document.documentElement.msRequestFullscreen) {
+        document.documentElement.msRequestFullscreen()
+      }
+    }
+
+    enterFullScreen()
+
+    return () => {
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen()
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen()
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen()
+      }
+    }
+  }, [])
 
   const getLanguageId = (language) => {
     const languageMap = {
@@ -63,7 +140,6 @@ const SkillAssessment = () => {
   }
 
   const handleCodeSubmit = async (code, timeSpent, keystrokes) => {
-    const currentProblem = assessments.problems[currentProblemIndex]
     const languageId = getLanguageId(currentProblem.language || 'javascript')
     const token = await Judge0.submitCodeToJudge0(code, languageId, 'hello')
     let result
@@ -75,7 +151,7 @@ const SkillAssessment = () => {
         status = result.status.description
 
         if (status === 'accepted' || true) {
-          // Handle accepted or continue checking status
+          // break;
           continue
         } else if (false) {
           setAlertMessage('Code rejected: ' + result.status.description)
@@ -89,19 +165,26 @@ const SkillAssessment = () => {
       code,
       timeSpent,
       keystrokes,
-      _id: currentProblem._id,
+      _id: currentProblem._id, // Accessing currentProblem directly
     }
 
     setSubmittedCode((prev) => [...prev, newCode])
 
+    console.log('Result', result)
     const data = {
       problemId: currentProblem._id,
       code,
       timeSpent,
       keystrokes,
-      actualOutput: result.stdout ? result.stdout.split('\n')[0] : '', // Handling output
+      actualOutput: result.stdout ? result.stdout.split('\n')[index] : '',
       passed: result.status.description === 'Accepted' && !result.stderr,
       error: result.stderr,
+      // result: {
+      //   error: result.stderr,
+      //   time: result.time,
+      //   stdout: result.stdout,
+      //   status: result.status.description,
+      // },
     }
 
     setUserCode((prev) => {
@@ -118,8 +201,21 @@ const SkillAssessment = () => {
 
       return updatedUserCode
     })
-  }
 
+    // if (currentProblemIndex < assessments.problems.length - 1) {
+    //   setCurrentProblemIndex(currentProblemIndex + 1);
+    //   setInitialCode(assessments.problems[currentProblemIndex + 1].initialCode); // Update initial code for the next problem
+    // } else {
+    //   const assessmentData = {
+    //     assessmentId: assessments._id,
+    //     answers: userCode,
+    //   }
+
+    //   console.log("Assessment Data" , assessmentData);
+    //   handleState("skillAssessment", data);
+    //   setSubmitApplication(true);
+    // }
+  }
   const handleFinalSubmit = () => {
     const assessmentData = {
       assessmentId: assessments._id,
@@ -128,13 +224,16 @@ const SkillAssessment = () => {
 
     // Updating parent state after assessment completion
     handleState('skillAssessment', assessmentData)
+
+    // Optionally navigate the user to a different page or show confirmation
+    // navigate("/jobseeker/dashboard");
   }
 
   useEffect(() => {
     if (submitApplication) {
       handleFinalSubmit()
     }
-  }, [submitApplication])
+  }, [submitApplication]) // This ensures state update happens after rendering
 
   const handleCloseDisclaimer = () => {
     setOpenDisclaimer(false)
@@ -148,17 +247,41 @@ const SkillAssessment = () => {
     return <Loader />
   }
 
-  // Add a check to ensure the assessments and problems exist before rendering
-  if (!assessments || !assessments.problems || !assessments.problems.length) {
-    return <div>Error loading assessment data</div>
-  }
-
   const currentProblem = assessments.problems[currentProblemIndex]
 
-  if (!currentProblem) {
-    return <div>Problem data not available</div>
+  if (submitApplication) {
+    return (
+      <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4'>
+        <div className='bg-white shadow-md rounded-lg p-6 max-w-md w-full'>
+          <h2 className='text-2xl font-bold text-center text-green-600 mb-4'>
+            Application Submitted Successfully!
+          </h2>
+          <p className='text-center text-gray-700 mb-6'>
+            Thank you for completing the skill assessment. Your application has
+            been submitted.
+          </p>
+          <div className='text-left text-gray-700 mb-4'>
+            <h3 className='text-lg font-semibold mb-2'>Summary:</h3>
+            <ul className='list-disc list-inside'>
+              <li>Job ID: {id}</li>
+              <li>User ID: 92934234</li>
+              <li>Status: Applied</li>
+              {/* Add more summary details as needed */}
+            </ul>
+          </div>
+          <button
+            className='w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200'
+            onClick={() => {
+              setSubmitApplication(true)
+              // navigate("/jobseeker/dashboard");
+            }}
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    )
   }
-
   return (
     <div className='skill-assessment-container p-5 bg-gray-900 text-white min-h-screen'>
       <Dialog
@@ -217,6 +340,7 @@ const SkillAssessment = () => {
         <Typography variant='body2'>
           <strong>Output:</strong> {currentProblem.output}
         </Typography>
+        <p>{currentProblem.initialCode}</p>
       </div>
 
       <CodeEditor
