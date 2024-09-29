@@ -6,6 +6,7 @@ import companyBackgroundImg from '../../../assets/company_background.jpg'
 import logo from '../../../assets/companyLogo.png'
 import personImage from '../../../assets/person.jpeg'
 import { Button } from '@mui/material'
+import { useOutletContext , useNavigate } from 'react-router-dom'
 
 const Company = () => {
   const [company, setCompany] = useState(null)
@@ -14,6 +15,10 @@ const Company = () => {
   const [loading, setLoading] = useState(true)
   const [isExpanded, setIsExpanded] = useState(false)
   const [jobs, setJobs] = useState([])
+  const {admin} = useOutletContext();
+  const navigate = useNavigate()
+
+
 
   // New states to trigger animations
   const [animationTriggered, setAnimationTriggered] = useState(false)
@@ -51,6 +56,8 @@ const Company = () => {
       }
     }
 
+
+
     const fetchJobs = async () => {
       let jobs = JSON.parse(localStorage.getItem('empJobs'))
       if (jobs && jobs.length > 0) {
@@ -82,6 +89,18 @@ const Company = () => {
       setAnimationTriggered(true)
     }, 200) // Add a slight delay to ensure content is loaded before animations
   }, [])
+
+  const handleLeaveCompany = async () => {
+    const token = localStorage.getItem('accessToken')
+    let response = await EmployerController.leaveCompany(token, company._id)
+    if (response.status === 200) {
+      setCompany(null)
+      // setCreate(true)
+      navigate('/')
+    } else {
+      console.log(response.message)
+    }
+  }
 
   if (loading) {
     return <Loader />
@@ -159,7 +178,7 @@ const Company = () => {
                 {company.employees ? company.employees.length + 50 : 50}
               </p>
             </div>
-            <Button
+            {!admin && <Button
               sx={{
                 backgroundColor: 'black',
                 color: 'white',
@@ -167,10 +186,10 @@ const Company = () => {
                   backgroundColor: '#E14400',
                 },
               }}
-              onClick={() => setEdit(true)}
+              onClick={() => handleLeaveCompany()}
             >
-              Manage
-            </Button>
+              Leave
+            </Button>}
           </div>
         </div>
 

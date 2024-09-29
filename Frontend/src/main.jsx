@@ -20,6 +20,7 @@ import AppliedJobs from "./Components/Jobseeker/Jobs/appliedJobs.jsx";
 import ResumeUpload from "./Components/Jobseeker/Jobs/JobApplication/ResumeUpload.jsx";
 import Job from "./Components/Jobseeker/Jobs/job.jsx";
 import Loader from "./Components/Loader/Loader.jsx";
+import RandomProblem from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/RandomProblems.jsx"
 
 import MessageComponent from "./Components/Components/Message.jsx";
 
@@ -49,6 +50,7 @@ import EmpJobNotes from "./Components/Employer/Job/JobListing/JobNotes.jsx"
 import EmpJobReport from "./Components/Employer/Job/JobListing/JobReport.jsx"
 
 
+
 import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
 import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
 import EmpProfile from "./Components/Employer/Profile/Profile.jsx";
@@ -58,6 +60,7 @@ import CreateAssessmentForm from "./Components/Employer/SkillAssessments/CreateA
 import AdminJobsList from "./Components/Admin/Job/JobsList.jsx";
 import AdminCompaniesList from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 import AdminDashboard from "./Components/Admin/Dashboard/Dashboard.jsx";
+import AdminQuesitonBank from "./Components/Admin/QuestionBank/QuesitonBank.jsx"
 
 import { MantineProvider } from "@mantine/core";
 import { NotFoundImage } from "./Components/NotFound/NotFoundImage.jsx";
@@ -164,6 +167,10 @@ const router = createBrowserRouter([
             path: "skillAssessment",
             element: <JsSkillAssessment />,
           },
+          {
+            path:"randomProblems",
+            element : <RandomProblem/>
+          }
         ],
       },
       {
@@ -303,6 +310,10 @@ const router = createBrowserRouter([
       {
         path: "analytics",
         element: <h1>Analytics</h1>,
+      },
+      {
+        path:"create/questionBank",
+        element: <AdminQuesitonBank/>
       },
       {
         path: "*", // Wildcard route for 404 errors

@@ -249,39 +249,39 @@ const SkillAssessment = () => {
 
   const currentProblem = assessments.problems[currentProblemIndex]
 
-  if (submitApplication) {
-    return (
-      <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4'>
-        <div className='bg-white shadow-md rounded-lg p-6 max-w-md w-full'>
-          <h2 className='text-2xl font-bold text-center text-green-600 mb-4'>
-            Application Submitted Successfully!
-          </h2>
-          <p className='text-center text-gray-700 mb-6'>
-            Thank you for completing the skill assessment. Your application has
-            been submitted.
-          </p>
-          <div className='text-left text-gray-700 mb-4'>
-            <h3 className='text-lg font-semibold mb-2'>Summary:</h3>
-            <ul className='list-disc list-inside'>
-              <li>Job ID: {id}</li>
-              <li>User ID: 92934234</li>
-              <li>Status: Applied</li>
-              {/* Add more summary details as needed */}
-            </ul>
-          </div>
-          <button
-            className='w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200'
-            onClick={() => {
-              setSubmitApplication(true)
-              // navigate("/jobseeker/dashboard");
-            }}
-          >
-            Go to Dashboard
-          </button>
-        </div>
-      </div>
-    )
-  }
+  // if (submitApplication) {
+  //   return (
+  //     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4'>
+  //       <div className='bg-white shadow-md rounded-lg p-6 max-w-md w-full'>
+  //         <h2 className='text-2xl font-bold text-center text-green-600 mb-4'>
+  //           Application Submitted Successfully!
+  //         </h2>
+  //         <p className='text-center text-gray-700 mb-6'>
+  //           Thank you for completing the skill assessment. Your application has
+  //           been submitted.
+  //         </p>
+  //         <div className='text-left text-gray-700 mb-4'>
+  //           <h3 className='text-lg font-semibold mb-2'>Summary:</h3>
+  //           <ul className='list-disc list-inside'>
+  //             <li>Job ID: {id}</li>
+  //             <li>User ID: 92934234</li>
+  //             <li>Status: Applied</li>
+  //             {/* Add more summary details as needed */}
+  //           </ul>
+  //         </div>
+  //         <button
+  //           className='w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200'
+  //           onClick={() => {
+  //             setSubmitApplication(true)
+  //             // navigate("/jobseeker/dashboard");
+  //           }}
+  //         >
+  //           Go to Dashboard
+  //         </button>
+  //       </div>
+  //     </div>
+  //   )
+  // }
   return (
     <div className='skill-assessment-container p-5 bg-gray-900 text-white min-h-screen'>
       <Dialog

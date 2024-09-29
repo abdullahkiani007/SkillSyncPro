@@ -53,14 +53,14 @@ const CodeEditor = ({ initialCode, language, onSubmit }) => {
   const handleRunCode = () => {
     const timeSpent = Date.now() - startTime;
 
-    if (timeSpent > timeLimit || isPasting || isTabSwitched) {
-      setSnackbarMessage(
-        'Submission failed due to one or more of the following reasons:\n- Time limit exceeded\n- Pasting detected\n- Tab switching detected'
-      );
-      setOpenSnackbar(true);
-    } else {
+    // if (timeSpent > timeLimit || isPasting || isTabSwitched) {
+    //   setSnackbarMessage(
+    //     'Submission failed due to one or more of the following reasons:\n- Time limit exceeded\n- Pasting detected\n- Tab switching detected'
+    //   );
+    //   setOpenSnackbar(true);
+    // } else {
       onSubmit(code, timeSpent, keystrokes);
-    }
+    // }
   };
 
   const handleCloseSnackbar = () => {

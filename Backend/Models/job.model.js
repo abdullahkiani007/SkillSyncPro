@@ -27,6 +27,10 @@ const jobSchema = new mongoose.Schema({
   location: {
     type: String,
   },
+  generateRandomProblems: {
+    type: Boolean,
+    default: false,
+  },
   experience: {
     type: String,
     enum: ['Fresher', '0-2 years', '2-5 years', '5-10 years', '10+ years'],

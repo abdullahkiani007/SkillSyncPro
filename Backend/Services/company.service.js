@@ -179,6 +179,51 @@ const companyService = {
             }
         }
     },
+    async leaveCompany(userId) {
+        try {
+            const employer = await Employer.findOne({ user: userId });
+            if (!employer) {
+                return {
+                    "status": 404,
+                    "message": "Employer not found"
+                }
+            }
+            const company = await Company.findById(employer.company);
+            if (!company) {
+                return {
+                    "status": 404,
+                    "message": "Company not found"
+                }
+            }
+
+            if (!company.unAuthEmployees.includes(employer._id) && !company.employees.includes(employer._id)) {
+                console.log("Not part of company")
+                return {
+                    "status": 403,
+                    "message": "Not part of company"
+                }
+            }
+
+            company.unAuthEmployees = company.unAuthEmployees.filter(id => id.toString() !== employer._id.toString());
+            company.employees = company.employees.filter(id => id.toString() !== employer._id.toString());
+            await company.save();
+
+            employer.company = null;
+            await employer.save();
+
+            return {
+                "status": 200,
+                "data": company
+            }
+        } catch (err) {
+            console.log(err);
+            return {
+                "status": 500,
+                "message": "Internal server error"
+            }
+        }
+    }
+    ,
     async getEmployees(companyId){
         try{
             const company = await Company.findById(companyId)

@@ -143,6 +143,35 @@ const CompanyController = {
             "message":"Internal server error"
         })
     },
+
+    async leaveCompany(req,res,next){
+        const {id} = req.user;
+        const response = await companyService.leaveCompany(id);
+        if (response.status == 200){
+            res.status(200).json({
+                "message":"Left company successfully",
+                "data":response.data
+            })
+            return ;
+        }else if (response.status == 404){
+            res.status(404).json({
+                "message":response.message
+            })
+            return ;
+        }else if (response.status == 403){
+            res.status(403).json({
+                "message":response.message
+            })
+            return ;
+        }
+
+        res.status(500).json({
+            "message":"Internal server error"
+        })
+
+    }
+
+    ,
     async authorizeEmployee(req,res,next){
         const {employeeId , companyId} = req.body;
         console.log("Authorize employee received")

@@ -5,6 +5,7 @@ const applicationResultSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Application',
     required: true,
+    unique: true,
   },
   recommendationScore: {
     type: Number,
@@ -14,6 +15,34 @@ const applicationResultSchema = new mongoose.Schema({
   },
   voiceSummary: {
     type: String,
+  },
+  scores: [
+    {
+      title: {
+        type: String,
+        required: true,
+      },
+      score: {
+        type: Number,
+        required: true,
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  totalScore: {
+    type: Number,
+    required: true,
+  },
+  maxScore: {
+    type: Number,
+    required: true,
+  },
+  finalScore: {
+    type: Number,
+    required: true,
   },
 }, { timestamps: true });
 

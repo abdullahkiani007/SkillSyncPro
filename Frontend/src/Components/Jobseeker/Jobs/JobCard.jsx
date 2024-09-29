@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-function JobCard({ props }) {
+function JobCard({ props}) {
   const colors = [
     "bg-green-200",
     "bg-red-200",
@@ -19,6 +19,7 @@ function JobCard({ props }) {
   console.log("props");
   console.log(props);
 
+ 
   return (
     <div
       onClick={() => navigate(`../job/${props._id}`)}
@@ -27,6 +28,7 @@ function JobCard({ props }) {
       <div className="flex flex-col justify-between  mb-3">
         <h3 className="text-sm rounded-3xl px-4 py-2 bg-secondary-dark text-white w-fit h-fit">
           {date}
+          {props.similarity_score && <span className="text-xs ml-2">({props.similarity_score.toFixed(2)}%)</span>}
         </h3>
         <h2 className="text-lg font-medium text-gray-500">
           {props.companyName}
