@@ -218,7 +218,7 @@ const ProfileForm = () => {
     >
       <div className='flex items-center mb-6'>
         <img
-          src={img || placeholderImage_person}
+          src={img ||user.profilePicture || placeholderImage_person}
           alt='profile'
           className='w-24 h-24 rounded-full border-4 border-orange-500 object-cover'
         />

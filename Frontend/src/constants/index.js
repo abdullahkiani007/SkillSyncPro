@@ -307,3 +307,25 @@ export const employerDashboardData = {
 };
 
 
+export const skillsList = [
+  'JavaScript',
+  'React',
+  'Node.js',
+  'CSS',
+  'HTML',
+  'Python',
+  'Java',
+  'C#',
+  'PHP',
+  'Ruby',
+  'Go',
+  'Swift',
+  'Kotlin',
+  'TypeScript',
+  'SQL',
+  'NoSQL',
+  'DevOps',
+  'AWS',
+  'Docker',
+  'Kubernetes',
+];

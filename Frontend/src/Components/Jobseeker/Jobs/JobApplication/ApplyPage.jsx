@@ -96,6 +96,9 @@ const ApplyPage = () => {
     } else if (step === 2) {
       navigate('./skillAssessment');
     }
+    else if (step ===3){
+      navigate("./randomProblems")
+    }
   };
 
   const handleSubmit = async () => {
@@ -105,7 +108,8 @@ const ApplyPage = () => {
       const response = await jobSeeker.submitApplication(application, token);
       console.log(response);
       if (response.status === 200) {
-        navigate("/jobseeker/dashboard");
+        // navigate("/jobseeker/dashboard");
+        goToNextStep();
       } else {
         console.log("Failed to submit application. Please try again.");
       }
@@ -167,6 +171,15 @@ const ApplyPage = () => {
           style={{ pointerEvents: "none" }}
         >
           Skills
+        </NavLink>
+        <NavLink
+          to={"./randomProblems"}
+          className={({ isActive }) =>
+            isActive ? activeClassName : defaultClassName
+          }
+          style={{ pointerEvents: "none" }}
+        >
+          Problems
         </NavLink>
       </div>
 

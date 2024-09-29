@@ -20,6 +20,7 @@ import Slider from '@mui/material/Slider'
 import EmployerController from '../../../../API/employer'
 import Alert from '@mui/material/Alert'
 import { useNavigate } from 'react-router-dom'
+import { skillsList } from '../../../../constants'
 
 const JobPost = () => {
   const [activeStep, setActiveStep] = useState(0)
@@ -41,6 +42,7 @@ const JobPost = () => {
     experienceLevel: '',
     skillAssessment: '',
     skills: [],
+    generateRandomProblem: false,
   })
   const navigate = useNavigate()
   const steps = ['Step 1', 'Step 2', 'Step 3', 'Step 4']
@@ -189,8 +191,7 @@ const JobPost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const token = localStorage.getItem('token')
-    console.log(formValues)
+    const token = localStorage.getItem('accessToken')
     const formattedValues = {
       ...formValues,
       salaryRange: `${formValues.salaryRange[0]}-${formValues.salaryRange[1]}`,
@@ -570,7 +571,7 @@ const JobPost = () => {
                       },
                     }}
                   >
-                    {['JavaScript', 'React', 'Node.js', 'CSS', 'HTML'].map(
+                    {skillsList.map(
                       (skill) => (
                         <MenuItem key={skill} value={skill}>
                           {skill}
@@ -638,6 +639,57 @@ const JobPost = () => {
                     ))}
                   </Select>
                 </FormControl>
+              </div>
+            </div>
+            <div>
+              <h1 className='font-bold text-lg text-white'>
+                Generate Random Problem
+              </h1>
+              <div className='mt-4'>
+                <FormControl variant='outlined' className='w-full'>
+                  <InputLabel
+                    id='generateRandomProblem-label'
+                    sx={{
+                      color: 'white', // Label color
+                      '&.Mui-focused': {
+                        color: 'white', // Label color when focused
+                      },
+                    }}
+                  >
+                    Generate Random Problem
+                  </InputLabel>
+                  <Select
+                    labelId='generateRandomProblem-label'
+                    id='generateRandomProblem'
+                    name='generateRandomProblem'
+                    label='Generate Random Problem'
+                    value={formValues.generateRandomProblem}
+                    onChange={handleInputChange}
+                    sx={{
+                      color: 'white', // Text color for selected items
+                      '.MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'rgba(255, 255, 255, 0.5)', // Softer white border color
+                      },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', // Border color when focused
+                      },
+                      '.MuiSvgIcon-root': {
+                        color: 'white', // Dropdown arrow color
+                      },
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
+                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', // Border color on hover
+                      },
+                      '&.Mui-focused': {
+                        color: 'white', // Label color when focused
+                      },
+                    }}
+                  >
+                    <MenuItem value={true}>Yes</MenuItem>
+                    <MenuItem value={false}>No</MenuItem>
+                  </Select>
+                </FormControl>
+
               </div>
             </div>
           </Card>

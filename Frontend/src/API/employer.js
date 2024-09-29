@@ -111,6 +111,26 @@ class EmployerController {
     }
   }
 
+  async leaveCompany(token) {
+    console.log("leaving company")
+    try {
+      const response = await this.apiClient.delete(`/company/leave`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+
+    } catch (error) {
+      console.error("Error leaving company:", error);
+      throw error;
+    }
+
+  }
+
   async getCompany(token) {
     try {
       const response = await this.apiClient.get("company", {
