@@ -53,6 +53,7 @@ const EmployerServices = {
       skills,
       salaryRange,
       location,
+      generateRandomProblem
     } = req;
 
     let job;
@@ -71,6 +72,7 @@ const EmployerServices = {
         skills,
         salaryRange,
         experienceLevel,
+        generateRandomProblem
       });
       await job.save();
       CompanyService.addJob(company, job._id);

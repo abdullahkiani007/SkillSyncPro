@@ -20,29 +20,23 @@ const applicationResultSchema = new mongoose.Schema({
     {
       title: {
         type: String,
-        required: true,
       },
       score: {
         type: Number,
-        required: true,
       },
       comment: {
         type: String,
-        required: true,
       },
     },
   ],
   totalScore: {
     type: Number,
-    required: true,
   },
   maxScore: {
     type: Number,
-    required: true,
   },
   finalScore: {
     type: Number,
-    required: true,
   },
 }, { timestamps: true });
 

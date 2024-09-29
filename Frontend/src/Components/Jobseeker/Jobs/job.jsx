@@ -44,6 +44,7 @@ const Job = () => {
     const jobs = JSON.parse(localStorage.getItem('jobs'))
     if (jobs) {
       const jobItem = jobs.find((job) => job._id.trim() === id.trim())
+      console.log("job items " , jobItem)
       setJob(jobItem)
       setLoading(false)
     }

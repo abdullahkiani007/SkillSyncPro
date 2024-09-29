@@ -27,7 +27,7 @@ const jobSchema = new mongoose.Schema({
   location: {
     type: String,
   },
-  generateRandomProblems: {
+  generateRandomProblem: {
     type: Boolean,
     default: false,
   },

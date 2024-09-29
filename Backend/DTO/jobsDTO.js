@@ -12,6 +12,7 @@ class JobDTO {
         this.applicants = job.applicants;
         this.createdAt = job.createdAt;
         this.archived = job.archived;
+        this.generateRandomProblem = job.generateRandomProblem ;
     }
 }
 
