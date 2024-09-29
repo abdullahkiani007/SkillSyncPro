@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, Outlet, useParams, useNavigate} from "react-router-dom";
+import { NavLink, Outlet, useParams, useNavigate , useLocation} from "react-router-dom";
 import jobSeeker from "../../../../API/jobseeker";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,6 +11,20 @@ const ApplyPage = () => {
   const [jobDescription , setJobDescription] = useState("")
   const [application, setApplication] = useState({});
   const [error , setError] = useState("");
+  const location = useLocation();
+  const [generate_problems , setGenerateProblems] = useState(false) 
+
+  console.log("Location", generate_problems);
+  console.log("id,  ", id);
+
+  useEffect(() => {
+    const jobs = JSON.parse(localStorage.getItem('jobs'))
+    if (jobs) {
+      const jobItem = jobs.find((job) => job._id.trim() === id.trim())
+      console.log("job items " , jobItem)
+      setGenerateProblems(jobItem.generateRandomProblem)
+    }
+  }, [id])
 
 
   // Step tracking state
@@ -96,7 +110,7 @@ const ApplyPage = () => {
     } else if (step === 2) {
       navigate('./skillAssessment');
     }
-    else if (step ===3){
+    else if (step ===3 && generate_problems){
       navigate("./randomProblems")
     }
   };
@@ -172,6 +186,8 @@ const ApplyPage = () => {
         >
           Skills
         </NavLink>
+        {
+          generate_problems &&
         <NavLink
           to={"./randomProblems"}
           className={({ isActive }) =>
@@ -181,6 +197,7 @@ const ApplyPage = () => {
         >
           Problems
         </NavLink>
+}
       </div>
 
       {/* Render the current step's content */}

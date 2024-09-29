@@ -9,9 +9,17 @@ const ResumeUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const { goToNextStep, handleState, jobDescription } = useOutletContext();
+  const [filename , setFilename] = useState("");
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
+    const randomNumber = generateRandomNumber();
+    const fileName = `${randomNumber}_${event.target.files[0].name}`;
+    setFilename(fileName);
+  };
+
+  const generateRandomNumber = () => {
+    return Math.floor(Math.random() * 1000000);
   };
 
   const handleUpload = async () => {
@@ -27,7 +35,7 @@ const ResumeUpload = () => {
       // Get pre-signed URL from backend
       const response = await UserController.generatePresignedUrl(
         "Resume",
-        file.name,
+        filename,
         file.type
       );
       console.log("Presigned URL response:", response);
@@ -52,7 +60,7 @@ const ResumeUpload = () => {
       formData.append("resume", file);
       handleState(
         "resume",
-        `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/Resume/${file.name}`
+        `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/Resume/${filename}`
       );
 
       try {

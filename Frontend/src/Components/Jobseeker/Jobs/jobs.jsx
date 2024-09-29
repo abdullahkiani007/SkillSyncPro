@@ -121,9 +121,10 @@ function Jobs() {
     <div className='font-sans flex flex-col min-h-screen bg-gray-100'>
       <div className='p-5'>
         <JobFilter />
-        <div className='p-5 rounded-lg shadow-md'>
+        <div className='p-5 rounded-lg '>
+        <div className='text-4xl font-bold my-4'>Jobs</div>
           <div className='flex justify-between items-center mb-5'>
-            <div className='text-xl font-bold'>Jobs</div>
+            
             <div className='flex space-x-2 items-center'>
               <label htmlFor='show-recommended' className='font-semibold'>
                 Show Recommended Jobs Only:
@@ -136,7 +137,7 @@ function Jobs() {
               />
             </div>
             <div className='text-lg font-bold'>
-              {(showRecommended
+            Totol Jobs:  {(showRecommended
                 ? recommendedJobs.length
                 : filteredJobs.length) || 0}
             </div>

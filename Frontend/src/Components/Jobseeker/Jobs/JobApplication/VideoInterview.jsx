@@ -28,6 +28,10 @@ const questions = [
 ];
 
 const VideoInterview = () => {
+  const generateRandomNumber = () => {
+    return Math.floor(Math.random() * 1000000);
+  };
+
   const { goToNextStep, handleState } = useOutletContext();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [application_id, setApplication_id] = useState(localStorage.getItem("application_id"));
@@ -36,8 +40,12 @@ const VideoInterview = () => {
   const timerRef = useRef(null);
   const {_id} = useSelector( (state)=> state.user)
   const [error,setError] = useState("")
+  const [filename , setFilename] = useState(`${generateRandomNumber()}_interview.webm`);
   const [openDialog, setOpenDialog] = useState(true); // State to control dialog
   
+  
+
+
   const icon = <FaCircleInfo />;
   // Video recording using react-media-recorder
   const {
@@ -116,6 +124,9 @@ const VideoInterview = () => {
 
   // Submit the video and audio interview separately
   const handleSubmit = async () => {
+
+    
+
     console.log("Submitting interview to backend...");
     console.log("timer", timer)
     if (!videoBlobUrl || !audioBlobUrl) {
@@ -138,7 +149,7 @@ const VideoInterview = () => {
       const audioBlob = await audioResponse.blob();
       
       const formDataVideo = new FormData();
-      formDataVideo.append("video", videoBlob, `${_id}.webm`);
+      formDataVideo.append("video", videoBlob, filename);
 
       formDataVideo.append("application_id", application_id);
         // Upload audio to FastAPI server
@@ -147,8 +158,8 @@ const VideoInterview = () => {
         // Call the backend to get the pre-signed URL for video
         let videoUploadResponse = await UserController.generatePresignedUrl(
           "interviews",
-          "interview.mp4",
-          "video/mp4"
+          filename,
+          "video/webm"
         );
         const { url } = videoUploadResponse;
 
@@ -156,7 +167,7 @@ const VideoInterview = () => {
         // Update application state with interview video URL
         handleState(
           "videoIntroduction",
-          "https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/interview.mp4"
+          "https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/interviews/"+filename
         );
 
         // move to the next step of skill Assessment
@@ -179,7 +190,7 @@ const VideoInterview = () => {
         // Upload the video to S3 using the pre-signed URL
         await axios.put(url.data, videoBlob, {
           headers: {
-            "Content-Type": "video/mp4",
+            "Content-Type": "video/webm",
           },
         });
 

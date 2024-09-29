@@ -6,6 +6,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleIcon from "@mui/icons-material/People";
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const companies = ["Codewar", "TechSoft", "InnovateX"];
 const locations = ["Islamabad", "Karachi", "Lahore"];
@@ -26,10 +27,13 @@ const JobFilter = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 1, borderRadius: "12px", backgroundColor: "#f7f9fc" }}>
+   
+   
+
+    <Paper elevation={3} sx={{ my: '20px', p: 1, borderRadius: '12px', backgroundColor: '#f7f9fc', position: 'relative' }}>
       <Typography
         variant="h5"
-        sx={{ display: "flex", alignItems: "center", mb: 2, color: "#333", cursor: "pointer" }}
+        sx={{ display: 'flex', alignItems: 'center', mb: 2, color: '#333', cursor: 'pointer' }}
         onClick={() => setOpen(!open)} // Toggle filters on header click
       >
         <IconButton size="large" color="primary">
@@ -37,7 +41,7 @@ const JobFilter = () => {
         </IconButton>
         Job Filters
       </Typography>
-
+    
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Grid container spacing={2}>
           {/* Company Dropdown */}
@@ -46,7 +50,7 @@ const JobFilter = () => {
               select
               label="Company"
               name="company"
-              value={searchParams.get("company") || ""}
+              value={searchParams.get('company') || ''}
               onChange={handleChange}
               fullWidth
               variant="outlined"
@@ -69,14 +73,14 @@ const JobFilter = () => {
               ))}
             </TextField>
           </Grid>
-
+    
           {/* Location Dropdown */}
           <Grid item xs={12} sm={6}>
             <TextField
               select
               label="Location"
               name="location"
-              value={searchParams.get("location") || ""}
+              value={searchParams.get('location') || ''}
               onChange={handleChange}
               fullWidth
               variant="outlined"
@@ -99,14 +103,14 @@ const JobFilter = () => {
               ))}
             </TextField>
           </Grid>
-
+    
           {/* Salary Range Dropdown */}
           <Grid item xs={12} sm={6}>
             <TextField
               select
               label="Salary Range"
               name="salaryRange"
-              value={searchParams.get("salaryRange") || ""}
+              value={searchParams.get('salaryRange') || ''}
               onChange={handleChange}
               fullWidth
               variant="outlined"
@@ -129,14 +133,14 @@ const JobFilter = () => {
               ))}
             </TextField>
           </Grid>
-
+    
           {/* Applicants Input */}
           <Grid item xs={12} sm={6}>
             <TextField
               label="Max Applicants"
               type="number"
               name="applicants"
-              value={searchParams.get("applicants") || ""}
+              value={searchParams.get('applicants') || ''}
               onChange={handleChange}
               fullWidth
               variant="outlined"
@@ -151,8 +155,14 @@ const JobFilter = () => {
             />
           </Grid>
         </Grid>
+        
       </Collapse>
+    
+      {/* Arrow Down Icon at the right-most bottom */}
+   
     </Paper>
+    
+    
   );
 };
 
