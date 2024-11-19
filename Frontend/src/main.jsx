@@ -21,6 +21,7 @@ import ResumeUpload from "./Components/Jobseeker/Jobs/JobApplication/ResumeUploa
 import Job from "./Components/Jobseeker/Jobs/job.jsx";
 import Loader from "./Components/Loader/Loader.jsx";
 import RandomProblem from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/RandomProblems.jsx"
+import JobsListing from "./Components/landingpage/JobsListing.jsx";
 
 import MessageComponent from "./Components/Components/Message.jsx";
 
@@ -108,6 +109,9 @@ const router = createBrowserRouter([
       {
         path: "/login/admin",
         element: <AdminLoginPage />,
+      },{
+        path: "/jobs",
+        element: <JobsListing/>
       },
       {
         path: "*", // Wildcard route for 404 errors

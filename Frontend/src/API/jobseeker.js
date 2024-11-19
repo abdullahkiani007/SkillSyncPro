@@ -21,6 +21,21 @@ class JobseekerController {
     }
   }
 
+  // Get all jobs
+  async getJobsById(id) {
+    try {
+      const response = await this.apiClient.get("/jobs/all?id="+id);
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      return { status: 500, message: "Internal server error" };
+    }
+  }
+
+
   async getRecommendedJbs(user_id){
     try{
       const response = await this.fastApiClient.post("recommend-jobs",user_id)

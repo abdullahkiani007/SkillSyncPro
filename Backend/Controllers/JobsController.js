@@ -4,9 +4,22 @@ const { ObjectId } = require('mongoose').Types;
 const JobsController = {
     async getJobs(req, res) {
         console.log("Fetching jobs...");
+        let { role } = req.query;
+        if (!role) role = 'employer'; // Default role is employer
         try {
-            const jobs = await Job.getJobs();
+            const jobs = await Job.getJobs(role);
             console.log(jobs);
+            return res.status(200).json({ jobs });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
+    async getAllJobs(req, res) {
+
+        const {id} = req.query;
+        try {
+            const jobs = await Job.getAllJobs(id);
             return res.status(200).json({ jobs });
         } catch (error) {
             return res.status(500).json({ error: error.message });

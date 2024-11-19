@@ -20,9 +20,9 @@ function Jobs() {
     const fetchJobs = async () => {
       setLoading(true);
       try {
-        const { data } = await JobSeekerController.getJobs();
+        const { data } = await JobSeekerController.getJobsById(userId);
 
-        let jobs = data.jobs.filter((job) => !job.archived);
+        let jobs = data.jobs.filter((job) => !job.archived && !job.applied);
         const formData = new FormData();
         formData.append('user_id', userId);
 

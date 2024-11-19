@@ -19,6 +19,7 @@ router.get("/applications",passport.authenticate('jwt', { session: false }),Jobs
 
 // Get applied Jobs
 router.get("/jobs/applied",passport.authenticate('jwt', { session: false }),JobsController.getAppliedJobs);
+
 router.get("/profile",
 passport.authenticate('jwt', { session: false }),userController.getInfo)
 
