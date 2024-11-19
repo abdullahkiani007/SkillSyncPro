@@ -24,6 +24,28 @@ const jobService = {
         }
     },
 
+    // get all jobs for a jobseeker and add an applied field to each job
+    getAllJobs : async(id)=>{
+        try{
+            console.log("Getting all the jobs", id)
+            const jobseeker = await JobseekerService.getJobSeeker(id);
+            console.log("Jobseeker , ", jobseeker)
+            const jobs = await JobModel.find().populate('company');
+            const newJobs = jobs.map((job)=>{
+
+                        let applied = job.applicants.includes(jobseeker._id);
+                        let jobDto = new jobDTO(job);
+                        jobDto.applied = applied;
+                        return jobDto;
+    
+                })
+            return newJobs;
+        }catch(err){
+            console.log(err)
+            return { status:500, "message":"Internal server error" };
+        }
+    },
+
     getJobDescription : async(id)=>{
         try{
             const job = await JobModel.findById(id);

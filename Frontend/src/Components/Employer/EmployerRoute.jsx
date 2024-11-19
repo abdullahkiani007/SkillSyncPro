@@ -11,6 +11,7 @@ import Header from './navbar/Header'
 import Loader from '../Loader/Loader'
 import SignUpForm from '../Employer/Company/Signup'
 import employer from '../../API/employer'
+import EmployerChatbot from "./Chatbot/EmpChatbot"
 
 const EmployerRoute = () => {
   const [alert, setAlert] = useState(false)
@@ -103,6 +104,7 @@ const EmployerRoute = () => {
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className='flex-1 min-h-screen  bg-secondary-dark '>
             <Outlet context={{ admin, setAdmin }} />
+            <EmployerChatbot/>
           </div>
         </div>
       </div>

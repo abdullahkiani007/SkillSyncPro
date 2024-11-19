@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import Loader from '../Loader/Loader'
 import Sidebar from './navbar/Sidebar'
 import Header from './navbar/Header'
+import JobSeekerChatBot from './Chatbot/JobSeekerChatbot'
 
 const JobseekerRoutes = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -28,6 +29,7 @@ const JobseekerRoutes = () => {
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className=''>
             <Outlet className='bg-gray-200 ' />
+            <JobSeekerChatBot />
           </div>
         </div>
       </div>
