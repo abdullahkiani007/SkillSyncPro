@@ -51,6 +51,21 @@ const ManageCompanies = () => {
     }
   }
 
+  // Adjusted unauthorization function
+  const handleUnauthorizeCompany = (companyId) => {
+    // Instead of removing from the backend, just filter from frontend view
+    setUnauthorizedCompanies(
+      unauthorizedCompanies.filter((company) => company._id !== companyId)
+    )
+    setAuthorizedCompanies([
+      ...authorizedCompanies,
+      {
+        ...authorizedCompanies.find((company) => company._id === companyId),
+        authorized: false,
+      },
+    ])
+  }
+
   const handleCompanyClick = async (companyId) => {
     try {
       const token = localStorage.getItem('accessToken')
@@ -111,13 +126,21 @@ const ManageCompanies = () => {
                 View Details
               </button>
               {activeTab === 'unauthorized' && (
-                <button
-                  onClick={() => handleAuthorizeCompany(company._id)}
-                  className='ml-4 py-1 px-3 bg-teal-500 text-white rounded-full hover:bg-teal-600 flex items-center transition-all duration-300'
-                >
-                  <FaCheckCircle className='mr-2' />
-                  Authorize
-                </button>
+                <>
+                  <button
+                    onClick={() => handleAuthorizeCompany(company._id)}
+                    className='ml-4 py-1 px-3 bg-teal-500 text-white rounded-full hover:bg-teal-600 flex items-center transition-all duration-300'
+                  >
+                    <FaCheckCircle className='mr-2' />
+                    Authorize
+                  </button>
+                  <button
+                    onClick={() => handleUnauthorizeCompany(company._id)} // Unauthorize button
+                    className='ml-4 py-1 px-3 bg-red-500 text-white rounded-full hover:bg-red-600 flex items-center transition-all duration-300'
+                  >
+                    Unauthorize
+                  </button>
+                </>
               )}
             </td>
           </tr>

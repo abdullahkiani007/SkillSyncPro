@@ -20,7 +20,7 @@ import AppliedJobs from "./Components/Jobseeker/Jobs/appliedJobs.jsx";
 import ResumeUpload from "./Components/Jobseeker/Jobs/JobApplication/ResumeUpload.jsx";
 import Job from "./Components/Jobseeker/Jobs/job.jsx";
 import Loader from "./Components/Loader/Loader.jsx";
-import RandomProblem from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/RandomProblems.jsx"
+import RandomProblem from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/RandomProblems.jsx";
 import JobsListing from "./Components/landingpage/JobsListing.jsx";
 
 import MessageComponent from "./Components/Components/Message.jsx";
@@ -40,17 +40,15 @@ import AdminLoginPage from "./Components/Admin/AdminLogin.jsx";
 import ApplyPage from "./Components/Jobseeker/Jobs/JobApplication/ApplyPage.jsx";
 import ResumeBuilder from "./Components/Jobseeker/Resume/ResumeBuilder.jsx";
 import JobDetails from "./Components/Employer/Job/JobDetails.jsx";
-import JobDetailsSub from "./Components/Employer/Job/JobListing/JobDetails.jsx"
+import JobDetailsSub from "./Components/Employer/Job/JobListing/JobDetails.jsx";
 import EmpSkillAssessment from "./Components/Employer/SkillAssessments/SkillAssessment.jsx";
 import EmpManageCompany from "./Components/Employer/Dashboard/ManageCompany.jsx";
 import JsSkillAssessment from "./Components/Jobseeker/Jobs/JobApplication/SkillAssessment/SkillAssessment.jsx";
 import ManageEmployees from "./Components/Employer/Dashboard/ManageEmployees.jsx";
 import EmpCandidatesList from "./Components/Employer/Dashboard/ManageCandidates/CandidatesList.jsx";
 import ManageCandidate from "./Components/Employer/Dashboard/ManageCandidates/ManageCandidate/Candidate.jsx";
-import EmpJobNotes from "./Components/Employer/Job/JobListing/JobNotes.jsx"
-import EmpJobReport from "./Components/Employer/Job/JobListing/JobReport.jsx"
-
-
+import EmpJobNotes from "./Components/Employer/Job/JobListing/JobNotes.jsx";
+import EmpJobReport from "./Components/Employer/Job/JobListing/JobReport.jsx";
 
 import Candidates from "./Components/Employer/Job/JobListing/CanidateListings.jsx";
 import ProfileForm from "./Components/Jobseeker/Profile/ProfileForm.jsx";
@@ -61,7 +59,7 @@ import CreateAssessmentForm from "./Components/Employer/SkillAssessments/CreateA
 import AdminJobsList from "./Components/Admin/Job/JobsList.jsx";
 import AdminCompaniesList from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 import AdminDashboard from "./Components/Admin/Dashboard/Dashboard.jsx";
-import AdminQuesitonBank from "./Components/Admin/QuestionBank/QuesitonBank.jsx"
+import AdminQuesitonBank from "./Components/Admin/QuestionBank/QuesitonBank.jsx";
 
 import { MantineProvider } from "@mantine/core";
 import { NotFoundImage } from "./Components/NotFound/NotFoundImage.jsx";
@@ -70,11 +68,11 @@ import AdminManageEmployees from "./Components/Admin/UsersManagement/ManageEmplo
 import AdminManageJobSeekers from "./Components/Admin/UsersManagement/ManageJobSeekers.jsx";
 import ManageCompanies from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 
-
+import { GiveFeedback } from "./Components/Jobseeker/Jobs/GiveFeedback.jsx";
+import { JobFeedback } from "./Components/Employer/Job/JobListing/JobFeedback.jsx";
 
 import TailorResume from "./Components/Components/TailorResume/TailorResume.jsx";
 import AppliedJobDetails from "./Components/Jobseeker/Jobs/AppliedJobDetails.jsx";
-
 
 const router = createBrowserRouter([
   {
@@ -86,10 +84,9 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path:"/tailor-resume",
-        element:<TailorResume/>
-      }
-      ,
+        path: "/tailor-resume",
+        element: <TailorResume />,
+      },
       {
         path: "/login/jobseeker",
         element: <Login role={"jobseeker"} />,
@@ -109,9 +106,10 @@ const router = createBrowserRouter([
       {
         path: "/login/admin",
         element: <AdminLoginPage />,
-      },{
+      },
+      {
         path: "/jobs",
-        element: <JobsListing/>
+        element: <JobsListing />,
       },
       {
         path: "*", // Wildcard route for 404 errors
@@ -140,8 +138,8 @@ const router = createBrowserRouter([
         element: <ProfileForm />,
       },
       {
-        path:"job-details",
-        element:<AppliedJobDetails/>
+        path: "job-details",
+        element: <AppliedJobDetails />,
       },
       {
         path: "jobs",
@@ -150,6 +148,10 @@ const router = createBrowserRouter([
       {
         path: "jobs/applied-jobs",
         element: <AppliedJobs />,
+      },
+      {
+        path: "job/feedback",
+        element: <GiveFeedback />,
       },
       {
         path: "job/:id",
@@ -172,9 +174,9 @@ const router = createBrowserRouter([
             element: <JsSkillAssessment />,
           },
           {
-            path:"randomProblems",
-            element : <RandomProblem/>
-          }
+            path: "randomProblems",
+            element: <RandomProblem />,
+          },
         ],
       },
       {
@@ -252,26 +254,30 @@ const router = createBrowserRouter([
             element: <Candidates />,
           },
           {
-            path:"candidate/:id",
-            element:<ManageCandidate/>
+            path: "candidate/:id",
+            element: <ManageCandidate />,
           },
           {
             path: "jobdetails",
-            element: <JobDetailsSub/>,
+            element: <JobDetailsSub />,
           },
           {
             path: "notes",
-            element: <EmpJobNotes/>,
+            element: <EmpJobNotes />,
           },
           {
             path: "reports",
-            element: <EmpJobReport/>,
+            element: <EmpJobReport />,
+          },
+          {
+            path: "feedback",
+            element: <JobFeedback />,
           },
         ],
       },
       {
-        path:"dashboard/candidates/manage/:id",
-        element:<ManageCandidate/>
+        path: "dashboard/candidates/manage/:id",
+        element: <ManageCandidate />,
       },
       {
         path: "job/job-post",
@@ -316,8 +322,8 @@ const router = createBrowserRouter([
         element: <h1>Analytics</h1>,
       },
       {
-        path:"create/questionBank",
-        element: <AdminQuesitonBank/>
+        path: "create/questionBank",
+        element: <AdminQuesitonBank />,
       },
       {
         path: "*", // Wildcard route for 404 errors
