@@ -1,31 +1,31 @@
-import React, { useState } from 'react'
+import Editor from '@monaco-editor/react'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import InfoIcon from '@mui/icons-material/Info'
+import SaveIcon from '@mui/icons-material/Save'
 import {
-  TextField,
-  Button,
-  Typography,
-  MenuItem,
-  InputLabel,
-  Select,
-  FormControl,
-  Tooltip,
-  IconButton,
-  Box,
-  Divider,
-  Card,
-  CardContent,
-  CardActions,
   Alert,
   AlertTitle,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Slide,
+  TextField,
+  Tooltip,
+  Typography,
 } from '@mui/material'
-import Editor from '@monaco-editor/react'
-import InfoIcon from '@mui/icons-material/Info'
-import EditIcon from '@mui/icons-material/Edit'
-import SaveIcon from '@mui/icons-material/Save'
+import React, { useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { v4 as uuidv4 } from 'uuid'
 import { useNavigate } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
 import employer from '../../../API/employer'
 
 const CreateAssessmentForm = () => {
@@ -72,13 +72,27 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
   }
 
   const addProblem = () => {
+    // Check if the problem fields are filled
+    if (
+      !editingProblem.title ||
+      !editingProblem.description ||
+      !editingProblem.initialCode ||
+      !editingProblem.testCases
+    ) {
+      setAlert({
+        type: 'error',
+        title: 'Submission Error',
+        message: 'All fields for the problem must be filled out.',
+      })
+      return // Exit the function early
+    }
+
     setAssessment((prev) => ({
       ...prev,
       problems: [...prev.problems, editingProblem],
     }))
     resetEditingProblem()
   }
-
   const editProblem = (problem) => {
     setEditingProblem(problem)
     setIsAddingProblem(true)
@@ -86,6 +100,21 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
   }
 
   const saveEditedProblem = () => {
+    // Check if the problem fields are filled
+    if (
+      !editingProblem.title ||
+      !editingProblem.description ||
+      !editingProblem.initialCode ||
+      !editingProblem.testCases
+    ) {
+      setAlert({
+        type: 'error',
+        title: 'Submission Error',
+        message: 'All fields for the problem must be filled out.',
+      })
+      return // Exit the function early
+    }
+
     setAssessment((prev) => ({
       ...prev,
       problems: prev.problems.map((problem) =>
@@ -128,7 +157,17 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // onCreateAssessment(assessment);
+
+    // Check if at least one problem is added
+    if (assessment.problems.length === 0) {
+      setAlert({
+        type: 'error',
+        title: 'Submission Error',
+        message: 'You must add at least one problem to the assessment.',
+      })
+      return // Exit the function early
+    }
+
     console.log(assessment)
     let response
     try {
@@ -151,17 +190,9 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
     } catch (error) {
       console.log(error)
     }
-    // setAssessment({
-    //   title: "",
-    //   description: "",
-    //   language: "javascript",
-    //   timeLimit: 5,
-    //   problems: [],
-    // });
   }
-
   return (
-    <div className='bg-gradient-to-b from-white    to-gray-500 p-10 rounded-xl shadow-lg max-w-4xl mx-auto my-10 '>
+    <div className='bg-white border-black border-2 p-10 rounded-xl shadow-lg max-w-4xl mx-auto my-10 '>
       <form onSubmit={handleSubmit}>
         <div className='space-y-8'>
           <div>
@@ -245,7 +276,7 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
               <div className='space-y-4'>
                 <Divider />
                 <Box display='flex' alignItems='center' className='mb-2'>
-                  <Typography variant='body1' className='text-gray-800'>
+                  <Typography variant='body1' className='text-black'>
                     {isEditing ? 'Editing Problem' : 'Adding Problem'}
                   </Typography>
                 </Box>
@@ -294,7 +325,7 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
                 />
 
                 <Box display='flex' alignItems='center' className='mb-2'>
-                  <Typography variant='body1' className='text-gray-800'>
+                  <Typography variant='body1' className='text-black'>
                     Test Cases
                   </Typography>
                   <Tooltip title="Write test cases to validate the candidate's solution.">
@@ -320,6 +351,16 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
                     startIcon={<SaveIcon />}
                     onClick={isEditing ? saveEditedProblem : addProblem}
                     className='bg-blue-600 hover:bg-blue-700 text-white'
+                    sx={{
+                      backgroundColor: '#007BFF', // Bootstrap primary color
+                      color: 'white',
+                      padding: '10px 20px',
+                      borderRadius: '5px',
+                      '&:hover': {
+                        backgroundColor: '#0056b3', // Darker shade for hover
+                      },
+                      transition: 'background-color 0.3s ease',
+                    }}
                   >
                     {isEditing ? 'Save Changes' : 'Save Problem'}
                   </Button>
@@ -340,7 +381,7 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
             {assessment.problems.map((problem) => (
               <Card key={problem.id} className='mb-4'>
                 <CardContent>
-                  <Typography variant='h6' className='text-gray-800'>
+                  <Typography variant='h6' className='text-black'>
                     {problem.title}
                   </Typography>
                   <Typography variant='body2' className='text-gray-600'>
@@ -371,8 +412,14 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
               fullWidth
               sx={{
                 color: 'white',
-                backgroundColor: 'black',
+                backgroundColor: '#4A90E2', // Custom background color
                 fontSize: '15px',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                '&:hover': {
+                  backgroundColor: '#357ABD', // Darker shade for hover effect
+                },
+                transition: 'background-color 0.3s ease',
               }}
             >
               <FaPlus className='mx-2 font-poppins' /> Add Another Problem
@@ -384,7 +431,14 @@ console.assert(reverseString("OpenAI") === "IAnepO", "Test Case 3 Failed");
               fullWidth
               sx={{
                 color: 'white',
-                backgroundColor: 'green',
+                backgroundColor: '#28a745', // Green background color for success
+                fontSize: '16px',
+                padding: '12px 20px',
+                borderRadius: '5px',
+                '&:hover': {
+                  backgroundColor: '#218838', // Darker shade for hover effect
+                },
+                transition: 'background-color 0.3s ease',
               }}
             >
               Create Assessment
