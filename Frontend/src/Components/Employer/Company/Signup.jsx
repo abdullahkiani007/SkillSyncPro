@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
 import { Notification } from '@mantine/core'
+import React, { useEffect, useState } from 'react'
 import employer from '../../../API/employer'
 import ImageUpload from '../../Uploader/ImageUploader'
 
@@ -95,7 +95,7 @@ const Signup = () => {
         </div>
       )}
 
-      <div className='bg-white rounded-xl p-20 shadow-2xl transition duration-500 transform hover:scale-105 animate-fade-in'>
+      <div className='bg-white rounded-xl p-20 shadow-2xl '>
         <h1 className='font-bold mb-8 text-center text-primary text-4xl animate-slide-down'>
           {option === 'join' ? 'Join a Company' : 'Register a Company'}
         </h1>
@@ -157,7 +157,7 @@ const Signup = () => {
                 <input
                   type='text'
                   name='name'
-                  className='w-full p-3 border border-primary-default rounded-md transition-all duration-300 hover:shadow-lg focus:ring-2 focus:ring-primary-default focus:outline-none'
+                  className='w-full p-3 border border-primary-default rounded-md focus:ring-2 focus:ring-primary-default focus:outline-none'
                   value={newCompany.name}
                   onChange={handleNewCompanyChange}
                 />

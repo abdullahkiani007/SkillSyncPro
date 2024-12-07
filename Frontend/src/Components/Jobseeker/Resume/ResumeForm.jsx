@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { IconButton } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import DeleteIcon from '@mui/icons-material/Delete'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { IconButton } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 
 const ResumeForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -23,12 +23,12 @@ const ResumeForm = ({ onSubmit }) => {
   })
 
   const [sections, setSections] = useState({
-    general: true,
-    education: true,
-    skills: true,
-    languages: true,
-    projects: true,
-    workExperience: true,
+    general: false,
+    education: false,
+    skills: false,
+    languages: false,
+    projects: false,
+    workExperience: false,
   })
 
   const [completedSections, setCompletedSections] = useState({
@@ -153,38 +153,37 @@ const ResumeForm = ({ onSubmit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='space-y-4 w-4/5 mx-auto p-8 rounded-lg shadow-lg font-poppins'
+      className='space-y-4 w-full mx-auto rounded-lg  font-poppins'
       style={{
-        background: 'linear-gradient(135deg, #FFFFFF, #E14411)', // White to dark orange gradient
+        background: 'white', // White to dark orange gradient
         maxWidth: '1000px',
-        marginTop: '20px',
-        color: '#333',
+        color: 'black',
         padding: '20px',
         borderRadius: '10px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <h1 className='text-center text-3xl font-semibold mb-6'>Resume Form</h1>
+      <h1 className='text-center text-5xl font-semibold mb-6'>Resume Form</h1>
 
       <div className='space-y-6'>
         {/* General Details Section */}
         <div
-          className='space-y-4 p-4 rounded-lg'
-          style={{
-            background: '#ffffff', // White background for contrast
-            borderRadius: '10px',
-          }}
+          className={
+            'space-y-4 p-4 rounded-lg transition-all duration-1000 bg-black text-white'
+          }
         >
           <div className='flex justify-between items-center'>
             <h2 className='text-lg font-semibold'>
               General Details
               {completedSections.general && (
                 <CheckCircleIcon
-                  style={{ color: '#E14411', marginLeft: '10px' }} // Updated checkmark color
+                  style={{ color: '#ffffff', marginLeft: '10px' }} // Updated checkmark color
                 />
               )}
             </h2>
-            <IconButton onClick={() => toggleSection('general')}>
+            <IconButton
+              style={{ color: 'white' }}
+              onClick={() => toggleSection('general')}
+            >
               {sections.general ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
           </div>
@@ -192,7 +191,7 @@ const ResumeForm = ({ onSubmit }) => {
           {sections.general && (
             <>
               <input
-                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                className='w-full bg-transparent border-2 border-white focus:border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                 placeholder='Name'
                 name='name'
                 value={formData.name}
@@ -200,7 +199,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                className='w-full bg-transparent border-2 border-white focus:border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                 placeholder='Title'
                 name='title'
                 value={formData.title}
@@ -208,7 +207,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                className='w-full bg-transparent border-2 border-white focus:border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                 placeholder='Phone'
                 name='phone'
                 value={formData.phone}
@@ -216,7 +215,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                className='w-full bg-transparent border-2 border-white focus:border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                 placeholder='Email'
                 name='email'
                 value={formData.email}
@@ -224,7 +223,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <input
-                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                className='w-full bg-transparent border-2 border-white focus:border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                 placeholder='Address'
                 name='address'
                 value={formData.address}
@@ -232,7 +231,7 @@ const ResumeForm = ({ onSubmit }) => {
                 required
               />
               <textarea
-                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                className='w-full bg-transparent border-2 border-white focus:border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                 placeholder='Intro'
                 name='intro'
                 value={formData.intro}
@@ -243,7 +242,7 @@ const ResumeForm = ({ onSubmit }) => {
                 type='file'
                 accept='image/*'
                 onChange={handleImageChange}
-                className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                className='w-full bg-transparent border-2 border-black focus:border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                 required
               />
             </>
@@ -251,23 +250,20 @@ const ResumeForm = ({ onSubmit }) => {
         </div>
 
         {/* Education Section */}
-        <div
-          className='space-y-4 p-4 rounded-lg'
-          style={{
-            background: '#ffffff', // White background for contrast
-            borderRadius: '10px',
-          }}
-        >
+        <div className='space-y-4 p-4 rounded-lg transition-all duration-300 bg-black text-white'>
           <div className='flex justify-between items-center'>
             <h2 className='text-lg font-semibold'>
               Education
               {completedSections.education && (
                 <CheckCircleIcon
-                  style={{ color: '#E14411', marginLeft: '10px' }} // Updated checkmark color
+                  style={{ color: '#ffffff', marginLeft: '10px' }} // Updated checkmark color
                 />
               )}
             </h2>
-            <IconButton onClick={() => toggleSection('education')}>
+            <IconButton
+              style={{ color: 'white' }}
+              onClick={() => toggleSection('education')}
+            >
               {sections.education ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
           </div>
@@ -277,10 +273,10 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.education.map((edu, index) => (
                 <div
                   key={index}
-                  className='bg-[#f3f4f6] p-4 rounded-lg space-y-2 border-2 border-gray-300'
+                  className='bg-black p-4 rounded-lg space-y-2 border-2 border-white'
                 >
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Degree'
                     value={edu.degree}
                     onChange={(e) =>
@@ -289,7 +285,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Year'
                     value={edu.year}
                     onChange={(e) =>
@@ -298,7 +294,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Institution'
                     value={edu.institution}
                     onChange={(e) =>
@@ -315,7 +311,7 @@ const ResumeForm = ({ onSubmit }) => {
                     aria-label='delete'
                     onClick={() => handleRemoveItem('education', index)}
                   >
-                    <DeleteIcon sx={{ color: '#E14411' }} />
+                    <DeleteIcon sx={{ color: 'red' }} />
                   </IconButton>
                 </div>
               ))}
@@ -327,7 +323,7 @@ const ResumeForm = ({ onSubmit }) => {
                     institution: '',
                   })
                 }
-                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-[#95db69] border-none rounded-full flex items-center justify-center space-x-2 text-black py-2 px-4 text-sm transform transition-transform duration-300 '
               >
                 <AddIcon />
                 <span>Add Education</span>
@@ -337,23 +333,20 @@ const ResumeForm = ({ onSubmit }) => {
         </div>
 
         {/* Skills Section */}
-        <div
-          className='space-y-4 p-4 rounded-lg'
-          style={{
-            background: '#ffffff', // White background for contrast
-            borderRadius: '10px',
-          }}
-        >
+        <div className='space-y-4 p-4 rounded-lg transition-all duration-300 bg-black text-white'>
           <div className='flex justify-between items-center'>
             <h2 className='text-lg font-semibold'>
               Skills
               {completedSections.skills && (
                 <CheckCircleIcon
-                  style={{ color: '#E14411', marginLeft: '10px' }}
+                  style={{ color: '#ffffff', marginLeft: '10px' }}
                 />
               )}
             </h2>
-            <IconButton onClick={() => toggleSection('skills')}>
+            <IconButton
+              style={{ color: 'white' }}
+              onClick={() => toggleSection('skills')}
+            >
               {sections.skills ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
           </div>
@@ -363,7 +356,7 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.skills.map((skill, index) => (
                 <div key={index} className='flex items-center space-x-2'>
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Skill'
                     value={skill}
                     onChange={(e) => handleArrayChange(e, index, 'skills')}
@@ -373,13 +366,13 @@ const ResumeForm = ({ onSubmit }) => {
                     aria-label='delete'
                     onClick={() => handleRemoveItem('skills', index)}
                   >
-                    <DeleteIcon sx={{ color: '#E14411' }} />
+                    <DeleteIcon sx={{ color: '#ffffff' }} />
                   </IconButton>
                 </div>
               ))}
               <button
                 onClick={() => handleAddItem('skills', '')}
-                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-[#95db62] border-none rounded-full flex items-center justify-center space-x-2 text-black py-2 px-4 text-sm transform transition-transform duration-300 '
               >
                 <AddIcon />
                 <span>Add Skill</span>
@@ -389,23 +382,20 @@ const ResumeForm = ({ onSubmit }) => {
         </div>
 
         {/* Languages Section */}
-        <div
-          className='space-y-4 p-4 rounded-lg'
-          style={{
-            background: '#ffffff', // White background for contrast
-            borderRadius: '10px',
-          }}
-        >
+        <div className='space-y-4 p-4 rounded-lg transition-all duration-300 bg-black text-white'>
           <div className='flex justify-between items-center'>
             <h2 className='text-lg font-semibold'>
               Languages
               {completedSections.languages && (
                 <CheckCircleIcon
-                  style={{ color: '#E14411', marginLeft: '10px' }}
+                  style={{ color: '#ffffff', marginLeft: '10px' }}
                 />
               )}
             </h2>
-            <IconButton onClick={() => toggleSection('languages')}>
+            <IconButton
+              style={{ color: 'white' }}
+              onClick={() => toggleSection('languages')}
+            >
               {sections.languages ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
           </div>
@@ -415,7 +405,7 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.languages.map((language, index) => (
                 <div key={index} className='flex items-center space-x-2'>
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Language'
                     value={language}
                     onChange={(e) => handleArrayChange(e, index, 'languages')}
@@ -425,13 +415,13 @@ const ResumeForm = ({ onSubmit }) => {
                     aria-label='delete'
                     onClick={() => handleRemoveItem('languages', index)}
                   >
-                    <DeleteIcon sx={{ color: '#E14411' }} />
+                    <DeleteIcon sx={{ color: 'red' }} />
                   </IconButton>
                 </div>
               ))}
               <button
                 onClick={() => handleAddItem('languages', '')}
-                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-[#95db62] border-none rounded-full flex items-center justify-center space-x-2 text-black py-2 px-4 text-sm transform transition-transform duration-300 '
               >
                 <AddIcon />
                 <span>Add Language</span>
@@ -441,23 +431,20 @@ const ResumeForm = ({ onSubmit }) => {
         </div>
 
         {/* Projects Section */}
-        <div
-          className='space-y-4 p-4 rounded-lg'
-          style={{
-            background: '#ffffff', // White background for contrast
-            borderRadius: '10px',
-          }}
-        >
+        <div className='space-y-4 p-4 rounded-lg transition-all duration-300 bg-black text-white'>
           <div className='flex justify-between items-center'>
             <h2 className='text-lg font-semibold'>
               Projects
               {completedSections.projects && (
                 <CheckCircleIcon
-                  style={{ color: '#E14411', marginLeft: '10px' }}
+                  style={{ color: '#ffffff', marginLeft: '10px' }}
                 />
               )}
             </h2>
-            <IconButton onClick={() => toggleSection('projects')}>
+            <IconButton
+              style={{ color: 'white' }}
+              onClick={() => toggleSection('projects')}
+            >
               {sections.projects ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
           </div>
@@ -467,10 +454,10 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.projects.map((project, index) => (
                 <div
                   key={index}
-                  className='bg-[#f3f4f6] p-4 rounded-lg space-y-2 border-2 border-gray-300'
+                  className='bg-black p-4 rounded-lg space-y-2 border-2 border-white'
                 >
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Project Name'
                     value={project.name}
                     onChange={(e) =>
@@ -479,7 +466,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <textarea
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Project Description'
                     value={project.description}
                     onChange={(e) =>
@@ -496,7 +483,7 @@ const ResumeForm = ({ onSubmit }) => {
                     aria-label='delete'
                     onClick={() => handleRemoveItem('projects', index)}
                   >
-                    <DeleteIcon sx={{ color: '#E14411' }} />
+                    <DeleteIcon sx={{ color: 'red' }} />
                   </IconButton>
                 </div>
               ))}
@@ -504,7 +491,7 @@ const ResumeForm = ({ onSubmit }) => {
                 onClick={() =>
                   handleAddItem('projects', { name: '', description: '' })
                 }
-                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-[#95db62] border-none rounded-full flex items-center justify-center space-x-2 text-black py-2 px-4 text-sm transform transition-transform duration-300 '
               >
                 <AddIcon />
                 <span>Add Project</span>
@@ -514,23 +501,20 @@ const ResumeForm = ({ onSubmit }) => {
         </div>
 
         {/* Work Experience Section */}
-        <div
-          className='space-y-4 p-4 rounded-lg'
-          style={{
-            background: '#ffffff', // White background for contrast
-            borderRadius: '10px',
-          }}
-        >
+        <div className='space-y-4 p-4 rounded-lg transition-all duration-300 bg-black text-white'>
           <div className='flex justify-between items-center'>
             <h2 className='text-lg font-semibold'>
               Work Experience
               {completedSections.workExperience && (
                 <CheckCircleIcon
-                  style={{ color: '#E14411', marginLeft: '10px' }}
+                  style={{ color: '#ffffff', marginLeft: '10px' }}
                 />
               )}
             </h2>
-            <IconButton onClick={() => toggleSection('workExperience')}>
+            <IconButton
+              style={{ color: 'white' }}
+              onClick={() => toggleSection('workExperience')}
+            >
               {sections.workExperience ? (
                 <ExpandLessIcon />
               ) : (
@@ -544,10 +528,10 @@ const ResumeForm = ({ onSubmit }) => {
               {formData.workExperience.map((work, index) => (
                 <div
                   key={index}
-                  className='bg-[#f3f4f6] p-4 rounded-lg space-y-2 border-2 border-gray-300'
+                  className='bg-black p-4 rounded-lg space-y-2 border-2 border-white'
                 >
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Company'
                     value={work.company}
                     onChange={(e) =>
@@ -561,7 +545,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Role'
                     value={work.role}
                     onChange={(e) =>
@@ -575,7 +559,7 @@ const ResumeForm = ({ onSubmit }) => {
                     required
                   />
                   <input
-                    className='w-full bg-transparent border-2 border-gray-300 focus:border-orange-500 focus:bg-gray-100 transition-all outline-none py-2 px-3 rounded-md text-gray-900'
+                    className='w-full bg-transparent border-2 border-white      transition-all outline-none py-2 px-3 rounded-md text-white'
                     placeholder='Duration'
                     value={work.duration}
                     onChange={(e) =>
@@ -592,7 +576,7 @@ const ResumeForm = ({ onSubmit }) => {
                     aria-label='delete'
                     onClick={() => handleRemoveItem('workExperience', index)}
                   >
-                    <DeleteIcon sx={{ color: '#E14411' }} />
+                    <DeleteIcon sx={{ color: '#ffffff' }} />
                   </IconButton>
                 </div>
               ))}
@@ -604,7 +588,7 @@ const ResumeForm = ({ onSubmit }) => {
                     duration: '',
                   })
                 }
-                className='bg-gradient-to-r from-orange-600 to-orange-400 border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105'
+                className='bg-[#95db62] border-none rounded-full flex items-center justify-center space-x-2 text-black py-2 px-4 text-sm transform transition-transform duration-300 '
               >
                 <AddIcon />
                 <span>Add Work Experience</span>
@@ -612,13 +596,14 @@ const ResumeForm = ({ onSubmit }) => {
             </>
           )}
         </div>
-
-        <button
-          type='submit'
-          className='w-full bg-secondary-dark border-none rounded-full flex items-center justify-center space-x-2 text-white py-2 px-4 text-sm transform transition-transform duration-300 hover:scale-105 mt-6'
-        >
-          <span>Generate Resume</span>
-        </button>
+        <div className='flex justify-end'>
+          <button
+            type='submit'
+            className='bg-black border-none rounded-full flex items-center justify-center space-x-2 text-white py-3 px-8 text-lg font-semibold transform transition-all duration-300 hover:scale-105 hover:shadow-lg  '
+          >
+            <span>Generate Resume</span>
+          </button>
+        </div>
       </div>
     </form>
   )

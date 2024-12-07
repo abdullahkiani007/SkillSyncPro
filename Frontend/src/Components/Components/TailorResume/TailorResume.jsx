@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Button, TextField, CircularProgress } from '@mui/material'
 import { CloudUpload as CloudUploadIcon } from '@mui/icons-material'
+import { Button, CircularProgress, TextField } from '@mui/material'
 import axios from 'axios'
+import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import resumeApi from '../../../API/resume'
 
@@ -49,12 +49,12 @@ const TailorResume = () => {
   }
 
   return (
-    <div className='p-8 mt-20 w-full  min-h-screen bg-gradient-to-br from-secondary-dark  to-secondary-dark '>
-      <div className='shadow-md w-2/3 bg-gradient-to-r from-primary to-primary-dark m-auto p-8 rounded-3xl'>
-        <h1 className='text-5xl font-bold mb-6 text-center text-white'>
+    <div className='p-4 mt-12 w-full  '>
+      <div className=' w-2/3 m-auto p-8 rounded-3xl '>
+        <h1 className='text-5xl font-poppins font-bold mb-6 text-center text-black'>
           Tailor Your Resume
         </h1>
-        <p className='text-center text-gray-300 mb-8 leading-relaxed text-lg'>
+        <p className='text-center text-black mb-8 leading-relaxed text-lg'>
           Upload your job description and resume in PDF format to get a
           customized resume or calculate similarity.
         </p>
@@ -72,7 +72,7 @@ const TailorResume = () => {
               placeholder='Paste the job description here...'
               className='shadow-sm'
               sx={{
-                backgroundColor: '#e0e0e0', // Light gray for text field
+                backgroundColor: '#ffffff', // Light gray for text field
                 borderRadius: '12px', // Rounded corners
               }}
             />
@@ -90,14 +90,16 @@ const TailorResume = () => {
               <Button
                 variant='contained'
                 sx={{
-                  backgroundColor: '#fffdd1', // Muted purple color
+                  backgroundColor: '#fff', // Muted purple color
                   color: 'black',
                   borderRadius: '20px', // Rounded buttons
                   padding: '10px 20px',
                   fontSize: '1rem',
                   transition: 'all 0.3s ease-in-out',
+                  border: '1px solid black',
                   '&:hover': {
-                    backgroundColor: '#fffdd1', // Lighter purple on hover
+                    backgroundColor: '#26242c',
+                    color: 'white', // Lighter purple on hover
                   },
                 }}
                 component='span'
@@ -115,14 +117,16 @@ const TailorResume = () => {
               variant='contained'
               disabled={loading}
               sx={{
-                background: '#0c1337', // Orange gradient
-                color: 'white',
+                background: 'white', // Orange gradient
+                color: 'black',
                 borderRadius: '20px', // Rounded buttons
                 padding: '10px 20px',
                 fontSize: '1rem',
                 transition: 'all 0.3s ease-in-out',
+                border: '1px solid black',
                 '&:hover': {
-                  background: '#1e3852', // Reverse gradient on hover
+                  background: '#26242c',
+                  color: 'white', // Reverse gradient on hover
                 },
               }}
             >
@@ -138,14 +142,16 @@ const TailorResume = () => {
               variant='contained'
               disabled={loading}
               sx={{
-                background: '#0c1337', // Orange gradient
-                color: 'white',
+                background: 'white', // Orange gradient
+                color: 'black',
                 borderRadius: '20px', // Rounded buttons
                 padding: '10px 20px',
                 fontSize: '1rem',
                 transition: 'all 0.3s ease-in-out',
+                border: '1px solid black',
                 '&:hover': {
-                  background: '#1e3852', // Reverse gradient on hover
+                  background: '#26242c',
+                  color: 'white', // Reverse gradient on hover
                 },
               }}
             >
