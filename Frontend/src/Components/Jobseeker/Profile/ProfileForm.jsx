@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import CreatableSelect from 'react-select/creatable'
-import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import Controller from '../../../API/index'
-import ImageUpload from '../../Uploader/ImageUploader'
-import placeholderImage_person from '../../../assets/placeholderImage_person.jpg'
-import { format, parseISO, isValid } from 'date-fns'
+import TextField from '@mui/material/TextField'
+import { format, isValid, parseISO } from 'date-fns'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import CreatableSelect from 'react-select/creatable'
+import Controller from '../../../API/index'
+import placeholderImage_person from '../../../assets/placeholderImage_person.jpg'
+import ImageUpload from '../../Uploader/ImageUploader'
 
 const ProfileForm = () => {
   const [formData, setFormData] = useState({
@@ -42,8 +42,7 @@ const ProfileForm = () => {
           startDate: new Date(edu.startDate).toLocaleDateString('en-GB'),
           endDate: new Date(edu.endDate).toLocaleDateString('en-GB'),
         })),
-          // Format education dates
-          
+        // Format education dates
       }
       setUser(formattedData.user || {})
       setFormData(formattedData || { education: [], skills: [] })
@@ -213,12 +212,18 @@ const ProfileForm = () => {
 
   return (
     <div
-      className='w-full bg-gradient-to-r from-teal-100 to-orange-100 p-6 rounded-lg shadow-lg'
+      className='w-full  p-6 rounded-lg shadow-lg'
       style={{ maxWidth: '900px', margin: 'auto' }}
     >
+      <h1
+        className='text-center font-bold from-neutral-600'
+        style={{ fontSize: '50px' }}
+      >
+        Edit Profile
+      </h1>
       <div className='flex items-center mb-6'>
         <img
-          src={img ||user.profilePicture || placeholderImage_person}
+          src={img || user.profilePicture || placeholderImage_person}
           alt='profile'
           className='w-24 h-24 rounded-full border-4 border-orange-500 object-cover'
         />
@@ -279,7 +284,7 @@ const ProfileForm = () => {
         />
       </div>
 
-      <div className='mt-10 relative z-50 mb-6'>
+      <div className='mt-10  z-50 mb-6'>
         <h2 className='text-lg font-bold mb-2 text-teal-600'>Skills</h2>
         <CreatableSelect
           isMulti
@@ -292,7 +297,7 @@ const ProfileForm = () => {
             }))
           }
           onChange={handleSkillChange}
-          className='relative z-50'
+          className='relative '
           styles={{
             menu: (provided) => ({
               ...provided,
@@ -309,7 +314,7 @@ const ProfileForm = () => {
           formData.education.map((edu, index) => (
             <div
               key={index}
-              className='mt-4 bg-white shadow-md rounded-lg px-4 py-3 mb-6 transition-transform transform hover:scale-105'
+              className='mt-4 bg-white shadow-md rounded-lg px-4 py-3 mb-6 '
               style={{ borderLeft: '4px solid #FF6347' }}
             >
               <div>

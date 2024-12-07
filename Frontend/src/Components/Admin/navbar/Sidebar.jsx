@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
 import BusinessIcon from '@mui/icons-material/Business'
 import PersonIcon from '@mui/icons-material/Person'
-import { FaCode } from "react-icons/fa";
-import { GiSkills } from "react-icons/gi";
-import codeIcon from "../../../assets/svg/vsCodeIcon.svg"
+import React, { useEffect, useRef, useState } from 'react'
+import { FaCode } from 'react-icons/fa'
+import { GiSkills } from 'react-icons/gi'
+import { NavLink, useLocation } from 'react-router-dom'
+import codeIcon from '../../../assets/svg/vsCodeIcon.svg'
 
 import SidebarLinkGroup from './SidebarLinkGroup'
 
@@ -97,7 +97,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
           </button>
           {/* Logo */}
           <NavLink end to='/admin/Dashboard' className='block'>
-            <p className='text-white font-bold text-xl'>Dashboard</p>
+            <p className='text-white font-bold text-xl text-center'>
+              Dashboard
+            </p>
           </NavLink>
         </div>
 
@@ -590,10 +592,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         <div className='flex items-center justify-between'>
                           <div className='flex items-center'>
                             <GiSkills />
-                            <span
-
-                            className='text-xs font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200'>
-                               Skill Development Resources
+                            <span className='text-xs font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200'>
+                              Skill Development Resources
                             </span>
                           </div>
                           {/* Icon */}
