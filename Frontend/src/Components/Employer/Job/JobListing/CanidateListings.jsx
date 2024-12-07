@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useParams, useOutletContext } from "react-router-dom";
 import { FiMessageCircle } from "react-icons/fi";
@@ -5,7 +6,13 @@ import { HiArchive } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import placeholderImage from "../../../../assets/placeholderImage_person.jpg";
 
-const CandidateCard = ({ name, appliedDate, avatar, status, recommendationScore }) => {
+const CandidateCard = ({
+  name,
+  appliedDate,
+  avatar,
+  status,
+  recommendationScore,
+}) => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out">
       <div className="flex items-center">
@@ -16,7 +23,9 @@ const CandidateCard = ({ name, appliedDate, avatar, status, recommendationScore 
         />
         <div>
           <h3 className="text-lg font-bold text-gray-800">{name}</h3>
-          <p className="text-gray-500">{new Date(appliedDate).toLocaleDateString()}</p>
+          <p className="text-gray-500">
+            {new Date(appliedDate).toLocaleDateString()}
+          </p>
         </div>
       </div>
       <div className="flex items-center justify-between mt-6">
@@ -38,7 +47,9 @@ const CandidateCard = ({ name, appliedDate, avatar, status, recommendationScore 
         </div>
         <div className="text-gray-500 flex items-center space-x-2 text-sm">
           <span>Recommendation:</span>
-          <span className="text-xl font-bold text-blue-500">{recommendationScore.toFixed(2)}</span>
+          <span className="text-xl font-bold text-blue-500">
+            {recommendationScore.toFixed(2)}
+          </span>
         </div>
       </div>
       <div className="flex items-center justify-between mt-4">
@@ -100,32 +111,39 @@ const Candidates = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Candidates</h2>
         <div className="flex items-center space-x-4">
-  <div className="relative">
-    <select
-      className="appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-gray-100 transition-all"
-      onChange={handleFilterChange}
-    >
-      <option value="">All Stages</option>
-      <option value="Under Review">Under Review</option>
-      <option value="Interview Scheduled">Interview Scheduled</option>
-      <option value="Rejected">Rejected</option>
-      <option value="Accepted">Accepted</option>
-    </select>
-    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-      <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-        <path fillRule="evenodd" d="M7 7l3-3 3 3m0 6l-3 3-3-3" clipRule="evenodd" />
-      </svg>
-    </span>
-  </div>
-  
-  <button
-    className="bg-blue-600 text-white rounded-full px-6 py-2 font-medium shadow-md hover:bg-blue-700 hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
-    onClick={handleSortChange}
-  >
-    Sort by Recommendation {sortOrder === "asc" ? "↑" : "↓"}
-  </button>
-</div>
+          <div className="relative">
+            <select
+              className="appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-gray-100 transition-all"
+              onChange={handleFilterChange}
+            >
+              <option value="">All Stages</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Interview Scheduled">Interview Scheduled</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Accepted">Accepted</option>
+            </select>
+            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7 7l3-3 3 3m0 6l-3 3-3-3"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
 
+          <button
+            className="bg-blue-600 text-white rounded-full px-6 py-2 font-medium shadow-md hover:bg-blue-700 hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={handleSortChange}
+          >
+            Sort by Recommendation {sortOrder === "asc" ? "↑" : "↓"}
+          </button>
+        </div>
       </div>
       <div className="grid grid-cols-3 gap-4">
         {filteredCandidates.map((candidate, index) => (

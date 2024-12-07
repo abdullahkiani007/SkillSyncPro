@@ -1,15 +1,15 @@
+import { Card, CardContent, Container, Grid, Typography } from '@mui/material'
 import React from 'react'
-import { Container, Typography, Grid, Card, CardContent } from '@mui/material'
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
 } from 'recharts'
 
 const jobPostingData = [
@@ -37,7 +37,7 @@ const EmployerAnalytics = () => {
       sx={{
         minHeight: '100vh', // Full height container
         p: 4,
-        backgroundColor: 'white',
+        backgroundColor: '#182235',
         // Gradient background
         backgroundSize: 'cover', // Ensure the gradient covers the entire container
       }}
@@ -48,7 +48,7 @@ const EmployerAnalytics = () => {
         sx={{
           fontWeight: 'bold',
           mb: 4,
-          color: '#000', // Light text color
+          color: '#ffffff', // Light text color
           textAlign: 'center',
         }}
       >
@@ -61,7 +61,7 @@ const EmployerAnalytics = () => {
             sx={{
               borderRadius: 3,
               boxShadow: 3,
-              background: '#E14400', // Dark navy blue card
+              background: 'black', // Dark navy blue card
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
               '&:hover': {
@@ -100,7 +100,7 @@ const EmployerAnalytics = () => {
               borderRadius: 3,
               boxShadow: 3,
 
-              background: 'linear-gradient(135deg, #E14411, #FFD460)', // Dark card color
+              background: 'black', // Dark card color
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
               '&:hover': {

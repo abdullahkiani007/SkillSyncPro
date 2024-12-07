@@ -5,11 +5,10 @@ const CompanyService = require("./company.service");
 const Employer = require("../Models/employer.model");
 const Assessment = require("../Models/companyAssessment.model");
 const Company = require("../Models/company.model");
-const CandidateAssessment = require("../Models/candidateAssessment.model")
+const CandidateAssessment = require("../Models/candidateAssessment.model");
 const Application = require("../Models/application.model");
-const ApplicationResultModel = require('../Models/applicationResult.model')
-const JobNote = require('../Models/jobNote.model');
-
+const ApplicationResultModel = require("../Models/applicationResult.model");
+const JobNote = require("../Models/jobNote.model");
 
 const EmployerServices = {
   async getJobs(id) {
@@ -21,10 +20,28 @@ const EmployerServices = {
       jobs = await Job.find({ company: company.data._id });
 
       if (jobs) {
-        console.log(jobs);
+        // Calculate cumulative rating for each job
+        const jobsWithRatings = await Promise.all(
+          jobs.map(async (job) => {
+            const applications = await Application.find({ job: job._id });
+            const totalRating = applications.reduce(
+              (acc, application) => acc + (application.rating || 0),
+              0
+            );
+            const averageRating = applications.length
+              ? totalRating / applications.length
+              : 0;
+            return {
+              ...job.toObject(),
+              averageRating,
+            };
+          })
+        );
+
+        console.log(jobsWithRatings);
         return {
           status: 200,
-          jobs,
+          jobs: jobsWithRatings,
         };
       } else {
         return {
@@ -53,7 +70,7 @@ const EmployerServices = {
       skills,
       salaryRange,
       location,
-      generateRandomProblem
+      generateRandomProblem,
     } = req;
 
     let job;
@@ -72,7 +89,7 @@ const EmployerServices = {
         skills,
         salaryRange,
         experienceLevel,
-        generateRandomProblem
+        generateRandomProblem,
       });
       await job.save();
       CompanyService.addJob(company, job._id);
@@ -123,22 +140,7 @@ const EmployerServices = {
     }
   },
 
-  async getEmployer(id) {
-    try {
-      const employer = await Employer.findOne({ user: id }).populate("user");
-
-      return {
-        status: 200,
-        employer,
-      };
-    } catch (error) {
-      console.log(error);
-      return {
-        status: 500,
-        message: "internal server error",
-      };
-    }
-  },
+  async getEmployer(id) {},
 
   updateEmployer: async (id, data) => {
     // id is the user id
@@ -426,14 +428,16 @@ const EmployerServices = {
           },
         })
         .populate("job");
-  
+
       if (applications) {
         const candidates = await Promise.all(
           applications.map(async (application) => {
             // Fetch the application result for the current application
-            const applicationResult = await ApplicationResultModel.findOne({ application: application._id });
-            console.log("application result", applicationResult)
-  
+            const applicationResult = await ApplicationResultModel.findOne({
+              application: application._id,
+            });
+            console.log("application result", applicationResult);
+
             return {
               _id: application._id,
               candidateName: `${application.jobSeeker.user.firstName} ${application.jobSeeker.user.lastName}`,
@@ -448,7 +452,7 @@ const EmployerServices = {
             };
           })
         );
-  
+
         return {
           status: 200,
           candidates,
@@ -478,22 +482,26 @@ const EmployerServices = {
           },
         })
         .populate("job");
-  
-      const candidateAssessment = await CandidateAssessment.findOne({ application: applicationId })
-        .populate({
-          path: "companyAssessment",
-          populate: {
-            path: "problems", // Populate the embedded problems array
-            select: "title description", // Select specific fields from problem
-          }
-        });
-  
+
+      const candidateAssessment = await CandidateAssessment.findOne({
+        application: applicationId,
+      }).populate({
+        path: "companyAssessment",
+        populate: {
+          path: "problems", // Populate the embedded problems array
+          select: "title description", // Select specific fields from problem
+        },
+      });
+
       if (application) {
         return {
           status: 200,
           application: {
             _id: application._id,
-            candidateName: application.jobSeeker.user.firstName + " " + application.jobSeeker.user.lastName,
+            candidateName:
+              application.jobSeeker.user.firstName +
+              " " +
+              application.jobSeeker.user.lastName,
             jobTitle: application.job.title,
             jobDescription: application.job.description,
             appliedDate: application.createdAt,
@@ -503,28 +511,35 @@ const EmployerServices = {
             stage: application.status,
             resume: application.resume, // Resume link
             videoIntroduction: application.videoIntroduction, // Video introduction link
-            candidateAssessment: candidateAssessment ? {
-              _id: candidateAssessment._id,
-              answers: candidateAssessment.answers.map(answer => {
-                const problem = candidateAssessment.companyAssessment.problems.find(p => p._id.equals(answer.problemId));
-                return {
-                  problemTitle: problem ? problem.title : "Problem not found",
-                  code: answer.code,
-                  passed: answer.passed,
-                  timeSpent: answer.timeSpent,
-                  keystrokes: answer.keystrokes,
-                  error: answer.error,
-                };
-              }),
-              score: candidateAssessment.score,
-              feedback: candidateAssessment.feedback,
-              createdAt: candidateAssessment.createdAt,
-              updatedAt: candidateAssessment.updatedAt,
-            } : null,
+            candidateAssessment: candidateAssessment
+              ? {
+                  _id: candidateAssessment._id,
+                  answers: candidateAssessment.answers.map((answer) => {
+                    const problem =
+                      candidateAssessment.companyAssessment.problems.find((p) =>
+                        p._id.equals(answer.problemId)
+                      );
+                    return {
+                      problemTitle: problem
+                        ? problem.title
+                        : "Problem not found",
+                      code: answer.code,
+                      passed: answer.passed,
+                      timeSpent: answer.timeSpent,
+                      keystrokes: answer.keystrokes,
+                      error: answer.error,
+                    };
+                  }),
+                  score: candidateAssessment.score,
+                  feedback: candidateAssessment.feedback,
+                  createdAt: candidateAssessment.createdAt,
+                  updatedAt: candidateAssessment.updatedAt,
+                }
+              : null,
           },
         };
       }
-  
+
       return {
         status: 404,
         message: "Application not found",
@@ -538,9 +553,13 @@ const EmployerServices = {
     }
   },
 
-  updateApplicationStage: async (applicationId, stage)=> {
+  updateApplicationStage: async (applicationId, stage) => {
     try {
-      const application = await Application.findByIdAndUpdate(applicationId, { status: stage }, { new: true });
+      const application = await Application.findByIdAndUpdate(
+        applicationId,
+        { status: stage },
+        { new: true }
+      );
       if (application) {
         return {
           status: 200,
@@ -560,53 +579,135 @@ const EmployerServices = {
     }
   },
 
-  // job notes 
-  addJobNote : async (jobId, authorId, text, isPrivate) => {
-    try{
-    const note = new JobNote({
-      job: jobId,
-      author: authorId,
-      text,
-      isPrivate,
-    });
+  // job notes
+  addJobNote: async (jobId, authorId, text, isPrivate) => {
+    try {
+      const note = new JobNote({
+        job: jobId,
+        author: authorId,
+        text,
+        isPrivate,
+      });
 
-    console.log("note created" , note.populate('author', 'firstName lastName email role profilePicture'))
+      console.log(
+        "note created",
+        note.populate("author", "firstName lastName email role profilePicture")
+      );
 
-    return await note.save();
-  }catch(err){
-    console.log(err);
-    return err
-  }
- 
+      return await note.save();
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
   },
-  
-  getJobNotes : async (jobId, userId, showPrivate = false) => {
+
+  getJobNotes: async (jobId, userId, showPrivate = false) => {
     const filter = { job: jobId };
-    
+
     // Filter out private notes unless the current user is the author
     if (!showPrivate) {
       filter.$or = [{ isPrivate: false }, { author: userId }];
     }
-    try{
-      let notes = await JobNote.find(filter).populate('author', 'firstName lastName email role profilePicture');
+    try {
+      let notes = await JobNote.find(filter).populate(
+        "author",
+        "firstName lastName email role profilePicture"
+      );
       // console.log("notes ->>" , notes)
-    return notes
-    }
-    catch(err){
-      console.log("error",err)
+      return notes;
+    } catch (err) {
+      console.log("error", err);
       return {
-        "message":"internal server error"
-      }
+        message: "internal server error",
+      };
     }
   },
-  
-  deleteJobNote : async (noteId, userId) => {
+
+  deleteJobNote: async (noteId, userId) => {
     const note = await JobNote.findOne({ _id: noteId, author: userId });
-    if (!note) throw new Error('Note not found or unauthorized');
+    if (!note) throw new Error("Note not found or unauthorized");
     return await JobNote.deleteOne({ _id: noteId });
   },
-  
-  
-}
+
+  submitFeedback: async (applicationId, feedback, rating) => {
+    console.log("feedback", feedback);
+    console.log("rating", rating);
+    console.log("applicationId", applicationId);
+
+    try {
+      if (!feedback || !rating) {
+        return {
+          status: 400,
+          message: "Feedback and rating are required",
+        };
+      }
+
+      const application = await Application.findById(applicationId);
+      if (!application) {
+        return {
+          status: 404,
+          message: "Application not found",
+        };
+      }
+
+      application.feedback = feedback;
+      application.rating = rating;
+      await application.save();
+
+      return {
+        status: 200,
+        message: "Feedback submitted successfully",
+      };
+    } catch (err) {
+      console.error("Error submitting feedback:", err);
+      return {
+        status: 500,
+        message: "Internal server error",
+      };
+    }
+  },
+
+  getJobFeedback: async (jobId, userId) => {
+    console.log("jobId", jobId);
+    console.log("userId", userId);
+    try {
+      const applications = await Application.find({ job: jobId }).populate({
+        path: "jobSeeker",
+        populate: {
+          path: "user",
+          select: "firstName lastName",
+        },
+      });
+
+      console.log("applications", applications);
+
+      // Filter applications to get feedback from the specified user
+      const userFeedback = applications
+        .filter(
+          (application) => application.jobSeeker && application.jobSeeker.user
+        )
+        .map((application) => ({
+          userName:
+            application.jobSeeker.user.firstName +
+            " " +
+            application.jobSeeker.user.lastName,
+          jobTitle: application.job.title,
+          feedback: application.jobseekerFeedback,
+          rating: application.jobseekerRating,
+        }));
+
+      return {
+        status: 200,
+        feedbacks: userFeedback,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        status: 500,
+        message: "Internal server error",
+      };
+    }
+  },
+};
 
 module.exports = EmployerServices;
