@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
 import {
+  DeleteOutline,
+  EditOutlined,
+  FileCopyOutlined,
+  VisibilityOutlined,
+} from '@mui/icons-material'
+import {
+  Box,
+  Button,
   Card,
   CardContent,
-  Typography,
   Grid,
   IconButton,
   Modal,
-  Box,
-  Button,
+  Typography,
 } from '@mui/material'
-import {
-  VisibilityOutlined,
-  EditOutlined,
-  DeleteOutline,
-  FileCopyOutlined,
-} from '@mui/icons-material'
+import React, { useState } from 'react'
 
 // Modal styling
 const modalStyle = {
@@ -48,6 +48,8 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
         sx={{
           marginBottom: 2,
           borderRadius: 2,
+          backgroundColor: 'black',
+          color: 'white',
           // Slight shadow
           transition: 'transform 0.3s ease-in-out', // Smooth transition for hover
           '&:hover': {
@@ -62,7 +64,7 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
             sx={{
               fontWeight: 'bold',
               marginBottom: 1,
-              color: 'text.primary',
+              color: 'white',
             }}
           >
             {assessment.title}
@@ -72,7 +74,7 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
             color='textSecondary'
             sx={{
               marginBottom: 2,
-              color: 'text.secondary',
+              color: 'white',
             }}
           >
             {assessment.description.substring(0, 100)}...
@@ -80,11 +82,12 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
           <Grid container spacing={1}>
             <Grid item>
               <IconButton
-                color='dark'
+                color='white'
                 onClick={() => onView(assessment)}
                 sx={{
+                  color: 'white',
                   '&:hover': {
-                    backgroundColor: 'rgba(25, 118, 210, 0.1)', // Blue hover effect
+                    backgroundColor: 'white', // Blue hover effect
                   },
                 }}
               >
@@ -96,6 +99,7 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
                 color='dark'
                 onClick={() => onEdit(assessment)}
                 sx={{
+                  color: 'white',
                   '&:hover': {
                     backgroundColor: 'rgba(25, 118, 210, 0.1)', // Blue hover effect
                   },
@@ -119,7 +123,7 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
             </Grid>
             <Grid item>
               <IconButton
-                color='secondary'
+                color='primary'
                 onClick={() => console.log('Duplicated')}
                 sx={{
                   '&:hover': {
