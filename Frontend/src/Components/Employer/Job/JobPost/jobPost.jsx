@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import { ArrowBack, ArrowForward, CheckCircle, Send } from '@mui/icons-material'
 import {
-  TextField,
-  Button,
-  Typography,
   Box,
+  Button,
   Card,
-  Stepper,
+  Chip,
+  FormControl,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
   Step,
   StepButton,
-  Select,
-  MenuItem,
-  Chip,
-  Input,
-  FormControl,
-  InputLabel,
+  Stepper,
+  TextField,
+  Typography,
 } from '@mui/material'
-import { ArrowBack, Send, ArrowForward, CheckCircle } from '@mui/icons-material'
-import Slider from '@mui/material/Slider'
-import EmployerController from '../../../../API/employer'
 import Alert from '@mui/material/Alert'
+import Slider from '@mui/material/Slider'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import EmployerController from '../../../../API/employer'
 import { skillsList } from '../../../../constants'
 
 const JobPost = () => {
@@ -225,7 +225,7 @@ const JobPost = () => {
     switch (step) {
       case 0:
         return (
-          <Card className='my-20 mx-10 p-10 bg-gradient-to-r from-primary to-secondary-dark   rounded-full'>
+          <Card className='my-20 mx-10 p-10 bg-gradient-to-r from-primary to-secondary-dark  rounded-full'>
             <div>
               <h1 className='font-bold text-lg text-white'>Title:</h1>
               <div className='pl-3 pt-2'>
@@ -571,13 +571,11 @@ const JobPost = () => {
                       },
                     }}
                   >
-                    {skillsList.map(
-                      (skill) => (
-                        <MenuItem key={skill} value={skill}>
-                          {skill}
-                        </MenuItem>
-                      )
-                    )}
+                    {skillsList.map((skill) => (
+                      <MenuItem key={skill} value={skill}>
+                        {skill}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </div>
@@ -689,7 +687,6 @@ const JobPost = () => {
                     <MenuItem value={false}>No</MenuItem>
                   </Select>
                 </FormControl>
-
               </div>
             </div>
           </Card>
@@ -700,7 +697,7 @@ const JobPost = () => {
   }
 
   return (
-    <div className='w-full min-h-screen mx-auto flex justify-center items-center bg-gradient-to-r from-secondary-dark to-secondary-dark py-10'>
+    <div className='w-full min-h-screen mx-auto flex justify-center items-center bg-gradient-to-r from-secondary-dark to-secondary-dark py-10 mb-10'>
       <Box
         sx={{
           width: '70%',
@@ -717,7 +714,7 @@ const JobPost = () => {
               '& .MuiStepIcon-root': {
                 color: 'rgba(255, 255, 255, 0.5)', // Default color of step icons
                 '&.Mui-active': {
-                  color: 'white', // Active step icon color
+                  color: 'black', // Active step icon color
                 },
                 '&.Mui-completed': {
                   color: 'white', // Completed step icon color

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import employer from '../../../API/employer'
-import { Modal, Box, Typography, Button } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import { Box, Button, Modal, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import employer from '../../../API/employer'
 
 const ManageCompany = () => {
   const [company, setCompany] = useState({
@@ -137,7 +137,7 @@ const ManageCompany = () => {
           <div className='mt-6 flex justify-end'>
             <button
               type='submit'
-              className='px-6 py-3 bg-green-500  text-white font-semibold rounded-md shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:from-orange-600 hover:to-blue-700'
+              className='px-6 py-3 bg-black  text-white font-semibold rounded-md shadow-lg '
             >
               Save Changes
             </button>
