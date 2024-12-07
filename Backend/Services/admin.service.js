@@ -4,6 +4,7 @@ const ApplicationModel = require("../Models/application.model");
 const CompanyModel = require("../Models/company.model");
 const EmployerModel = require("../Models/employer.model");
 const mongoose = require("mongoose");
+const QuestionBank = require("../Models/questionbank.model");
 
 const AdminService = {
   fetchJobsOverTime: async (query) => {
@@ -591,7 +592,7 @@ const AdminService = {
       return { status: 500, message: "Error fetching companies", error };
     }
   },
-  
+
   authorizeCompany: async (companyId) => {
     try {
       const company = await CompanyModel.findById(companyId);
@@ -611,50 +612,50 @@ const AdminService = {
     try {
       const company = await CompanyModel.findById(companyId);
       if (!company) {
-        return res.status(404).json({ error: 'Company not found' });
+        return res.status(404).json({ error: "Company not found" });
       }
       await company.remove();
-      res.status(200).json({ message: 'Company deleted successfully' });
+      res.status(200).json({ message: "Company deleted successfully" });
     } catch (error) {
-      res.status(500).json({ error: 'Failed to delete company' });
+      res.status(500).json({ error: "Failed to delete company" });
     }
   },
 
-  getCompanyDetails : async (companyId) => {
+  getCompanyDetails: async (companyId) => {
     try {
       const company = await CompanyModel.aggregate([
         { $match: { _id: new mongoose.Types.ObjectId(companyId) } },
         {
           $lookup: {
-            from: 'users', // Collection name for the User model
-            localField: 'createdBy',
-            foreignField: '_id',
-            as: 'creator',
+            from: "users", // Collection name for the User model
+            localField: "createdBy",
+            foreignField: "_id",
+            as: "creator",
           },
         },
-        { $unwind: { path: '$creator', preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$creator", preserveNullAndEmptyArrays: true } },
         {
           $lookup: {
-            from: 'employers', // Collection name for the Employer model
-            localField: 'employees',
-            foreignField: '_id',
-            as: 'employees',
-          },
-        },
-        {
-          $lookup: {
-            from: 'jobs', // Collection name for the Job model
-            localField: 'jobs',
-            foreignField: '_id',
-            as: 'jobs',
+            from: "employers", // Collection name for the Employer model
+            localField: "employees",
+            foreignField: "_id",
+            as: "employees",
           },
         },
         {
           $lookup: {
-            from: 'employers', // Collection name for the Employer model
-            localField: 'unAuthEmployees',
-            foreignField: '_id',
-            as: 'unAuthEmployees',
+            from: "jobs", // Collection name for the Job model
+            localField: "jobs",
+            foreignField: "_id",
+            as: "jobs",
+          },
+        },
+        {
+          $lookup: {
+            from: "employers", // Collection name for the Employer model
+            localField: "unAuthEmployees",
+            foreignField: "_id",
+            as: "unAuthEmployees",
           },
         },
         {
@@ -670,9 +671,9 @@ const AdminService = {
             contactPhone: 1,
             authorized: 1,
             createdBy: {
-              _id: '$creator._id',
-              name: '$creator.name',
-              email: '$creator.email',
+              _id: "$creator._id",
+              name: "$creator.name",
+              email: "$creator.email",
             },
             employees: 1,
             jobs: 1,
@@ -680,7 +681,7 @@ const AdminService = {
           },
         },
       ]);
-  
+
       if (!company || company.length === 0) {
         return { status: 404, message: "Company not found" };
       }
@@ -689,7 +690,39 @@ const AdminService = {
       console.error("Error fetching company details:", error);
       return { status: 500, message: "Error fetching company details", error };
     }
-  }
-}
+  },
+  async createQuestionBank(role, difficulty, problems) {
+    const questionBankEntry = new QuestionBank({
+      role,
+      difficulty,
+      problems,
+    });
+    return await questionBankEntry.save();
+  },
+
+  // Fetch all questions for a specific role
+  async getQuestionsByRole(role) {
+    return await QuestionBank.find({ role });
+  },
+
+  // Fetch all questions (optionally filtered by role and difficulty)
+  async getQuestions(role, difficulty) {
+    const filter = {};
+    if (role) filter.role = role;
+    if (difficulty) filter.difficulty = difficulty;
+
+    return await QuestionBank.find(filter);
+  },
+
+  // Update a question bank entry
+  async updateQuestionBank(id, updateData) {
+    return await QuestionBank.findByIdAndUpdate(id, updateData, { new: true });
+  },
+
+  // Delete a question bank entry
+  async deleteQuestionBank(id) {
+    return await QuestionBank.findByIdAndDelete(id);
+  },
+};
 
 module.exports = AdminService;
