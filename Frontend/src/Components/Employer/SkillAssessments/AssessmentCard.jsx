@@ -48,7 +48,7 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
         sx={{
           marginBottom: 2,
           borderRadius: 2,
-          backgroundColor: 'black',
+          backgroundColor: '#182235',
           color: 'white',
           // Slight shadow
           transition: 'transform 0.3s ease-in-out', // Smooth transition for hover
@@ -86,9 +86,6 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
                 onClick={() => onView(assessment)}
                 sx={{
                   color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'white', // Blue hover effect
-                  },
                 }}
               >
                 <VisibilityOutlined />
@@ -100,9 +97,6 @@ const AssessmentCard = ({ assessment, onView, onEdit, onDelete }) => {
                 onClick={() => onEdit(assessment)}
                 sx={{
                   color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'rgba(25, 118, 210, 0.1)', // Blue hover effect
-                  },
                 }}
               >
                 <EditOutlined />

@@ -1,49 +1,49 @@
-import ApiClient from "./ApiClient";
-import axios from "axios";
+import axios from 'axios'
+import ApiClient from './ApiClient'
 
 class Admin {
   constructor() {
-    this.apiClient = new ApiClient("http://localhost:3000/api/v1/admin");
+    this.apiClient = new ApiClient('http://localhost:3000/api/v1/admin')
   }
 
   async fetchJobsOverTime(fromDate, toDate) {
     try {
       const response = await this.apiClient.get(
         `jobsOverTime?from=${fromDate}&to=${toDate}`
-      );
+      )
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching jobs over time:", error);
-      throw error;
+      console.error('Error fetching jobs over time:', error)
+      throw error
     }
   }
 
   async fetchJobApplications() {
     try {
-      const response = await this.apiClient.get("/jobApplications");
+      const response = await this.apiClient.get('/jobApplications')
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (err) {
-      console.error("Error fetching job applications", err);
-      throw err;
+      console.error('Error fetching job applications', err)
+      throw err
     }
   }
 
   async fetchTopCompanies() {
     try {
-      const response = await this.apiClient.get("/topComapaniesByJobPosts");
+      const response = await this.apiClient.get('/topComapaniesByJobPosts')
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching top companies", error);
-      throw error;
+      console.error('Error fetching top companies', error)
+      throw error
     }
   }
 
@@ -51,66 +51,66 @@ class Admin {
     try {
       const response = await this.apiClient.get(
         `/jobSeekerRegistrations?from=${from}&to=${to}`
-      );
+      )
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching job seeker registrations", error);
-      throw error;
+      console.error('Error fetching job seeker registrations', error)
+      throw error
     }
   }
 
   async fetchEmploymentTypeDistribution() {
     try {
-      const response = await this.apiClient.get(`/EmploymentTypesDistribution`);
+      const response = await this.apiClient.get(`/EmploymentTypesDistribution`)
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching employment types", error);
-      throw error;
+      console.error('Error fetching employment types', error)
+      throw error
     }
   }
 
   async fetchSalaryDistribution() {
     try {
-      const response = await this.apiClient.get(`/salaryRange`);
+      const response = await this.apiClient.get(`/salaryRange`)
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching salary range distribution", error);
-      throw error;
+      console.error('Error fetching salary range distribution', error)
+      throw error
     }
   }
 
   async fetchJobsByLocation() {
     try {
-      const response = await this.apiClient.get(`/jobLocations`);
+      const response = await this.apiClient.get(`/jobLocations`)
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching job locations", error);
-      throw error;
+      console.error('Error fetching job locations', error)
+      throw error
     }
   }
 
   async getJobsForAdmin() {
     try {
-      const response = await this.apiClient.get(`/jobs`);
+      const response = await this.apiClient.get(`/jobs`)
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching jobs for admin", error);
-      throw error;
+      console.error('Error fetching jobs for admin', error)
+      throw error
     }
   }
 
@@ -120,14 +120,14 @@ class Admin {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      })
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching job seekers for admin", error);
-      throw error;
+      console.error('Error fetching job seekers for admin', error)
+      throw error
     }
   }
 
@@ -135,15 +135,15 @@ class Admin {
     try {
       const response = await this.apiClient.get(`/employees`, {
         headers: { Authorization: `Bearer ${token}` },
-      });
+      })
 
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching all employees", error);
-      throw error;
+      console.error('Error fetching all employees', error)
+      throw error
     }
   }
 
@@ -151,40 +151,40 @@ class Admin {
     try {
       const response = await this.apiClient.get(`/employees/${employeeId}`, {
         headers: { Authorization: `Bearer ${token}` },
-      });
+      })
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching employee details", error);
-      throw error;
+      console.error('Error fetching employee details', error)
+      throw error
     }
   }
 
   async getCompanies() {
     try {
-      const response = await this.apiClient.get(`/companies`);
+      const response = await this.apiClient.get(`/companies`)
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching companies", error);
-      throw error;
+      console.error('Error fetching companies', error)
+      throw error
     }
   }
 
   async getCompanies(req, res, next) {
     try {
-      const response = await this.apiClient.get(`/companies`);
+      const response = await this.apiClient.get(`/companies`)
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching companies", error);
-      throw error;
+      console.error('Error fetching companies', error)
+      throw error
     }
   }
 
@@ -198,14 +198,14 @@ class Admin {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
+      )
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error authorizing company", error);
-      throw error;
+      console.error('Error authorizing company', error)
+      throw error
     }
   }
 
@@ -215,16 +215,16 @@ class Admin {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      })
       return {
         data: response.data,
         status: response.status,
-      };
+      }
     } catch (error) {
-      console.error("Error fetching company details", error);
-      throw error;
+      console.error('Error fetching company details', error)
+      throw error
     }
   }
 }
 
-export default new Admin();
+export default new Admin()
