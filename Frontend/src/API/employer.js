@@ -33,7 +33,6 @@ class EmployerController {
         data: response.data,
         status: response.status,
       };
-
     } catch (error) {
       console.error("Error fetching job details:", error);
       throw error;
@@ -112,7 +111,7 @@ class EmployerController {
   }
 
   async leaveCompany(token) {
-    console.log("leaving company")
+    console.log("leaving company");
     try {
       const response = await this.apiClient.delete(`/company/leave`, {
         headers: {
@@ -123,12 +122,10 @@ class EmployerController {
         data: response.data,
         status: response.status,
       };
-
     } catch (error) {
       console.error("Error leaving company:", error);
       throw error;
     }
-
   }
 
   async getCompany(token) {
@@ -394,7 +391,7 @@ class EmployerController {
     }
   }
 
-  async getApplicationsGroupedByStatus(token){
+  async getApplicationsGroupedByStatus(token) {
     try {
       console.log("Sending /get/applications/grouped request");
       const response = await this.apiClient.get("applicationsStatus", {
@@ -407,16 +404,13 @@ class EmployerController {
         data: response.data.data,
         status: response.status,
       };
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching applications grouped by status:", error);
       throw error;
     }
-
   }
 
-  async getAllCandidates(token){
+  async getAllCandidates(token) {
     try {
       console.log("Sending /get/candidates request");
       const response = await this.apiClient.get("candidates", {
@@ -429,30 +423,29 @@ class EmployerController {
         data: response.data.candidates,
         status: response.status,
       };
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching candidates:", error);
       throw error;
     }
   }
 
-  async getCandidatesByJobId(token, jobId){
+  async getCandidatesByJobId(token, jobId) {
     try {
       console.log("Sending /get/candidates/job request");
-      const response = await this.apiClient.get(`candidates/job?jobId=${jobId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await this.apiClient.get(
+        `candidates/job?jobId=${jobId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return {
         data: response.data.candidates,
         status: response.status,
       };
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching candidates by job id:", error);
       throw error;
     }
@@ -460,11 +453,14 @@ class EmployerController {
 
   async getApplication(applicationId, token) {
     try {
-      const response = await this.apiClient.get(`application?id=${applicationId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await this.apiClient.get(
+        `application?id=${applicationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return {
         data: response.data,
         status: response.status,
@@ -479,7 +475,7 @@ class EmployerController {
     console.log("Updating application stage to:", newStage);
     console.log("Application ID:", applicationId);
     console.log("Token:", token);
-    
+
     try {
       const response = await this.apiClient.put(
         `application/stage?id=${applicationId}`,
@@ -500,33 +496,33 @@ class EmployerController {
     }
   }
 
-  async getJobReport(){
+  async getJobReport() {
     const mockData = {
-      "jobTitle": "Frontend Developer",
-      "totalApplications": 120,
-      "shortlisted": 30,
-      "rejected": 50,
-      "inProgress": 40,
-      "averageAge": 28,
-      "topLocations": ["New York", "San Francisco", "London"],
-      "educationLevels": {
-        "Bachelors": 60,
-        "Masters": 30,
-        "PhD": 10
+      jobTitle: "Frontend Developer",
+      totalApplications: 120,
+      shortlisted: 30,
+      rejected: 50,
+      inProgress: 40,
+      averageAge: 28,
+      topLocations: ["New York", "San Francisco", "London"],
+      educationLevels: {
+        Bachelors: 60,
+        Masters: 30,
+        PhD: 10,
       },
-      "averageSkillMatch": 75,
-      "topSkills": ["JavaScript", "React", "CSS"],
-      "jobViews": 5000,
-      "clickThroughRate": 4.5,
-      "skillAssessments": {
-        "completed": 50,
-        "averageScore": 80
+      averageSkillMatch: 75,
+      topSkills: ["JavaScript", "React", "CSS"],
+      jobViews: 5000,
+      clickThroughRate: 4.5,
+      skillAssessments: {
+        completed: 50,
+        averageScore: 80,
       },
-      "averageTimeToHire": 45,
-      "currentJobTime": 30
-    }
-    
-      return mockData
+      averageTimeToHire: 45,
+      currentJobTime: 30,
+    };
+
+    return mockData;
   }
 
   // ================= Job Notes API Functions ================= //
@@ -549,8 +545,7 @@ class EmployerController {
 
   // Create a new note for a job
   async createJobNote(data, token) {
-    console.log("Crating note in employ", data)
-  
+    console.log("Crating note in employ", data);
 
     try {
       const response = await this.apiClient.post(`note`, data, {
@@ -586,8 +581,43 @@ class EmployerController {
     }
   }
 
+  async submitFeedback(applicationId, data, token) {
+    try {
+      const response = await this.apiClient.post(
+        `application/feedback?id=${applicationId}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      throw error;
+    }
+  }
 
-
+  async getJobFeedbacks(jobId, token) {
+    try {
+      const response = await this.apiClient.get(`job/feedback?id=${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        data: response.data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.error("Error fetching job feedback:", error);
+      throw error;
+    }
+  }
 }
 
 export default new EmployerController();

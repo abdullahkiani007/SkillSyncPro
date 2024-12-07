@@ -51,6 +51,14 @@ router.post(
   jobseekerController.applyJob
 );
 
+router.post(
+  "/submitFeedback",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  jobseekerController.submitFeedback
+);
+
 router.get("/companies", CompanyController.getCompanies);
 router.get("/assessment", jobseekerController.getAssessmentByJobId);
 router.post(
