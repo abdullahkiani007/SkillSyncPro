@@ -1,16 +1,16 @@
 import React from 'react'
-import JobPostingsChart from '../Charts/JobPostingChart'
-import JobApplicationsChart from '../Charts/JobApplicationChart'
-import TopCompaniesChart from '../Charts/TopCompaniesChart'
-import JobseekerRegistrationsChart from '../Charts/JobSeekerRegistrationsChart'
 import EmploymentTypesDistributionChart from '../Charts/EmloyementTypeDistributionChart'
-import SalaryRangeDistributionChart from '../Charts/SalaryRangeDistributionChart'
+import JobApplicationsChart from '../Charts/JobApplicationChart'
 import JobPostingsByLocationBarChart from '../Charts/JobPostingByLocationBarChar'
 import JobPostingsByLocationMapChart from '../Charts/JobPostingByLocationMapChart'
+import JobPostingsChart from '../Charts/JobPostingChart'
+import JobseekerRegistrationsChart from '../Charts/JobSeekerRegistrationsChart'
+import SalaryRangeDistributionChart from '../Charts/SalaryRangeDistributionChart'
+import TopCompaniesChart from '../Charts/TopCompaniesChart'
 
 const AdminDashboard = () => {
   return (
-    <div className='p-6 bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen'>
+    <div className='p-6 bg-[#182235] min-h-screen'>
       <h1 className='text-3xl font-bold text-white mb-6'>Admin Dashboard</h1>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>
         {/* Job postings card */}

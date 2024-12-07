@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
 import { Facebook, GitHub, Google } from '@mui/icons-material'
-import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { useFormik } from 'formik'
-import signupSchema from '../../Schemas/Signup/signupSchema'
-import Controller from '../../API/index'
-import Loader from '../Loader/Loader'
+import { motion } from 'framer-motion'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import Controller from '../../API/index'
 import { login } from '../../redux/userSlice'
+import signupSchema from '../../Schemas/Signup/signupSchema'
+import Loader from '../Loader/Loader'
 
 const SignUpForm = () => {
   const route = window.location.pathname.split('/')[2]

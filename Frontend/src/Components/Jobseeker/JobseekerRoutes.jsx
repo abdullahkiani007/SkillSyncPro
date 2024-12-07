@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
-import Navbar from './navbar/Navbar'
-import Topbar from './navbar/Topbar'
 import { useSelector } from 'react-redux'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Loader from '../Loader/Loader'
-import Sidebar from './navbar/Sidebar'
-import Header from './navbar/Header'
 import JobSeekerChatBot from './Chatbot/JobSeekerChatbot'
+import Header from './navbar/Header'
+import Navbar from './navbar/Navbar'
+import Sidebar from './navbar/Sidebar'
+import Topbar from './navbar/Topbar'
 
 const JobseekerRoutes = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -18,17 +18,21 @@ const JobseekerRoutes = () => {
       navigate('/login/jobseeker')
     }
   }, [user, navigate])
-
   if (user.auth && user.role === 'jobseeker') {
     return (
       <div className='flex h-full'>
-        {/* <Navbar /> */}
+        {/* Sidebar */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className='flex flex-col flex-1 '>
-          {/* <Topbar /> */}
+
+        {/* Main Content: Apply margin when sidebar is open */}
+        <div
+          className={`flex flex-col flex-1 transition-all ${
+            sidebarOpen ? 'ml-64' : 'ml-0'
+          }`}
+        >
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className=''>
-            <Outlet className='bg-gray-200 ' />
+            <Outlet className='bg-gray-200' />
             <JobSeekerChatBot />
           </div>
         </div>

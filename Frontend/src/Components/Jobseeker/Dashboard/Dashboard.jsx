@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import userController from '../../../API/index'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import JobManagementCard from './JobManagementCard'
-import ProfileToolsCard from './ProfileToolsCard'
-import NotificationsPanel from './NotificationsPanel'
-import JobSuggestions from './JobSuggestions'
-import SkillsEndorsement from './SkillsEndorsement'
-import JobApplicationAnalytics from './JobApplicationAnalytics'
 import { ClipLoader } from 'react-spinners'
+import userController from '../../../API/index'
+import JobApplicationAnalytics from './JobApplicationAnalytics'
+import JobManagementCard from './JobManagementCard'
+import JobSuggestions from './JobSuggestions'
+import NotificationsPanel from './NotificationsPanel'
+import ProfileToolsCard from './ProfileToolsCard'
+import SkillsEndorsement from './SkillsEndorsement'
 
 const Dashboard = () => {
   const user = useSelector((state) => state.user)
