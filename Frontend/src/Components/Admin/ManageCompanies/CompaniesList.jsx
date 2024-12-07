@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { Button, Modal, Transition } from '@mantine/core'
+import React, { useEffect, useState } from 'react'
+import { FaCheckCircle, FaEye } from 'react-icons/fa'
 import admin from '../../../API/admin'
-import { Modal, Button } from '@mantine/core'
-import { FaEye, FaCheckCircle } from 'react-icons/fa'
 import ModalContent from './CompanyModal'
-import { Transition } from '@mantine/core'
 
 const ManageCompanies = () => {
   const [authorizedCompanies, setAuthorizedCompanies] = useState([])

@@ -1,18 +1,18 @@
-import { createChatBotMessage } from "react-chatbot-kit";
+import { createChatBotMessage } from 'react-chatbot-kit'
 
 const config = {
-  botName: "SkillSync",
+  botName: 'SkillSync',
   initialMessages: [
-    createChatBotMessage("Hello! How can I assist you today with jobs?"),
+    createChatBotMessage('Hello! How can I assist you today with jobs?'),
   ],
   customStyles: {
     botMessageBox: {
-      backgroundColor: "#5c9ded",
+      backgroundColor: 'black',
     },
     chatButton: {
-      backgroundColor: "#5c9ded",
+      backgroundColor: 'black',
     },
   },
-};
+}
 
-export default config;
+export default config
