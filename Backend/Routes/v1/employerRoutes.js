@@ -170,4 +170,18 @@ EmployerRouter.delete(
   passport.authenticate("jwt", { session: false }),
   employerController.deleteNote
 );
+
+// feedback routes
+EmployerRouter.post(
+  "/application/feedback",
+  passport.authenticate("jwt", { session: false }),
+  employerController.submitFeedback
+);
+
+EmployerRouter.get(
+  "/job/feedback",
+  passport.authenticate("jwt", { session: false }),
+  employerController.getJobFeedback
+);
+
 module.exports = EmployerRouter;
