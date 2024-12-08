@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import {
-  TextField,
-  Button,
-  Typography,
-  MenuItem,
-  FormControl,
-  Select,
-} from '@mui/material'
 import Editor from '@monaco-editor/react'
+import {
+  Button,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material'
+import React, { useState } from 'react'
 
 const EditAssessment = ({ assessment, onSave }) => {
   const [editableAssessment, setEditableAssessment] = useState(assessment)
@@ -29,12 +29,19 @@ const EditAssessment = ({ assessment, onSave }) => {
 
   return (
     <form
-      className='p-8 m-8 rounded-lg'
+      className='p-8 m-8 rounded-lg border-black border-2'
       style={{
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ffffff',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        borderRadius: '10px',
       }}
     >
+      <Typography
+        variant='h4'
+        sx={{ marginBottom: 4, color: '#333', textAlign: 'center' }}
+      >
+        Edit Assessment
+      </Typography>
       <TextField
         label='Assessment Title'
         name='title'
@@ -46,7 +53,7 @@ const EditAssessment = ({ assessment, onSave }) => {
         InputLabelProps={{ style: { color: '#333' } }}
         InputProps={{
           sx: {
-            backgroundColor: '#fff',
+            backgroundColor: '#f9f9f9',
             borderRadius: '5px',
           },
         }}
@@ -64,7 +71,7 @@ const EditAssessment = ({ assessment, onSave }) => {
         InputLabelProps={{ style: { color: '#333' } }}
         InputProps={{
           sx: {
-            backgroundColor: '#fff',
+            backgroundColor: '#f9f9f9',
             borderRadius: '5px',
           },
         }}
@@ -75,7 +82,7 @@ const EditAssessment = ({ assessment, onSave }) => {
           value={editableAssessment.language}
           onChange={handleChange}
           sx={{
-            backgroundColor: '#fff',
+            backgroundColor: '#f9f9f9',
             borderRadius: '5px',
           }}
         >
@@ -96,7 +103,7 @@ const EditAssessment = ({ assessment, onSave }) => {
         InputLabelProps={{ style: { color: '#333' } }}
         InputProps={{
           sx: {
-            backgroundColor: '#fff',
+            backgroundColor: '#f9f9f9',
             borderRadius: '5px',
           },
         }}
@@ -110,6 +117,7 @@ const EditAssessment = ({ assessment, onSave }) => {
             padding: '16px',
             backgroundColor: '#e8f0fe',
             borderRadius: '8px',
+            border: '1px solid #cfd8dc',
           }}
         >
           <Typography variant='h6' sx={{ fontWeight: 'bold', color: '#333' }}>
@@ -126,7 +134,7 @@ const EditAssessment = ({ assessment, onSave }) => {
             InputLabelProps={{ style: { color: '#333' } }}
             InputProps={{
               sx: {
-                backgroundColor: '#fff',
+                backgroundColor: '#f9f9f9',
                 borderRadius: '5px',
               },
             }}
@@ -144,7 +152,7 @@ const EditAssessment = ({ assessment, onSave }) => {
             InputLabelProps={{ style: { color: '#333' } }}
             InputProps={{
               sx: {
-                backgroundColor: '#fff',
+                backgroundColor: '#f9f9f9',
                 borderRadius: '5px',
               },
             }}
@@ -182,6 +190,9 @@ const EditAssessment = ({ assessment, onSave }) => {
         sx={{
           backgroundColor: '#4caf50',
           '&:hover': { backgroundColor: '#45a049' },
+          marginTop: 2,
+          borderRadius: '8px',
+          padding: '10px 20px',
         }}
       >
         Save Assessment
