@@ -1,11 +1,11 @@
+import { Button, Card, CardContent, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { Card, CardContent, Typography, Button, Grid } from '@mui/material'
 import { NavLink } from 'react-router-dom'
-import AssessmentCard from './AssessmentCard'
 import employer from '../../../API/employer'
 import Loader from '../../Loader/Loader'
-import ViewAssessment from './ViewAssessment'
+import AssessmentCard from './AssessmentCard'
 import EditAssessment from './EditAssessment'
+import ViewAssessment from './ViewAssessment'
 
 const ManageAssessments = () => {
   const [loading, setLoading] = useState(true)
@@ -125,9 +125,19 @@ const ManageAssessments = () => {
                 onSave={handleSave}
               />
               <Button
-                variant='outlined'
+                variant='contained' // Use 'contained' for a filled button
                 onClick={handleCancel}
-                sx={{ marginTop: 2, color: 'white', backgroundColor: 'black' }}
+                sx={{
+                  marginTop: 2,
+                  color: 'white', // Text color
+                  backgroundColor: '#f44336', // Bright red color
+                  '&:hover': {
+                    backgroundColor: '#c62828', // Darker red on hover
+                  },
+                  borderRadius: '8px', // Rounded corners
+                  padding: '10px 20px', // Increased padding
+                  boxShadow: 2, // Add a subtle shadow for depth
+                }}
               >
                 Cancel
               </Button>
