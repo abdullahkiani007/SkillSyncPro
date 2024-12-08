@@ -66,8 +66,8 @@ const ManageCompany = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark flex items-center justify-center'>
-      <div className='bg-gradient-to-br from-primary to-primary p-8 rounded-lg shadow-lg w-full max-w-4xl'>
+    <div className='min-h-screen bg-white flex items-center justify-center'>
+      <div className=' p-8 rounded-lg bg-secondary-dark shadow-lg w-full max-w-4xl'>
         <h2 className='text-3xl font-bold text-white mb-6 text-center'>
           Manage Company
         </h2>
@@ -80,7 +80,7 @@ const ManageCompany = () => {
                 name='name'
                 value={company.name}
                 onChange={handleChange}
-                className='bg-white border border-primary p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
+                className='bg-white border border-black p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
               />
             </div>
             <div className='flex flex-col'>
@@ -90,7 +90,7 @@ const ManageCompany = () => {
                 name='industry'
                 value={company.industry}
                 onChange={handleChange}
-                className='bg-white border border-primary p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
+                className='bg-white border border-black p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
               />
             </div>
             <div className='flex flex-col'>
@@ -100,7 +100,7 @@ const ManageCompany = () => {
                 name='website'
                 value={company.website}
                 onChange={handleChange}
-                className='bg-white border border-primary p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
+                className='bg-white border border-black p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
               />
             </div>
             <div className='flex flex-col'>
@@ -110,7 +110,7 @@ const ManageCompany = () => {
                 name='contactEmail'
                 value={company.contactEmail}
                 onChange={handleChange}
-                className='bg-white border border-primary p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
+                className='bg-white border border-black p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
               />
             </div>
             <div className='flex flex-col'>
@@ -120,7 +120,7 @@ const ManageCompany = () => {
                 name='contactPhone'
                 value={company.contactPhone}
                 onChange={handleChange}
-                className='bg-white border border-primary p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
+                className='bg-white border border-black p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
               />
             </div>
             <div className='flex flex-col'>
@@ -130,14 +130,14 @@ const ManageCompany = () => {
                 name='address'
                 value={company.address}
                 onChange={handleChange}
-                className='bg-white border border-primary p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
+                className='bg-white border border-black p-3 rounded-md text-black transition duration-300 ease-in-out hover:border-orange-300 focus:border-orange-300 focus:ring-2 focus:ring-orange-300'
               />
             </div>
           </div>
           <div className='mt-6 flex justify-end'>
             <button
               type='submit'
-              className='px-6 py-3 bg-black  text-white font-semibold rounded-md shadow-lg '
+              class='px-6 py-3 text-white font-semibold rounded-md shadow-lg bg-black hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300'
             >
               Save Changes
             </button>
