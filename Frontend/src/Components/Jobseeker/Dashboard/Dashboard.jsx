@@ -69,9 +69,6 @@ const Dashboard = () => {
                 isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
               }`}
             />
-            <div className='text-white p-6 rounded-xl mb-8'>
-              <JobManagementCard />
-            </div>
 
             <JobApplicationAnalytics
               className={`transform transition-all duration-700 ${
@@ -95,12 +92,6 @@ const Dashboard = () => {
             <div className='bg-white text-black rounded-xl shadow-lg border border-black mb-8'>
               <ProfileToolsCard />
             </div>
-
-            <SkillsEndorsement
-              className={`transform transition-all duration-700 ${
-                isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-              }`}
-            />
           </div>
         </div>
       )}
