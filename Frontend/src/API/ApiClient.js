@@ -5,7 +5,6 @@ class ApiClient {
     this.apiClient = axios.create({
       baseURL: baseURL || "http://localhost:3000/api/v1/",
     });
-
     // Set up the request interceptor
     this.apiClient.interceptors.request.use(
       async (config) => {
@@ -13,9 +12,9 @@ class ApiClient {
         console.log("Interceptor setup");
 
         let accessToken = this.getAccessToken();
-        if (this.isTokenExpired(accessToken)) {
-          accessToken = await this.refreshToken();
-        }
+        // if (this.isTokenExpired(accessToken)) {
+        //   accessToken = await this.refreshToken();
+        // }
 
         if (accessToken) {
           config.headers.Authorization = `Bearer ${accessToken}`;
