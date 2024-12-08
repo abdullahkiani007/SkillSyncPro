@@ -36,8 +36,10 @@ const EmployerAnalytics = () => {
       maxWidth={false}
       sx={{
         minHeight: '100vh', // Full height container
-        p: 4,
-        backgroundColor: '#182235',
+        paddingBottom: '100px',
+        paddingTop: '50px',
+        marginBottom: '20px',
+
         // Gradient background
         backgroundSize: 'cover', // Ensure the gradient covers the entire container
       }}
@@ -48,7 +50,7 @@ const EmployerAnalytics = () => {
         sx={{
           fontWeight: 'bold',
           mb: 4,
-          color: '#ffffff', // Light text color
+          color: 'black', // Light text color
           textAlign: 'center',
         }}
       >
@@ -61,14 +63,9 @@ const EmployerAnalytics = () => {
             sx={{
               borderRadius: 3,
               boxShadow: 3,
-              background: 'black', // Dark navy blue card
+              background: '#2d4059', // Dark navy blue card
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.03)', // Slight scale on hover
-                boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.2)', // Softer shadow on hover
-                // New background color on hover
-              },
             }}
           >
             <CardContent>
@@ -100,13 +97,9 @@ const EmployerAnalytics = () => {
               borderRadius: 3,
               boxShadow: 3,
 
-              background: 'black', // Dark card color
+              background: '#2d4059', // Dark card color
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.03)',
-                boxShadow: '0px 6px 24px rgba(0, 0, 0, 0.2)',
-              },
             }}
           >
             <CardContent>
@@ -131,13 +124,10 @@ const EmployerAnalytics = () => {
           <Card
             sx={{
               borderRadius: 3,
-              boxShadow: 3,
-              background: 'linear-gradient(135deg,#000,#333)', // Matching navy blue card
+
+              background: '#2d4059', // Matching navy blue card
               transition:
                 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.03)',
-              },
             }}
           >
             <CardContent>

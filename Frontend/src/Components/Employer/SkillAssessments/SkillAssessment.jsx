@@ -95,7 +95,7 @@ const ManageAssessments = () => {
   return (
     <div className='py-20 px-10'>
       <nav className='flex justify-between mb-10'>
-        <h1 className='font-bold text-4xl text-white'>
+        <h1 className='font-bold text-4xl text-black'>
           Manage Skill Assessments
         </h1>
         <NavLink to='./create'>
