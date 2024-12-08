@@ -3,8 +3,8 @@ import {
   FaBell,
   FaChevronDown,
   FaChevronUp,
-  FaFileAlt,
   FaClipboardList,
+  FaFileAlt,
 } from 'react-icons/fa'
 
 const NotificationsPanel = () => {
