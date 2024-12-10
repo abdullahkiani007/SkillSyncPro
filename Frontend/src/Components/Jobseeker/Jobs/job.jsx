@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react'
 import {
-  Typography,
-  Container,
+  Box,
+  Button,
   Card,
   CardContent,
-  Button,
   Chip,
+  Container,
   Divider,
-  Box,
+  Typography,
 } from '@mui/material'
-import { IoMdArrowRoundBack } from 'react-icons/io'
+import React, { useEffect, useState } from 'react'
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa6'
 import { HiOutlineCurrencyDollar } from 'react-icons/hi2'
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa6'
+import { IoMdArrowRoundBack } from 'react-icons/io'
 import { IoCaretForwardOutline } from 'react-icons/io5'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import JobPerformanceTracker from '../../../API/JobPerfomanceTracker'
-import Loader from '../../Loader/Loader'
 import companyLogo from '../../../assets/companyLogo.png'
+import Loader from '../../Loader/Loader'
 
 const Job = () => {
   const id = window.location.pathname.split('/')[3]
@@ -44,7 +44,7 @@ const Job = () => {
     const jobs = JSON.parse(localStorage.getItem('jobs'))
     if (jobs) {
       const jobItem = jobs.find((job) => job._id.trim() === id.trim())
-      console.log("job items " , jobItem)
+      console.log('job items ', jobItem)
       setJob(jobItem)
       setLoading(false)
     }
@@ -56,14 +56,14 @@ const Job = () => {
 
   return (
     <>
-      <div className='flex items-center pl-10 py-3 border-b border-gray-300 bg-gray-100'>
+      <div className='flex items-center pl-10 py-3 '>
         <IoMdArrowRoundBack
-          className='hover:cursor-pointer text-2xl text-indigo-500 hover:text-indigo-700 transition duration-200'
+          className='hover:cursor-pointer text-2xl text-black hover:text-indigo-700 transition duration-200'
           onClick={() => navigate('../jobs')}
         />
         <Typography
           variant='h6'
-          className='ml-3 font-semibold text-indigo-500 hover:text-indigo-700 transition duration-200 hover:cursor-pointer'
+          className='ml-3 font-semibold text-black hover:text-indigo-700 transition duration-200 hover:cursor-pointer'
           onClick={() => navigate('../jobs')}
         >
           Back to All Jobs
@@ -73,7 +73,7 @@ const Job = () => {
       <div className='lg:flex lg:flex-row lg:gap-8 mt-8 px-10'>
         {/* Main Job Card */}
         <Container>
-          <Card className='shadow-xl hover:shadow-2xl transition-shadow rounded-lg bg-white border-t-8 border-indigo-500'>
+          <Card className='transition-shadow rounded-lg bg-white border-t-8 border-indigo-500'>
             <CardContent className='flex justify-between p-8'>
               <div>
                 <img
@@ -197,31 +197,31 @@ const Job = () => {
               Apply Before
             </Typography>
             <Typography className='mb-6 text-gray-700'>
-              {job.deadLine}
+              {job?.deadLine || 'Deadline not specified'}
             </Typography>
 
             <Typography className='text-gray-500 text-sm'>Posted on</Typography>
             <Typography className='mb-6 text-gray-700'>
-              {jobDetails.postedOn}
+              {jobDetails?.postedOn || 'Posted date not available'}
             </Typography>
 
             <Typography className='text-gray-500 text-sm'>Job Type</Typography>
             <Typography className='mb-6 text-gray-700'>
-              {job.employmentType}
+              {job?.employmentType || 'Employment type not specified'}
             </Typography>
 
             <Typography className='text-gray-500 text-sm'>
               Experience Level
             </Typography>
             <Typography className='mb-6 text-gray-500 border border-gray-300 rounded-md p-2 text-xs w-fit'>
-              {job.experienceLevel}
+              {job?.experienceLevel || 'Experience level not specified'}
             </Typography>
 
             <Typography className='text-gray-500 text-sm'>Salary</Typography>
             <div className='flex items-center py-1 mb-6'>
               <HiOutlineCurrencyDollar className='text-xl text-green-500' />
               <Typography className='ml-1 text-sm text-gray-700'>
-                {job.salaryRange}
+                {job?.salaryRange || 'Salary range not specified'}
               </Typography>
             </div>
           </CardContent>
