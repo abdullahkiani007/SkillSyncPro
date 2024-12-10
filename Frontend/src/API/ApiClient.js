@@ -64,7 +64,7 @@ class ApiClient {
 
       if (response.ok) {
         console.log("storing new access token");
-        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
         return data.accessToken;
       } else {
         throw new Error(data.message);

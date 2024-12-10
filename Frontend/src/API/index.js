@@ -15,8 +15,9 @@ class Controller {
       };
     } catch (error) {
       console.error("Error signing up:", error);
+      console.log(error.response.data);
       return {
-        data: null,
+        data: error.response.data || "An error occurred",
         status: error.response ? error.response.status : 500,
       };
     }

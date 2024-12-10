@@ -6,15 +6,11 @@ class MessageParser {
   parse(message) {
     const lowerCaseMessage = message.toLowerCase();
 
-    if (lowerCaseMessage.includes("candidate skills")) {
-      this.actionProvider.handleCandidateSkills();
-    } else if (lowerCaseMessage.includes("education")) {
-      this.actionProvider.handleCandidateEducation();
-    } else if (lowerCaseMessage.includes("schedule interview")) {
-      this.actionProvider.handleScheduleInterview();
-    } else if (lowerCaseMessage.includes("applicant metrics")) {
-      this.actionProvider.handleApplicantMetrics();
+    if (lowerCaseMessage == "clear") {
+      console.log("Clearing messages");
+      this.actionProvider.handleClearMessages();
     } else {
+      console.log("Parsing message");
       this.actionProvider.handleDefaultResponse(lowerCaseMessage);
     }
   }

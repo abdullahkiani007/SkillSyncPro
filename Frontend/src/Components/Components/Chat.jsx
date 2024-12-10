@@ -13,7 +13,7 @@ const Chat = ({
   console.log("Messages", messages);
   console.log("Current conv", currentConversation);
   return (
-    <div className="flex-1 flex flex-col bg-gray-100 p-5 overflow-y-auto">
+    <div className="flex-1 max-h-[calc(100vh-80px)] flex flex-col bg-gray-100 p-5 ">
       {selectedPerson ? (
         <>
           <div className="flex items-center border-b border-gray-300 pb-3 mb-5">

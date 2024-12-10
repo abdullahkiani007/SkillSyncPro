@@ -60,6 +60,7 @@ import AdminJobsList from "./Components/Admin/Job/JobsList.jsx";
 import AdminCompaniesList from "./Components/Admin/ManageCompanies/CompaniesList.jsx";
 import AdminDashboard from "./Components/Admin/Dashboard/Dashboard.jsx";
 import AdminQuesitonBank from "./Components/Admin/QuestionBank/QuesitonBank.jsx";
+import { SkillBuilder } from "./Components/Jobseeker/skill-builder/SkillBuilder.jsx";
 
 import { MantineProvider } from "@mantine/core";
 import { NotFoundImage } from "./Components/NotFound/NotFoundImage.jsx";
@@ -190,6 +191,10 @@ const router = createBrowserRouter([
       {
         path: "cv-builder",
         element: <ResumeBuilder />,
+      },
+      {
+        path: "skill-builder",
+        element: <SkillBuilder />,
       },
     ],
   },
