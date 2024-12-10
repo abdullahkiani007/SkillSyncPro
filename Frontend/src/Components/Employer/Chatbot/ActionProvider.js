@@ -1,5 +1,3 @@
-import React from "react";
-import ReactMarkdown from "react-markdown";
 class ActionProvider {
   constructor(createChatBotMessage, setStateFunc) {
     this.createChatBotMessage = createChatBotMessage;
@@ -21,11 +19,7 @@ class ActionProvider {
       const skills = await response.json();
 
       const skillsMessage = this.createChatBotMessage(
-        React.createElement(
-          ReactMarkdown,
-          null,
-          `Here are the skills: ${skills.join(", ")}`
-        )
+        `Here are the skills: ${skills.join(", ")}`
       );
 
       this.setState((prev) => ({
@@ -58,11 +52,7 @@ class ActionProvider {
       const education = await response.json();
 
       const educationMessage = this.createChatBotMessage(
-        React.createElement(
-          ReactMarkdown,
-          null,
-          `Education details: ${education}`
-        )
+        `Education details: ${education}`
       );
 
       this.setState((prev) => ({
@@ -104,11 +94,7 @@ class ActionProvider {
       const metrics = await response.json();
 
       const metricsMessage = this.createChatBotMessage(
-        React.createElement(
-          ReactMarkdown,
-          null,
-          `Applicant metrics: ${JSON.stringify(metrics)}`
-        )
+        `Applicant metrics: ${JSON.stringify(metrics)}`
       );
 
       this.setState((prev) => ({
@@ -149,9 +135,7 @@ class ActionProvider {
       console.log("data", data);
       const responseMessage = data.response.content;
 
-      const markdownMessage = this.createChatBotMessage(
-        React.createElement(ReactMarkdown, null, responseMessage)
-      );
+      const markdownMessage = this.createChatBotMessage(responseMessage);
 
       this.setState((prev) => ({
         ...prev,

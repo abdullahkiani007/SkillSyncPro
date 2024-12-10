@@ -140,7 +140,28 @@ const EmployerServices = {
     }
   },
 
-  async getEmployer(id) {},
+  async getEmployer(id) {
+    try {
+      const employer = await Employer.findOne({ user: id }).populate("user");
+      if (employer) {
+        return {
+          status: 200,
+          employer,
+        };
+      } else {
+        return {
+          status: 404,
+          message: "Employer not found",
+        };
+      }
+    } catch (err) {
+      console.log(err);
+      return {
+        status: 500,
+        message: "Internal server error",
+      };
+    }
+  },
 
   updateEmployer: async (id, data) => {
     // id is the user id
