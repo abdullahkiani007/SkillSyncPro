@@ -1,236 +1,302 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 export const SkillBuilder = () => {
   const [activeTab, setActiveTab] = useState('articles')
-  const [currentTopicIndex, setCurrentTopicIndex] = useState(0)
-
-  const trendingTopics = [
-    {
-      text: 'MERN Stack is trending!',
-      video: 'https://www.youtube.com/embed/7CqJlxBYj-M',
-    },
-    {
-      text: 'Machine Learning is taking over!',
-      video: 'https://www.youtube.com/embed/Gv9_4yMHFhI',
-    },
-    {
-      text: 'Graphic Designing is essential for web development!',
-      video: 'https://www.youtube.com/embed/MOeU7xjw_bM',
-    },
-    {
-      text: 'LeetCode is the top choice for interview prep!',
-      video: 'https://www.youtube.com/embed/RqQ1d1qEWlE',
-    },
-  ]
 
   const articles = [
     {
-      title: 'Complete Guide to MERN Stack',
-      url: 'https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs',
-      image: 'https://miro.medium.com/max/700/1*Gkr7mr1S37uDi9AwQzvl8w.png',
+      title: 'Top Machine Learning Algorithms You Must Know',
+      url: 'https://www.analyticsvidhya.com',
     },
     {
-      title: 'MEAN Stack Tutorial for Beginners',
-      url: 'https://www.tutorialspoint.com/mean_stack/index.htm',
-      image: 'https://www.tutorialspoint.com/mean_stack/images/mean_stack.jpg',
+      title: 'Machine Learning Basics - Coursera Article',
+      url: 'https://www.coursera.org/learn/machine-learning/home/welcome',
     },
     {
-      title: 'Machine Learning Basics for Beginners',
-      url: 'https://www.coursera.org/learn/machine-learning',
-      image:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/AI_logo.svg/2048px-AI_logo.svg.png',
+      title: '15 Machine Learning Projects for Beginners',
+      url: 'https://www.kdnuggets.com/2023/11/15-machine-learning-projects-beginners.html',
     },
     {
-      title: 'LeetCode Interview Preparation',
-      url: 'https://leetcode.com/problemset/all/',
-      image:
-        'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png',
-    },
-
-    {
-      title: 'Learn Node.js with Practical Examples',
-      url: 'https://www.digitalocean.com/community/tutorials',
-      image:
-        'https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png',
-    },
-
-    {
-      title: 'Introduction to RESTful APIs',
-      url: 'https://restfulapi.net/',
-      image: 'https://restfulapi.net/wp-content/uploads/restful-api.png',
+      title: 'Introduction to Artificial Intelligence',
+      url: 'https://ai.google/education/',
     },
     {
-      title: '10 Graphic Design Trends in 2024',
-      url: 'https://www.canva.com/learn/graphic-design/',
-      image:
-        'https://blog.tubikstudio.com/wp-content/uploads/2017/04/graphic-design-process.png',
+      title: "Beginner's Guide to Web Development",
+      url: 'https://www.freecodecamp.org/news/learn-web-development-as-a-beginner/',
     },
     {
-      title: 'What is Artificial Intelligence?',
-      url: 'https://www.ibm.com/cloud/learn/what-is-artificial-intelligence',
-      image:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/AI_logo.svg/2048px-AI_logo.svg.png',
+      title: 'Understanding Blockchain Technology',
+      url: 'https://www.ibm.com/topics/what-is-blockchain',
+    },
+    {
+      title: 'Cloud Computing Basics',
+      url: 'https://azure.microsoft.com/en-us/resources/cloud-computing-dictionary/what-is-cloud-computing/',
+    },
+    {
+      title: 'Cybersecurity Essentials',
+      url: 'https://www.coursera.org/articles/what-is-cyber-security',
     },
   ]
 
   const videos = [
     {
-      title: 'MERN Stack Full Course - CodeWithHarry',
-      url: 'https://www.youtube.com/embed/7CqJlxBYj-M',
-      image: 'https://miro.medium.com/max/700/1*Gkr7mr1S37uDi9AwQzvl8w.png',
+      title: 'Machine Learning Full Course - Edureka',
+      url: 'https://www.youtube.com/embed/Gv9_4yMHFhI',
+    },
+
+    {
+      title: 'Neural Networks for Beginners - 3Blue1Brown',
+      url: 'https://www.youtube.com/embed/aircAruvnKk',
     },
     {
-      title: 'Machine Learning Full Course',
-      url: 'https://www.youtube.com/embed/Gv9_4yMHFhI',
-      image:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/AI_logo.svg/2048px-AI_logo.svg.png',
+      title: 'Introduction to Blockchain - Simplilearn',
+      url: 'https://www.youtube.com/embed/SSo_EIwHSd4',
     },
     {
       title: 'Web Development Full Course - FreeCodeCamp',
-      url: 'https://www.youtube.com/embed/Q33KBiDriJY',
-      image:
-        'https://codewithharry.com/wp-content/uploads/2021/07/web-development-1.webp',
+      url: 'https://www.youtube.com/embed/mU6anWqZJcc',
     },
+
     {
-      title: 'LeetCode Problem Solving Tips',
-      url: 'https://www.youtube.com/embed/RqQ1d1qEWlE',
-      image:
-        'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png',
-    },
-    {
-      title: 'Graphic Design for Beginners',
-      url: 'https://www.youtube.com/embed/MOeU7xjw_bM',
-      image:
-        'https://blog.tubikstudio.com/wp-content/uploads/2017/04/graphic-design-process.png',
-    },
-    {
-      title: 'Learn React.js in One Hour',
-      url: 'https://www.youtube.com/embed/Ke90Tje7VS0',
-      image: 'https://reactjs.org/logo-og.png',
-    },
-    {
-      title: 'Node.js Crash Course',
-      url: 'https://www.youtube.com/embed/fBNz5xF-Kx4',
-      image:
-        'https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png',
-    },
-    {
-      title: 'How to Ace Your Tech Interview',
-      url: 'https://www.youtube.com/embed/w1zRyi2lR3Y',
-      image: 'https://miro.medium.com/max/1400/1*pflz-QIb90KwVrhG22FCxA.png',
-    },
-    {
-      title: 'Intro to AI and Machine Learning',
-      url: 'https://www.youtube.com/embed/JMUxmLyrhSk',
-      image:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/AI_logo.svg/2048px-AI_logo.svg.png',
-    },
-    {
-      title: 'REST API Crash Course',
-      url: 'https://www.youtube.com/embed/lsMQRaeKNDk',
-      image: 'https://restfulapi.net/wp-content/uploads/restful-api.png',
+      title: 'How Artificial Intelligence is Changing the World - TEDx',
+      url: 'https://www.youtube.com/embed/2ePf9rue1Ao',
     },
   ]
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTopicIndex(
-        (prevIndex) => (prevIndex + 1) % trendingTopics.length
-      )
-    }, 10000) // Change the topic every 10 seconds
-    return () => clearInterval(interval)
-  }, [])
-
-  const currentTopic = trendingTopics[currentTopicIndex]
+  const backgroundImages = [
+    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1542831371-29b0f74f9713?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1573497491208-6b1acb260507?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1542831371-29b0f74f9713?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1573497491208-6b1acb260507?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1542831371-29b0f74f9713?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+    'https://images.unsplash.com/photo-1573497491208-6b1acb260507?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400',
+  ]
 
   return (
-    <div className='bg-gray-100 min-h-screen p-10'>
-      {/* Header */}
-      <div className='text-center mb-8'>
-        <h1 className='text-4xl font-bold text-gray-800'>Skill Builder</h1>
-        <p className='text-lg text-gray-600'>
-          Learn about the latest tech topics
+    <div
+      style={{
+        fontFamily: 'Arial, sans-serif',
+        backgroundColor: '#f9f9f9',
+        paddingBottom: '50px',
+      }}
+    >
+      {/* Header Section */}
+      <header
+        style={{
+          backgroundColor: '#002B5B',
+          color: '#fff',
+          padding: '40px 20px',
+          textAlign: 'center',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '0 0 20px 20px',
+        }}
+      >
+        <h1 style={{ fontSize: '3rem', margin: '0', fontWeight: 'bold' }}>
+          Explore Technology Resources
+        </h1>
+        <p style={{ fontSize: '1.3rem', marginTop: '15px', lineHeight: '1.6' }}>
+          Dive into curated articles and videos to boost your knowledge in
+          Machine Learning, Web Development, Blockchain, Cybersecurity, and
+          more.
         </p>
-      </div>
+      </header>
 
-      {/* Trending Section */}
-      <div className='mb-8 text-center'>
-        <div className='p-6 bg-black text-white rounded-lg shadow-lg flex flex-col items-center'>
-          <h2 className='text-xl font-bold mb-4'>Trending Topic:</h2>
-          <iframe
-            src={currentTopic.video}
-            title={currentTopic.text}
-            className='w-full h-60 rounded-lg mb-4'
-            allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
-            allowFullScreen
-          ></iframe>
-          <p className='text-2xl font-semibold'>{currentTopic.text}</p>
-        </div>
-      </div>
-
-      {/* Tabs Section */}
-      <div className='flex justify-center mb-6'>
+      {/* Tab Navigation */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '30px',
+          marginTop: '20px',
+          padding: '0 20px',
+        }}
+      >
         <button
+          style={{
+            padding: '12px 30px',
+            backgroundColor: activeTab === 'articles' ? '#3498db' : '#ecf0f1',
+            color: activeTab === 'articles' ? '#fff' : '#2c3e50',
+            border: 'none',
+            borderRadius: '20px',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            cursor: 'pointer',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+            transition: 'transform 0.3s ease, background-color 0.3s ease',
+          }}
           onClick={() => setActiveTab('articles')}
-          className={`px-6 py-2 text-lg font-semibold ${
-            activeTab === 'articles'
-              ? 'bg-black text-white'
-              : 'bg-gray-200 text-gray-700'
-          } rounded-l-lg transition duration-300`}
         >
           Articles
         </button>
         <button
+          style={{
+            padding: '12px 30px',
+            backgroundColor: activeTab === 'videos' ? '#3498db' : '#ecf0f1',
+            color: activeTab === 'videos' ? '#fff' : '#2c3e50',
+            border: 'none',
+            borderRadius: '20px',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            cursor: 'pointer',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+            transition: 'transform 0.3s ease, background-color 0.3s ease',
+          }}
           onClick={() => setActiveTab('videos')}
-          className={`px-6 py-2 text-lg font-semibold ${
-            activeTab === 'videos'
-              ? 'bg-black text-white'
-              : 'bg-gray-200 text-gray-700'
-          } rounded-r-lg transition duration-300`}
         >
           Videos
         </button>
       </div>
 
       {/* Content Section */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-        {activeTab === 'articles'
-          ? articles.map((article, index) => (
-              <div
-                key={index}
-                className='bg-white p-6 rounded-lg shadow-lg transition transform hover:scale-105 duration-300'
-              >
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className='w-full h-40 object-cover rounded-lg mb-4'
-                />
-                <h3 className='text-xl font-semibold mb-2'>{article.title}</h3>
-                <a
-                  href={article.url}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-blue-600 hover:underline'
+      <div style={{ padding: '40px', maxWidth: '1200px', margin: 'auto' }}>
+        {activeTab === 'articles' && (
+          <>
+            <h2
+              style={{
+                color: '#34495e',
+                textAlign: 'center',
+                marginBottom: '20px',
+                fontSize: '2rem',
+                fontWeight: 'bold',
+              }}
+            >
+              Featured Articles
+            </h2>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+                gap: '40px',
+                marginTop: '20px',
+              }}
+            >
+              {articles.map((article, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundImage: `url(${backgroundImages[index]})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    border: '1px solid #ddd',
+                    borderRadius: '12px',
+                    padding: '30px',
+                    boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)',
+                    transition: 'transform 0.3s ease',
+                    overflow: 'hidden',
+                    color: '#fff',
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = 'scale(1.05)')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = 'scale(1)')
+                  }
                 >
-                  Read more
-                </a>
-              </div>
-            ))
-          : videos.map((video, index) => (
-              <div
-                key={index}
-                className='bg-white p-6 rounded-lg shadow-lg transition transform hover:scale-105 duration-300'
-              >
-                <h3 className='text-xl font-semibold mb-2'>{video.title}</h3>
-                <iframe
-                  src={video.url}
-                  title={video.title}
-                  className='w-full h-60 rounded-lg'
-                  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
-                  allowFullScreen
-                ></iframe>
-              </div>
-            ))}
+                  <h3
+                    style={{
+                      marginBottom: '10px',
+                      fontSize: '1.5rem',
+                      fontWeight: 'bold',
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      padding: '10px 15px',
+                      borderRadius: '5px',
+                    }}
+                  >
+                    {article.title}
+                  </h3>
+                  <a
+                    href={article.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    style={{
+                      color: '#3498db',
+                      textDecoration: 'none',
+                      fontWeight: 'bold',
+                      display: 'block',
+                      marginTop: '20px',
+                      fontSize: '1.2rem',
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      padding: '10px 15px',
+                      borderRadius: '5px',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Read More ↗
+                  </a>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {activeTab === 'videos' && (
+          <>
+            <h2
+              style={{
+                color: '#34495e',
+                textAlign: 'center',
+                marginBottom: '20px',
+                fontSize: '2rem',
+                fontWeight: 'bold',
+              }}
+            >
+              Featured Videos
+            </h2>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+                gap: '40px',
+                marginTop: '20px',
+              }}
+            >
+              {videos.map((video, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor: '#fff',
+                    border: '1px solid #ddd',
+                    borderRadius: '12px',
+                    padding: '40px',
+                    boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)',
+                    transition: 'transform 0.3s ease',
+                    overflow: 'hidden',
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = 'scale(1.05)')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = 'scale(1)')
+                  }
+                >
+                  <h3
+                    style={{
+                      color: '#2c3e50',
+                      marginBottom: '20px',
+                      fontSize: '1.5rem',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {video.title}
+                  </h3>
+                  <iframe
+                    width='100%'
+                    height='250'
+                    src={video.url}
+                    title={video.title}
+                    frameBorder='0'
+                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                    allowFullScreen
+                    style={{ borderRadius: '8px' }}
+                  ></iframe>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
