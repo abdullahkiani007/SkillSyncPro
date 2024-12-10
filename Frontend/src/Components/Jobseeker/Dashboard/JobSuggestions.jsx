@@ -1,78 +1,99 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-  FaLaptopCode,
-  FaDatabase,
-  FaDev,
   FaCloud,
   FaCode,
+  FaDatabase,
+  FaDev,
+  FaLaptopCode,
 } from 'react-icons/fa'
-
-const jobs = [
-  {
-    title: 'Frontend Developer at Amazon',
-    icon: <FaLaptopCode className='text-teal-600 text-3xl' />,
-    description: 'Build user interfaces and enhance user experience.',
-    location: 'Seattle, WA',
-    link: 'https://www.amazon.jobs/en/jobs/123456/frontend-developer',
-  },
-  {
-    title: 'Data Analyst at Microsoft',
-    icon: <FaDatabase className='text-orange-600 text-3xl' />,
-    description: 'Analyze data to drive business solutions.',
-    location: 'Redmond, WA',
-    link: 'https://careers.microsoft.com/us/en/job/789012/data-analyst',
-  },
-  {
-    title: 'DevOps Engineer at IBM',
-    icon: <FaDev className='text-purple-600 text-3xl' />,
-    description: 'Implement CI/CD pipelines and manage infrastructure.',
-    location: 'Armonk, NY',
-    link: 'https://www.ibm.com/employment/devops-engineer',
-  },
-  {
-    title: 'Cloud Engineer at Google',
-    icon: <FaCloud className='text-blue-500 text-3xl' />,
-    description: 'Design and manage cloud solutions.',
-    location: 'Mountain View, CA',
-    link: 'https://careers.google.com/jobs/results/456789/cloud-engineer/',
-  },
-  {
-    title: 'Backend Developer at Facebook',
-    icon: <FaCode className='text-pink-500 text-3xl' />,
-    description: 'Develop and maintain server-side applications.',
-    location: 'Menlo Park, CA',
-    link: 'https://www.facebook.com/careers/jobs/12345678/backend-developer',
-  },
-]
+import { useSelector } from 'react-redux'
+import JobSeekerController from '../../../API/jobseeker'
 
 const JobSuggestions = () => {
+  const [jobs, setJobs] = useState([])
+  const [recommendedJobs, setRecommendedJobs] = useState([])
+  const [showRecommended, setShowRecommended] = useState(false) // State for toggle
+  const [loading, setLoading] = useState(true) // Loading state
+  const [error, setError] = useState(null) // Error state
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoplay, setIsAutoplay] = useState(true)
   const [interactionTimeout, setInteractionTimeout] = useState(null)
   const [selectedJob, setSelectedJob] = useState(null)
 
-  const nextJob = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % Math.ceil(jobs.length / 2))
-  }
+  const userId = useSelector((store) => store.user)._id
 
-  const prevJob = () => {
-    setCurrentIndex(
-      (prevIndex) =>
-        (prevIndex - 1 + Math.ceil(jobs.length / 2)) %
-        Math.ceil(jobs.length / 2)
-    )
-  }
+  // Fetch jobs from the backend API
+  useEffect(() => {
+    const fetchJobs = async () => {
+      setLoading(true)
+      try {
+        const { data } = await JobSeekerController.getJobsById(userId)
 
+        let jobs = data.jobs.filter((job) => !job.archived && !job.applied)
+
+        const formData = new FormData()
+        formData.append('user_id', userId)
+
+        const recommendedJobsResponse =
+          await JobSeekerController.getRecommendedJbs(formData)
+
+        // Check if recommended_jobs exists and is an array before calling sort
+        if (
+          recommendedJobsResponse?.recommended_jobs &&
+          Array.isArray(recommendedJobsResponse.recommended_jobs)
+        ) {
+          // Sort recommended jobs on the basis of similarity score
+          recommendedJobsResponse.recommended_jobs.sort(
+            (a, b) => b.similarity_score - a.similarity_score
+          )
+
+          const recommendedJobIds =
+            recommendedJobsResponse.recommended_jobs.map((job) => job.job_id)
+
+          // Filter jobs based on recommended IDs and add similarity score to each job
+          const filteredRecommendedJobs = jobs
+            .filter((job) => recommendedJobIds.includes(job._id))
+            .map((job) => {
+              const recommendedJob =
+                recommendedJobsResponse.recommended_jobs.find(
+                  (rj) => rj.job_id === job._id
+                )
+              return {
+                ...job,
+                similarity_score: recommendedJob.similarity_score,
+              }
+            })
+
+          setRecommendedJobs(filteredRecommendedJobs)
+        } else {
+          setRecommendedJobs([]) // Fallback to empty array if recommended_jobs is not available
+        }
+
+        setJobs(jobs)
+        localStorage.setItem('jobs', JSON.stringify(jobs))
+      } catch (error) {
+        setError(error.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchJobs()
+  }, [userId])
+
+  // Handle autoplay for job suggestions
   useEffect(() => {
     let interval
     if (isAutoplay) {
       interval = setInterval(() => {
-        nextJob()
+        setCurrentIndex(
+          (prevIndex) => (prevIndex + 1) % Math.ceil(jobs.length / 2)
+        )
       }, 3000) // Change slide every 3 seconds
     }
 
     return () => clearInterval(interval) // Cleanup on unmount
-  }, [isAutoplay, currentIndex])
+  }, [isAutoplay, currentIndex, jobs.length])
 
   const handleButtonClick = () => {
     setIsAutoplay(false) // Pause autoplay when navigating
@@ -88,6 +109,10 @@ const JobSuggestions = () => {
     setSelectedJob(job) // Set selected job details
   }
 
+  // Conditional rendering based on loading or error states
+  if (loading) return <div>Loading jobs...</div>
+  if (error) return <div>{error}</div>
+
   return (
     <div className='bg-gradient-to-br from-teal-400 to-blue-500 p-6 rounded-xl mb-8 shadow-lg'>
       <h2 className='text-3xl font-bold mb-6 text-white text-center'>
@@ -98,7 +123,7 @@ const JobSuggestions = () => {
           className='flex transition-transform duration-500'
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {jobs.map((job, index) => (
+          {(showRecommended ? recommendedJobs : jobs).map((job, index) => (
             <li
               key={index}
               className='flex items-center bg-white p-4 rounded-lg shadow-lg mx-2 min-w-[300px] 
@@ -107,7 +132,9 @@ const JobSuggestions = () => {
               onClick={() => handleJobClick(job)} // Attach click handler
             >
               <div className='flex items-center'>
-                {job.icon}
+                {job.icon || (
+                  <FaLaptopCode className='text-teal-600 text-3xl' />
+                )}
                 <span className='text-lg font-semibold text-gray-800 ml-3'>
                   {job.title}
                 </span>
@@ -119,7 +146,11 @@ const JobSuggestions = () => {
       <div className='flex justify-between mt-4'>
         <button
           onClick={() => {
-            prevJob()
+            setCurrentIndex(
+              (prevIndex) =>
+                (prevIndex - 1 + Math.ceil(jobs.length / 2)) %
+                Math.ceil(jobs.length / 2)
+            )
             handleButtonClick()
           }}
           className='bg-white p-2 rounded-full shadow-md hover:bg-gray-200'
@@ -128,7 +159,9 @@ const JobSuggestions = () => {
         </button>
         <button
           onClick={() => {
-            nextJob()
+            setCurrentIndex(
+              (prevIndex) => (prevIndex + 1) % Math.ceil(jobs.length / 2)
+            )
             handleButtonClick()
           }}
           className='bg-white p-2 rounded-full shadow-md hover:bg-gray-200'
