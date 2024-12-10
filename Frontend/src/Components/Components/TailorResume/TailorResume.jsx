@@ -165,11 +165,11 @@ const TailorResume = () => {
         </form>
 
         {tailoredResume && (
-          <div className='mt-12 p-6 rounded-lg bg-opacity-50 bg-gray-900 shadow-inner'>
-            <h2 className='text-2xl font-semibold text-gray-200 mb-4'>
+          <div className='mt-12 p-6 rounded-lg bg-opacity-50  shadow-lg shadow-black'>
+            <h2 className='text-4xl font-semibold text-black mb-4 text-center'>
               Tailored Resume
             </h2>
-            <div className='prose text-gray-300'>
+            <div className='prose text-black'>
               <ReactMarkdown>{tailoredResume}</ReactMarkdown>
             </div>
           </div>
