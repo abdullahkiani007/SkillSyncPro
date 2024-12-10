@@ -144,16 +144,22 @@ function Jobs() {
               />
             </div>
             <div className='text-lg font-bold'>
-              Totol Jobs:{' '}
+              Total Jobs:{' '}
               {(showRecommended
                 ? recommendedJobs.length
                 : filteredJobs.length) || 0}
             </div>
           </div>
           <div className='flex flex-wrap justify-around'>
-            {(showRecommended ? recommendedJobs : filteredJobs).map((job) => (
-              <JobCard key={job._id} props={job} />
-            ))}
+            {(showRecommended ? recommendedJobs : filteredJobs).length === 0 ? (
+              <div className='text-lg font-semibold text-red-500'>
+                No jobs available at the moment.
+              </div>
+            ) : (
+              (showRecommended ? recommendedJobs : filteredJobs).map((job) => (
+                <JobCard key={job._id} props={job} />
+              ))
+            )}
           </div>
         </div>
       </div>
