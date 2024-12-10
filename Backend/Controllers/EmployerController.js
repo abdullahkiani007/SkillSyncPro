@@ -22,10 +22,10 @@ const EmployerController = {
   },
   async getEmployer(req, res, next) {
     console.log("Get /Emp received");
-    const id = req.user;
+    const { _id } = req.user;
 
-    const response = await EmployerServices.getEmployer(id);
-    console.log(response);
+    const response = await EmployerServices.getEmployer(_id);
+    console.log("employer response", response, _id);
 
     if (response.status === 200) {
       return res.status(200).json({
@@ -39,10 +39,10 @@ const EmployerController = {
   },
 
   async updateEmployer(req, res, next) {
-    const id = req.user;
+    const { _id } = req.user;
     const data = req.body;
 
-    const response = await EmployerServices.updateEmployer(id, data);
+    const response = await EmployerServices.updateEmployer(_id, data);
     if (response.status === 200) {
       return res.status(200).json({
         data: response.employer,
@@ -145,8 +145,6 @@ const EmployerController = {
     const id = req.query.id;
     const data = req.body;
 
-    console.log("request body", req.body);
-
     const response = await EmployerServices.editAssessment(id, data);
     if (response.status === 500) {
       return res.status(500).json({
@@ -238,7 +236,6 @@ const EmployerController = {
         message: response.message,
       });
     }
-    console.log(response);
     res.status(200).json({
       data: response.groupedApplications,
     });
@@ -265,7 +262,6 @@ const EmployerController = {
 
   async getCandidatesByJobId(req, res, next) {
     console.log("GET emp/candidates/job received");
-    console.log(req.query);
 
     const { jobId } = req.query;
     const { _id } = req.user;
@@ -387,7 +383,6 @@ const EmployerController = {
         req.body.feedback,
         req.body.rating
       );
-      console.log("Feedback", feedback);
       res.status(201).json(feedback);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -399,7 +394,6 @@ const EmployerController = {
     const userId = req.user._id;
     try {
       const feedback = await EmployerServices.getJobFeedback(id, userId);
-      console.log("Feedback", feedback);
 
       res.status(200).json(feedback);
     } catch (error) {
