@@ -129,17 +129,6 @@ const Login = ({ role }) => {
           <h3 className="text-lg md:text-xl font-semibold text-primary pt-2">
             Sign In!
           </h3>
-          <div className="flex space-x-2 m-4 items-center justify-center">
-            <div className="socialIcon">
-              <Facebook />
-            </div>
-            <div className="socialIcon">
-              <GitHub />
-            </div>
-            <div className="socialIcon">
-              <Google />
-            </div>
-          </div>
           <div className="flex flex-col items-center justify-center">
             <input
               name="email"

@@ -110,6 +110,21 @@ class ActionProvider {
     }
   };
 
+  handleClearMessages = () => {
+    this.setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, "Clearing messages..."],
+    }));
+
+    setTimeout(() => {
+      this.setState((prev) => ({
+        ...prev,
+        messages: [],
+      }));
+      localStorage.removeItem("chat_messages");
+    }, 3000);
+  };
+
   handleDefaultResponse = async (message) => {
     this.setState((prev) => ({
       ...prev,
