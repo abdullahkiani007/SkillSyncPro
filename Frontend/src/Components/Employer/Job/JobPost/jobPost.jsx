@@ -4,6 +4,11 @@ import {
   Button,
   Card,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   Input,
   InputLabel,
@@ -225,9 +230,9 @@ const JobPost = () => {
     switch (step) {
       case 0:
         return (
-          <Card className='my-20 mx-10 p-10 bg-gradient-to-r from-primary to-secondary-dark  rounded-full'>
+          <Card className='mb-5 mx-10 p-10 bg-white  rounded-full'>
             <div>
-              <h1 className='font-bold text-lg text-white'>Title:</h1>
+              <h1 className='font-bold text-lg text-black'>Title:</h1>
               <div className='pl-3 pt-2'>
                 <TextField
                   className='w-full'
@@ -238,21 +243,21 @@ const JobPost = () => {
                   value={formValues.title}
                   onChange={handleInputChange}
                   InputProps={{
-                    style: { color: 'white' }, // Text color
+                    style: { color: 'black' }, // Text color
                   }}
                   InputLabelProps={{
-                    style: { color: 'white' }, // Label color
+                    style: { color: 'black' }, // Label color
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'white', // Border color
+                        borderColor: 'black', // Border color
                       },
                       '&:hover fieldset': {
-                        borderColor: 'white', // Border color on hover
+                        borderColor: 'black', // Border color on hover
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: 'white', // Border color when focused
+                        borderColor: 'black', // Border color when focused
                       },
                     },
                   }}
@@ -260,7 +265,7 @@ const JobPost = () => {
               </div>
             </div>
             <div className='mt-4'>
-              <h1 className='font-bold text-lg text-white'>Location:</h1>
+              <h1 className='font-bold text-lg text-black'>Location:</h1>
               <div className='pl-3 pt-2'>
                 <TextField
                   className='w-full'
@@ -271,21 +276,21 @@ const JobPost = () => {
                   value={formValues.location}
                   onChange={handleInputChange}
                   InputProps={{
-                    style: { color: 'white' }, // Text color
+                    style: { color: 'black' }, // Text color
                   }}
                   InputLabelProps={{
-                    style: { color: 'white' }, // Label color
+                    style: { color: 'black' }, // Label color
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: 'white', // Border color
+                        borderColor: 'black', // Border color
                       },
                       '&:hover fieldset': {
-                        borderColor: 'white', // Border color on hover
+                        borderColor: 'black', // Border color on hover
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: 'white', // Border color when focused
+                        borderColor: 'black', // Border color when focused
                       },
                     },
                   }}
@@ -297,85 +302,58 @@ const JobPost = () => {
       case 1:
         return (
           <Card
-            className='my-20 mx-10 p-10 h-96  bg-gradient-to-r from-primary to-secondary-dark '
+            className='mb-5 mx-10 p-10 h-96 bg-white'
             sx={{ overflowY: 'scroll' }}
           >
             <div>
-              <h1 className='font-bold text-lg text-white'>Description:</h1>
-              <div className='pl-3 pt-2'>
-                <TextField
-                  className='w-full'
-                  id='description'
-                  name='description'
-                  label='Description'
-                  variant='outlined'
-                  multiline
-                  value={formValues.description}
-                  onChange={handleInputChange}
-                  InputProps={{
-                    style: { color: 'white' }, // Text color
-                  }}
-                  InputLabelProps={{
-                    style: { color: 'white' }, // Label color
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: 'white', // Border color
-                      },
-                      '&:hover fieldset': {
-                        borderColor: 'white', // Border color on hover
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'white', // Border color when focused
-                      },
-                    },
-                  }}
-                />
-              </div>
+              <h1 className='font-bold text-lg text-black'>Description:</h1>
+              <TextField
+                className='w-full mt-2 pl-3'
+                id='description'
+                name='description'
+                label='Description'
+                variant='outlined'
+                multiline
+                value={formValues.description}
+                onChange={handleInputChange}
+                InputProps={{
+                  style: { color: 'black' },
+                }}
+                InputLabelProps={{
+                  style: { color: 'black' },
+                }}
+              />
             </div>
+
             <div className='mt-4'>
-              <h1 className='font-bold text-lg text-white'>Requirements:</h1>
-              <div className='pl-3 pt-2'>
-                <TextField
-                  className='w-full'
-                  id='requirements'
-                  name='requirements'
-                  label='Requirements'
-                  variant='outlined'
-                  multiline
-                  value={formValues.requirements}
-                  onChange={handleInputChange}
-                  InputProps={{
-                    style: { color: 'white' }, // Text color
-                  }}
-                  InputLabelProps={{
-                    style: { color: 'white' }, // Label color
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: 'white', // Border color
-                      },
-                      '&:hover fieldset': {
-                        borderColor: 'white', // Border color on hover
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'white', // Border color when focused
-                      },
-                    },
-                  }}
-                />
-              </div>
+              <h1 className='font-bold text-lg text-black'>Requirements:</h1>
+              <TextField
+                className='w-full mt-2 pl-3'
+                id='requirements'
+                name='requirements'
+                label='Requirements'
+                variant='outlined'
+                multiline
+                rows={6} // Set this to control the initial height
+                maxRows={10} // Set this to control the maximum height
+                value={formValues.requirements}
+                onChange={handleInputChange}
+                InputProps={{
+                  style: { color: 'black' },
+                }}
+                InputLabelProps={{
+                  style: { color: 'black' },
+                }}
+              />
             </div>
           </Card>
         )
       case 2:
         return (
-          <Card className='my-20 mx-10 p-10 bg-gradient-to-r from-primary to-secondary-dark'>
+          <Card className='mb-5 mx-10 p-10 bg-white'>
             {/* Salary Range Section */}
             <div className='mt-4'>
-              <h1 className='font-bold text-lg text-white'>Salary Range:</h1>
+              <h1 className='font-bold text-lg text-black'>Salary Range:</h1>
               <div className='pl-3 pt-2'>
                 <Slider
                   value={formValues.salaryRange}
@@ -392,16 +370,16 @@ const JobPost = () => {
                     { value: 100000, label: '100K' },
                   ]}
                   sx={{
-                    color: 'white', // Slider track and thumb color
+                    color: 'black', // Slider track and thumb color
                     '& .MuiSlider-markLabel': {
-                      color: 'white', // Mark labels color
+                      color: 'black', // Mark labels color
                     },
                     '& .MuiSlider-valueLabel': {
-                      color: 'white', // The value label box background
+                      color: 'black', // The value label box background
                       backgroundColor: 'transparent', // Remove default background
                     },
                     '& .MuiSlider-valueLabelLabel': {
-                      color: 'white', // Text inside the value label
+                      color: 'black', // Text inside the value label
                     },
                   }}
                 />
@@ -410,12 +388,12 @@ const JobPost = () => {
 
             {/* Employment Type Section */}
             <div className='mt-4'>
-              <h1 className='font-bold text-lg text-white'>Employment Type:</h1>
+              <h1 className='font-bold text-lg text-black'>Employment Type:</h1>
               <div className='pl-3 pt-2'>
                 <FormControl variant='outlined' className='w-full'>
                   <InputLabel
                     id='employmentType-label'
-                    sx={{ color: 'white' }} // Label color
+                    sx={{ color: 'black' }} // Label color
                   >
                     Employment Type
                   </InputLabel>
@@ -427,19 +405,19 @@ const JobPost = () => {
                     value={formValues.employmentType}
                     onChange={handleInputChange}
                     sx={{
-                      color: 'white', // Text color
+                      color: 'black', // Text color
                       '.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color
+                        borderColor: 'black', // Border color
                       },
                       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color when focused
+                        borderColor: 'black', // Border color when focused
                       },
                       '.MuiSvgIcon-root': {
-                        color: 'white', // Dropdown arrow color
+                        color: 'black', // Dropdown arrow color
                       },
                       '&.Mui-focused': {
-                        color: 'white',
-                        borderColor: 'white', // Label color when focused
+                        color: 'black',
+                        borderColor: 'black', // Label color when focused
                       },
 
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
@@ -459,14 +437,14 @@ const JobPost = () => {
 
             {/* Experience Level Section */}
             <div className='mt-4'>
-              <h1 className='font-bold text-lg text-white'>
+              <h1 className='font-bold text-lg text-black'>
                 Experience Level:
               </h1>
               <div className='pl-3 pt-2'>
                 <FormControl fullWidth>
                   <InputLabel
                     id='experienceLevel-label'
-                    sx={{ color: 'white' }} // Label color
+                    sx={{ color: 'black' }} // Label color
                   >
                     Experience Level
                   </InputLabel>
@@ -478,20 +456,20 @@ const JobPost = () => {
                     onChange={handleInputChange}
                     label='Experience Level'
                     sx={{
-                      color: 'white', // Text color
+                      color: 'black', // Text color
                       '.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color
+                        borderColor: 'black', // Border color
                       },
                       '&.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white',
-                        color: 'white', // Border color when focused
+                        borderColor: 'black',
+                        color: 'black', // Border color when focused
                       },
                       '.MuiSvgIcon-root': {
-                        color: 'white', // Dropdown arrow color
+                        color: 'black', // Dropdown arrow color
                       },
                       '&.Mui-focused': {
-                        color: 'white',
-                        borderColor: 'white', // Label color when focused
+                        color: 'black',
+                        borderColor: 'black', // Label color when focused
                       },
 
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
@@ -515,17 +493,17 @@ const JobPost = () => {
 
             {/* Skills Section */}
             <div className='mt-4'>
-              <h1 className='font-bold text-lg text-white'>Skills:</h1>
+              <h1 className='font-bold text-lg text-black'>Skills:</h1>
               <div className='pl-3 pt-2'>
                 <FormControl className='w-full'>
                   <InputLabel
                     id='skills-label'
                     sx={{
-                      color: 'white',
+                      color: 'black',
                       '&.Mui-focused': {
-                        color: 'white', // Label color when focused
+                        color: 'black', // Label color when focused
                       },
-                    }} // Label color to white
+                    }} // Label color to black
                   >
                     Skills
                   </InputLabel>
@@ -544,8 +522,8 @@ const JobPost = () => {
                             key={value}
                             label={value}
                             sx={{
-                              backgroundColor: 'white', // Chip background color
-                              color: 'black', // Chip text color
+                              backgroundColor: '#333', // Chip background color
+                              color: 'white', // Chip text color
                             }}
                           />
                         ))}
@@ -554,20 +532,21 @@ const JobPost = () => {
                     sx={{
                       color: 'white', // Text color
                       '.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255, 255, 255, 0.5)', // Softer white border color
+                        borderColor: 'rgba(255, 255, 255, 0.5)', // Softer black border color
                       },
                       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color when focused
+                        borderColor: 'black',
+                        // Border color when focused
                       },
                       '.MuiSvgIcon-root': {
-                        color: 'white', // Dropdown arrow color
+                        color: 'black', // Dropdown arrow color
                       },
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
                       '& .MuiChip-root': {
-                        borderColor: 'white', // Border for the selected chips
+                        borderColor: 'black', // Border for the selected chips
                       },
                       '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Change the border color on hover
+                        borderColor: 'black', // Change the border color on hover
                       },
                     }}
                   >
@@ -585,9 +564,9 @@ const JobPost = () => {
       // skill assessment
       case 3:
         return (
-          <Card className='my-20 mx-10 p-10 bg-gradient-to-r from-primary to-secondary-dark'>
+          <Card className='mb-5 mx-10 p-10 bg-white'>
             <div>
-              <h1 className='font-bold text-lg text-white'>
+              <h1 className='font-bold text-lg text-black'>
                 Select Skill Assessment
               </h1>
               <div className='mt-4'>
@@ -595,9 +574,9 @@ const JobPost = () => {
                   <InputLabel
                     id='skillAssessment-label'
                     sx={{
-                      color: 'white', // Label color
+                      color: 'black', // Label color
                       '&.Mui-focused': {
-                        color: 'white', // Label color when focused
+                        color: 'black', // Label color when focused
                       },
                     }}
                   >
@@ -611,22 +590,22 @@ const JobPost = () => {
                     value={formValues.skillAssessment}
                     onChange={handleSkillAssessmentChange}
                     sx={{
-                      color: 'white', // Text color for selected items
+                      color: 'black', // Text color for selected items
                       '.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255, 255, 255, 0.5)', // Softer white border color
+                        borderColor: 'black', // Softer black border color
                       },
                       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color when focused
+                        borderColor: 'black', // Border color when focused
                       },
                       '.MuiSvgIcon-root': {
-                        color: 'white', // Dropdown arrow color
+                        color: 'black', // Dropdown arrow color
                       },
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
                       '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color on hover
+                        borderColor: 'black', // Border color on hover
                       },
                       '&.Mui-focused': {
-                        color: 'white', // Label color when focused
+                        color: 'black', // Label color when focused
                       },
                     }}
                   >
@@ -639,8 +618,9 @@ const JobPost = () => {
                 </FormControl>
               </div>
             </div>
-            <div>
-              <h1 className='font-bold text-lg text-white'>
+
+            <div className='mt-6'>
+              <h1 className='font-bold text-lg text-black'>
                 Generate Random Problem
               </h1>
               <div className='mt-4'>
@@ -648,9 +628,9 @@ const JobPost = () => {
                   <InputLabel
                     id='generateRandomProblem-label'
                     sx={{
-                      color: 'white', // Label color
+                      color: 'black', // Label color
                       '&.Mui-focused': {
-                        color: 'white', // Label color when focused
+                        color: 'black', // Label color when focused
                       },
                     }}
                   >
@@ -664,22 +644,22 @@ const JobPost = () => {
                     value={formValues.generateRandomProblem}
                     onChange={handleInputChange}
                     sx={{
-                      color: 'white', // Text color for selected items
+                      color: 'black',
                       '.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255, 255, 255, 0.5)', // Softer white border color
+                        borderColor: 'black', // Softer black border color
                       },
                       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color when focused
+                        borderColor: 'black', // Border color when focused
                       },
                       '.MuiSvgIcon-root': {
-                        color: 'white', // Dropdown arrow color
+                        color: 'black', // Dropdown arrow color
                       },
                       backgroundColor: 'rgba(255, 255, 255, 0.1)', // Background of dropdown
                       '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'white', // Border color on hover
+                        borderColor: 'black', // Border color on hover
                       },
                       '&.Mui-focused': {
-                        color: 'white', // Label color when focused
+                        color: 'black', // Label color when focused
                       },
                     }}
                   >
@@ -691,13 +671,14 @@ const JobPost = () => {
             </div>
           </Card>
         )
+
       default:
         return null
     }
   }
 
   return (
-    <div className='w-full min-h-screen mx-auto flex justify-center items-center bg-gradient-to-r from-secondary-dark to-secondary-dark py-10 mb-10'>
+    <div className='w-full min-h-screen mx-auto flex justify-center items-center bg-slate-400 py-10 mb-10'>
       <Box
         sx={{
           width: '70%',
@@ -708,8 +689,9 @@ const JobPost = () => {
           activeStep={activeStep}
           sx={{
             '.MuiStep-root': {
+              marginBottom: '20px',
               '& .MuiStepLabel-label': {
-                color: 'white', // Text color of the step labels
+                color: 'black', // Text color of the step labels
               },
               '& .MuiStepIcon-root': {
                 color: 'rgba(255, 255, 255, 0.5)', // Default color of step icons
@@ -717,7 +699,7 @@ const JobPost = () => {
                   color: 'black', // Active step icon color
                 },
                 '&.Mui-completed': {
-                  color: 'white', // Completed step icon color
+                  color: 'black', // Completed step icon color
                 },
               },
             },
@@ -730,13 +712,13 @@ const JobPost = () => {
                 onClick={handleStep(index)}
                 sx={{
                   '& .MuiStepLabel-label': {
-                    color: 'white', // Step label text color
+                    color: 'black', // Step label text color
                   },
                   '& .Mui-active': {
-                    color: 'white', // Active step label color
+                    color: 'black', // Active step label color
                   },
                   '& .Mui-completed': {
-                    color: 'white', // Completed step label color
+                    color: 'black', // Completed step label color
                   },
                 }}
               >
@@ -746,19 +728,16 @@ const JobPost = () => {
           ))}
         </Stepper>
 
-        <div
-          className='
-        '
-        >
+        <div>
           {allStepsCompleted() ? (
             <div
               className='flex flex-col 
-        items-center mt-10 bg-secondary-dark
+        items-center mb-5 bg-white
         rounded-xl'
             >
               <Typography
                 variant='h5'
-                sx={{ mt: 2, mb: 1, fontWeight: 'bold', color: 'white' }}
+                sx={{ mt: 2, mb: 1, fontWeight: 'bold', color: 'black' }}
               >
                 {!submited
                   ? "All steps completed - you're finished"
@@ -770,16 +749,16 @@ const JobPost = () => {
                 variant='contained'
                 onClick={handleSubmit}
                 disabled={submited}
-                className='bg-primary text-white py-2 px-5 rounded-md w-[150px]'
+                className=' text-white bg-black py-2 px-5 rounded-md w-[150px]'
               >
                 <Send className='mr-2' /> {/* Icon added before text */}
                 Submit
               </button>
 
               <button
-                className='py-2 px-5 rounded-md my-6 w-[100px] flex flex-nowrap gap-1
-                 text-white
-                bg-black'
+                className='py-2 px-5  text-white bg-black rounded-md my-6 w-[100px] flex flex-nowrap gap-1
+                
+                '
                 onClick={handleReset}
               >
                 <ArrowBack /> {/* Icon added before text */}
@@ -789,10 +768,10 @@ const JobPost = () => {
           ) : (
             <>
               {renderStepContent(activeStep)}
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                 {/* Back Button */}
                 <button
-                  className='py-2 px-5 rounded-md w-[100px] flex items-center gap-2 text-white bg-black'
+                  className='py-2 px-5 rounded-md w-[100px] flex items-center gap-2 text-black bg-white'
                   onClick={handleBack}
                   disabled={activeStep === 0} // Disable button when activeStep is 0
                 >
@@ -805,7 +784,7 @@ const JobPost = () => {
 
                 {/* Next Button */}
                 <button
-                  className='px-5 mx-3 rounded-md w-[120px] flex items-center gap-2 bg-primary text-white'
+                  className='px-5 mx-3 rounded-md w-[120px] flex items-center gap-2 bg-white text-black'
                   onClick={handleNext}
                 >
                   Next
@@ -816,7 +795,7 @@ const JobPost = () => {
                 {/* Complete/Finish Button */}
                 {activeStep !== steps.length && (
                   <button
-                    className='px-5 rounded-md w-[190px] flex items-center gap-2 bg-green-800 text-white'
+                    className='px-5 rounded-md w-[190px] flex items-center gap-2 bg-white  text-black'
                     onClick={handleComplete}
                   >
                     <CheckCircle className='mr-1' />{' '}
@@ -832,17 +811,75 @@ const JobPost = () => {
         </div>
       </Box>
       {message && (
-        <Alert
-          severity={error ? 'error' : 'success'}
-          className=' 
-        fixed
-        bottom-0
-        right-0
-        bg-primary
-        mt-10 '
+        <Dialog
+          open={true} // Keeps the modal open when message exists
+          onClose={() => setMessage('')} // Close modal when user clicks outside or on close button
+          aria-labelledby='modal-title'
+          aria-describedby='modal-description'
+          sx={{
+            '& .MuiDialog-paper': {
+              borderRadius: '10px', // Rounded corners for the modal
+              width: '400px', // Fixed width of the modal
+              padding: '20px', // Padding inside the modal
+              backgroundColor: '#fff', // White background
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // Subtle shadow for the modal
+            },
+          }}
         >
-          {message}
-        </Alert>
+          <DialogTitle
+            id='modal-title'
+            className='bg-primary text-white'
+            sx={{
+              paddingBottom: '10px',
+              fontWeight: 'bold',
+              fontSize: '18px',
+              textAlign: 'center', // Centering the title
+              borderBottom: '2px solid #ddd', // Adding a line under the title
+            }}
+          >
+            {messageType === 'error'
+              ? 'Error'
+              : messageType === 'success'
+              ? 'Success'
+              : messageType === 'info'
+              ? 'Information'
+              : messageType === 'warning'
+              ? 'Warning'
+              : 'Notification'}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText
+              id='modal-description'
+              sx={{
+                fontSize: '16px',
+                color: '#333', // Text color
+                textAlign: 'center', // Centered text
+              }}
+            >
+              {message}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions
+            sx={{
+              justifyContent: 'center', // Centering the button
+              padding: '10px 20px',
+            }}
+          >
+            <Button
+              onClick={() => setMessage('')}
+              color='primary'
+              variant='contained'
+              sx={{
+                backgroundColor: '#007BFF', // Custom blue color
+                '&:hover': {
+                  backgroundColor: '#0056b3', // Darker blue on hover
+                },
+              }}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </div>
   )

@@ -1,21 +1,21 @@
-import React from 'react'
 import {
+  Cancel as CancelIcon,
+  CheckCircle as CheckCircleIcon,
+  MoreVert as MoreVertIcon,
+} from '@mui/icons-material'
+import {
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  Paper,
-  IconButton,
   Tooltip,
+  Typography,
 } from '@mui/material'
-import {
-  CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon,
-  MoreVert as MoreVertIcon,
-} from '@mui/icons-material'
+import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const statusColors = {
@@ -47,7 +47,7 @@ function CandidateTable({ candidates }) {
     <div>
       <div className=' max-w-7xl mx-auto'>
         <TableContainer>
-          <Table className='min-w-full border-1 mb-1 border-black rounded-lg'>
+          <Table className='min-w-full border-2 mb-1 border-black rounded-lg'>
             <TableHead
               sx={{
                 backgroundColor: '#E14400',
@@ -92,7 +92,7 @@ function CandidateTable({ candidates }) {
               {candidates.map((candidate, index) => (
                 <TableRow
                   key={index}
-                  className='hover:bg-blue-100'
+                  className='text-black hover:bg-blue-100'
                   onClick={() =>
                     navigate(
                       `/employer/dashboard/candidates/manage/${candidate._id}`
@@ -106,25 +106,25 @@ function CandidateTable({ candidates }) {
                     },
                   }}
                 >
-                  <TableCell sx={{ color: 'white' }}>
+                  <TableCell sx={{ color: 'black' }}>
                     {candidate.candidateName}
                   </TableCell>
-                  <TableCell sx={{ color: 'white' }}>
+                  <TableCell sx={{ color: 'black' }}>
                     {candidate.jobTitle}
                   </TableCell>
-                  <TableCell sx={{ color: 'white' }}>
+                  <TableCell sx={{ color: 'black' }}>
                     {new Date(candidate.appliedDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell sx={{ color: 'white' }}>
+                  <TableCell sx={{ color: 'black' }}>
                     {candidate.location}
                   </TableCell>
-                  <TableCell sx={{ color: 'white' }}>
+                  <TableCell sx={{ color: 'black' }}>
                     {candidate.contact}
                   </TableCell>
-                  <TableCell sx={{ color: 'white' }}>
+                  <TableCell sx={{ color: 'black' }}>
                     {candidate.email}
                   </TableCell>
-                  <TableCell sx={{ color: 'white' }}>
+                  <TableCell sx={{ color: 'black' }}>
                     <p
                       className={`border w-fit px-2 py-1 rounded ${
                         statusColors[candidate.stage]?.border
