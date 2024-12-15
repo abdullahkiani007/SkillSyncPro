@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import employer from '../../../API/employer'
+import React, { useEffect, useState } from 'react'
 import {
   FaEye,
   FaInbox,
   FaTrashAlt,
-  FaUserShield,
   FaUserAltSlash,
+  FaUserShield,
 } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
+import employer from '../../../API/employer'
 
 const ManageEmployees = ({ companyId }) => {
   const [employees, setEmployees] = useState([])
@@ -94,8 +94,8 @@ const ManageEmployees = ({ companyId }) => {
   }
 
   return (
-    <div className='bg-gradient-to-r from-secondary-dark to-secondary-dark min-h-screen p-8 rounded-lg shadow-md animate-fade-in-up'>
-      <h2 className='text-3xl font-semibold mb-6 text-secondary-dark animate-slide-in-right'>
+    <div className='min-h-screen p-8 bg-gray-50 rounded-lg shadow-xl animate-fade-in-up'>
+      <h2 className='font-semibold mb-6 text-black text-5xl animate-slide-in-right'>
         Manage Employees
       </h2>
 
@@ -128,13 +128,13 @@ const ManageEmployees = ({ companyId }) => {
       {/* Tab Content */}
       {activeTab === 'authorized' ? (
         <div className='overflow-x-auto animate-slide-in-left'>
-          <table className='min-w-full bg-white shadow-md rounded-lg overflow-hidden'>
-            <thead className='bg-gradient-to-r from-primary to-secondary-dark text-white'>
+          <table className='min-w-full bg-white shadow-lg rounded-lg overflow-hidden'>
+            <thead className='bg-primary text-white'>
               <tr>
-                <th className='py-3 px-6 text-left'>Name</th>
-                <th className='py-3 px-6 text-left'>Email</th>
-                <th className='py-3 px-6 text-left'>Role</th>
-                <th className='py-3 px-6 text-right'>Actions</th>
+                <th className='py-4 px-6 text-left text-lg'>Name</th>
+                <th className='py-4 px-6 text-left text-lg'>Email</th>
+                <th className='py-4 px-6 text-left text-lg'>Role</th>
+                <th className='py-4 px-6 text-right text-lg'>Actions</th>
               </tr>
             </thead>
             <tbody className='text-gray-800'>
@@ -143,11 +143,13 @@ const ManageEmployees = ({ companyId }) => {
                   key={employee.id}
                   className='border-b hover:bg-gray-100 transition-colors animate-fade-in'
                 >
-                  <td className='py-4 px-6'>{`${employee.user.firstName} ${employee.user.lastName}`}</td>
+                  <td className='py-4 px-6'>
+                    {`${employee.user.firstName} ${employee.user.lastName}`}
+                  </td>
                   <td className='py-4 px-6'>{employee.user.email}</td>
                   <td className='py-4 px-6'>{employee.role}</td>
                   <td className='py-4 px-6'>
-                    <div className='flex items-center justify-end space-x-4'>
+                    <div className='flex items-center justify-end space-x-6'>
                       <button
                         onClick={() => handleViewDetails(employee.id)}
                         className='text-primary hover:text-primary-dark transform hover:scale-110 transition-transform'
