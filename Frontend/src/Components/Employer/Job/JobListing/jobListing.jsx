@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import EmployeeController from '../../../../API/employer'
 import Loader from '../../../Loader/Loader'
 import JobCard from './jobCard'
@@ -70,7 +70,7 @@ const JobListing = () => {
   }
 
   return (
-    <div className='min-h-screen bg-slate-200 mx-auto p-4'>
+    <div className='min-h-screen bg-slate-300 mx-auto p-10 mb-10'>
       {/* Category Filter */}
       <div className='flex justify-center mb-8'>
         <button
