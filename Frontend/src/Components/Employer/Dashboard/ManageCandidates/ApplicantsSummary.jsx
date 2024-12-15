@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, Typography, CardHeader } from '@mui/material'
 import {
-  Description as DescriptionIcon,
-  Search as SearchIcon,
-  EventAvailable as EventAvailableIcon,
-  Cancel as CancelIcon,
   BorderAllRounded,
+  Cancel as CancelIcon,
+  Description as DescriptionIcon,
+  EventAvailable as EventAvailableIcon,
+  Search as SearchIcon,
 } from '@mui/icons-material'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Card, CardContent, CardHeader, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import 'swiper/css'
 import 'swiper/css/effect-cards'
 import { EffectCards } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import EmployerController from '../../../../API/employer'
 import Loader from '../../../../Components/Loader/Loader'
 
@@ -102,7 +102,7 @@ const ApplicationSummary = () => {
       }
 
       setLoading(false)
-    };
+    }
 
     fetchSummaryData()
   }, [])

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import ApplicationSummary from './ApplicantsSummary'
-import CandidateTable from './CandidatesTables'
+import React, { useEffect, useState } from 'react'
 import EmployerController from '../../../../API/employer'
 import Loader from '../../../../Components/Loader/Loader'
+import ApplicationSummary from './ApplicantsSummary'
+import CandidateTable from './CandidatesTables'
 
 const CandidatesList = () => {
   const [candidates, setCandidates] = useState([])
@@ -21,14 +21,14 @@ const CandidatesList = () => {
   }, [])
 
   return (
-    <div className=' min-h-screen bg-gradient-to-r from-secondary-dark to-secondary-dark'>
-      <h1 className='py-10 px-6 font-bold text-2xl text-white'>
+    <div className=' min-h-screen'>
+      <h1 className='py-10 px-6 font-bold text-2xl text-black'>
         Candidates Summary
       </h1>
       <div className='ml-20'>
         <ApplicationSummary />
       </div>
-      <h1 className='py-10 px-6 font-bold text-2xl text-white'>
+      <h1 className='py-10 px-6 font-bold text-2xl text-black'>
         Candidates List:{' '}
       </h1>
       <div>

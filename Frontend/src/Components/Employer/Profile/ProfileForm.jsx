@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import CreatableSelect from 'react-select/creatable'
-import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import Controller from '../../../API/index'
-import ImageUpload from '../../Uploader/ImageUploader'
-import placeholderImage_person from '../../../assets/placeholderImage_person.jpg'
+import TextField from '@mui/material/TextField'
 import { format } from 'date-fns'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import CreatableSelect from 'react-select/creatable'
+import Controller from '../../../API/index'
+import placeholderImage_person from '../../../assets/placeholderImage_person.jpg'
+import ImageUpload from '../../Uploader/ImageUploader'
 
 const ProfileForm = () => {
   const [formData, setFormData] = useState({})
@@ -72,7 +72,7 @@ const ProfileForm = () => {
   }
 
   return (
-    <div className='w-full min-h-screen p-5 bg-gradient-to-r from-primary to-secondary-dark flex flex-col items-center justify-center'>
+    <div className='w-full min-h-screen p-5 mb-10 bg-slate-400 flex flex-col items-center justify-center'>
       <div className='w-full lg:w-2/3 bg-white shadow-2xl rounded-3xl px-8 pt-10 pb-8 mb-4'>
         <div className='flex items-center'>
           <img
@@ -127,7 +127,7 @@ const ProfileForm = () => {
 
         <div className='mt-10 text-center'>
           <Button
-            className='w-full bg-gradient-to-r from-primary to-secondary-dark text-white py-3 rounded-full shadow-lg hover:shadow-2xl transform transition-transform duration-300 hover:from-secondary-dark hover:to-primary'
+            className='w-1/2 bg-slate-400 text-white rounded-full shadow-lg hover:shadow-2xl transform transition-transform duration-300 hover:from-secondary-dark hover:to-primary'
             variant='contained'
             onClick={handleSubmit}
           >
@@ -136,8 +136,8 @@ const ProfileForm = () => {
           <Button
             variant='outlined'
             color='secondary'
-            onClick={() => navigate('/jobseeker/profile')}
-            sx={{ mt: '2rem', ml: '1rem' }}
+            onClick={() => navigate('/employer/profile')}
+            sx={{ ml: '1rem' }}
           >
             Cancel
           </Button>
