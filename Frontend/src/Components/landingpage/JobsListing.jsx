@@ -80,7 +80,7 @@ function Jobs() {
                   </div>
 
                   {/* Display Posted By Details */}
-                  <div className="mt-2 flex flex-row gap-x-2">
+                  <div className="mt-2 flex flex-row flex-wrap gap-2">
                     {job.skills.map((skill, index) => {
                       return (
                         <div
@@ -93,25 +93,10 @@ function Jobs() {
                     })}
                   </div>
 
-                  {/* Display Skill Assessment Details */}
-                  {Array.isArray(job.skillAssessment) &&
-                    job.skillAssessment.length > 0 && (
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-400">
-                          Skill Assessment:
-                        </p>
-                        <ul className="list-disc pl-5 text-sm text-gray-500">
-                          {job.skillAssessment.map((assessment, index) => (
-                            <li key={index}>{assessment}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                  <div className="mt-4">
+                  <div className="mt-4 flex-end">
                     <button
                       onClick={handleApplyClick}
-                      className="w-full py-2 px-4 bg-black text-white rounded-lg hover:bg-gray-800 transition duration-200"
+                      className="w-full py-2 px-4 bg-black text-white rounded-lg hover:bg-gray-800 transition duration-200 self-end"
                     >
                       Apply Now
                     </button>

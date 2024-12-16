@@ -1,15 +1,9 @@
-const userModel = require('../Models/user.model')
-const AWS = require('aws-sdk')
+const userModel = require("../Models/user.model");
+const AWS = require("aws-sdk");
 
-require('dotenv').config()
+require("dotenv").config();
 
-AWS.config.update({
-  accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_KEY,
-  region: process.env.S3_REGION,
-})
-
-const s3 = new AWS.S3()
+const s3 = new AWS.S3();
 
 const UserService = {
   async createUser(email, password, firstName, lastName, role) {
@@ -20,71 +14,71 @@ const UserService = {
       firstName,
       lastName,
       role,
-    })
-    return user
+    });
+    return user;
   },
   async updateUser(id, data) {
     const user = await userModel.findOneAndUpdate({ _id: id }, data, {
       new: true,
-    })
-    return user
+    });
+    return user;
   },
 
   async emailExists(email) {
-    const user = await userModel.findOne({ email })
-    return user ? true : false
+    const user = await userModel.findOne({ email });
+    return user ? true : false;
   },
 
   async getInfo(id) {
-    let response
+    let response;
     try {
-      response = await userModel.findById(id)
+      response = await userModel.findById(id);
       if (response) {
         return {
           status: 200,
           data: response,
-        }
+        };
       } else {
         return {
           status: 404,
-          message: 'User not found',
-        }
+          message: "User not found",
+        };
       }
     } catch (err) {
       return {
         status: 500,
-        message: 'Internal server error',
-      }
+        message: "Internal server error",
+      };
     }
   },
 
   // generate presigned url
   async generatePreSignedUrl(folderName, fileName, fileType) {
-    console.log('Access key check: ', process.env.S3_ACCESS_KEY)
+    console.log("Access key check: ", process.env.S3_ACCESS_KEY);
     const params = {
-      Bucket: 'skillsyncprobucket', // Your bucket name
+      Bucket: "skillsyncprobucket", // Your bucket name
       Key: `${folderName}/${fileName}`,
       Expires: 120, // URL expiration time in seconds
       ContentType: fileType,
-    }
+    };
 
     try {
-      const url = await s3.getSignedUrlPromise('putObject', params)
-      const itemUrl = `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/${folderName}/${fileName}`
-      console.log('Presigned URL:', url)
-      console.log('Item URL:', itemUrl)
+      const url = await s3.getSignedUrlPromise("putObject", params);
+      const itemUrl = `https://skillsyncprobucket.s3.ap-southeast-2.amazonaws.com/${folderName}/${fileName}`;
+      console.log("Presigned URL:", url);
+      console.log("Item URL:", itemUrl);
       return {
         status: 200,
         data: url,
-      }
+      };
     } catch (err) {
-      console.error(err)
+      console.error(err);
       return {
         status: 500,
-        message: 'Internal server error',
-      }
+        message: "Internal server error",
+      };
     }
   },
-}
+};
 
-module.exports = UserService
+module.exports = UserService;

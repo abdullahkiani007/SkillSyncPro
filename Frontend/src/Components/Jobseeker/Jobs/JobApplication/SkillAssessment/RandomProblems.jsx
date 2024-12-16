@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { Editor } from '@monaco-editor/react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
+import { Editor } from "@monaco-editor/react";
+import axios from "axios";
 import {
   Container,
   Typography,
@@ -13,7 +13,7 @@ import {
   Box,
   CircularProgress,
   Alert,
-} from '@mui/material';
+} from "@mui/material";
 
 const RandomProblems = () => {
   const [problems, setProblems] = useState([]);
@@ -22,23 +22,28 @@ const RandomProblems = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { jobDescription } = useOutletContext();
-  const [application_id, setApplication_id] = useState(localStorage.getItem("application_id"));
-
+  const [application_id, setApplication_id] = useState(
+    localStorage.getItem("application_id")
+  );
 
   useEffect(() => {
     const fetchProblems = async () => {
       setLoading(true);
       try {
         const formData = new FormData();
-        formData.append('job_description', jobDescription);
-        const response = await axios.post('http://localhost:8000/generate_problems/', formData);
-        const problemsWithCode = response.data.problems.map(problem => ({
+        formData.append("job_description", jobDescription);
+        const response = await axios.post(
+          "http://localhost:8000/generate_problems/",
+          formData
+        );
+        const problemsWithCode = response.data.problems.map((problem) => ({
           ...problem,
-          userCode: problem.initialCode || '', // Initialize userCode with initialCode or empty string
+          userCode: problem.initialCode || "", // Initialize userCode with initialCode or empty string
         }));
+        console.log("problmes", problemsWithCode);
         setProblems(problemsWithCode);
       } catch (error) {
-        setError('Failed to fetch problems');
+        setError("Failed to fetch problems");
       } finally {
         setLoading(false);
       }
@@ -52,7 +57,7 @@ const RandomProblems = () => {
   };
 
   const handleCodeChange = (value) => {
-    setProblems(prevProblems => {
+    setProblems((prevProblems) => {
       const updatedProblems = [...prevProblems];
       updatedProblems[selectedProblemIndex].userCode = value;
       return updatedProblems;
@@ -69,23 +74,24 @@ const RandomProblems = () => {
         userCode: problem.userCode,
         language: problem.language,
       }));
-  
-    console.log(JSON.stringify(problemsToSubmit, null, 2));
-    const formData = new FormData();
-    formData.append('problems', JSON.stringify(problemsToSubmit));
-    formData.append('application_id', application_id);
+
+      console.log(JSON.stringify(problemsToSubmit, null, 2));
+      const formData = new FormData();
+      formData.append("problems", JSON.stringify(problemsToSubmit));
+      formData.append("application_id", application_id);
 
       // Make a POST request with JSON payload
-      const response = await axios.post('http://localhost:8000/submit_solutions', formData);
-  
+      const response = await axios.post(
+        "http://localhost:8000/submit_solutions",
+        formData
+      );
+
       setSubmissionResult(response.data);
     } catch (error) {
-      console.error('Error submitting solutions:', error);
-      setSubmissionResult({ error: 'Submission failed' });
+      console.error("Error submitting solutions:", error);
+      setSubmissionResult({ error: "Submission failed" });
     }
   };
-  
-  
 
   return (
     <Container maxWidth="lg" className="py-8">
@@ -94,13 +100,23 @@ const RandomProblems = () => {
       </Typography>
 
       {loading && (
-        <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="50vh"
+        >
           <CircularProgress />
         </Box>
       )}
 
       {error && (
-        <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="50vh"
+        >
           <Alert severity="error">{error}</Alert>
         </Box>
       )}
@@ -155,7 +171,7 @@ const RandomProblems = () => {
           <Typography variant="h5" component="h3">
             Submission Result:
           </Typography>
-          <Alert severity={submissionResult.error ? 'error' : 'success'}>
+          <Alert severity={submissionResult.error ? "error" : "success"}>
             <pre>{JSON.stringify(submissionResult, null, 2)}</pre>
           </Alert>
         </Box>

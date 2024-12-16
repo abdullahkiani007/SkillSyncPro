@@ -108,6 +108,7 @@ const CompanyController = {
     }
   },
   async joinCompany(req, res, next) {
+    console.log("Join company received");
     const { id } = req.user;
     const companyId = req.query.id;
     const response = await companyService.joinCompany(id, companyId);
